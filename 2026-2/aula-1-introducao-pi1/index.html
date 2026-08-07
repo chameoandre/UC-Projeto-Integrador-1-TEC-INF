@@ -30,6 +30,7 @@
       --accent-amber: #f59e0b;
       --accent-emerald: #10b981;
       --accent-rose: #f43f5e;
+      --accent-cyan: #06b6d4;
       --radius-lg: 16px;
       --radius-md: 10px;
     }
@@ -70,8 +71,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2.5rem;
-      background: rgba(19, 27, 46, 0.85);
+      padding: 0.9rem 2.5rem;
+      background: rgba(19, 27, 46, 0.9);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-color);
       z-index: 100;
@@ -84,19 +85,20 @@
     }
 
     .brand-logo .logo-icon {
-      width: 38px;
-      height: 38px;
-      background: var(--ifsc-green);
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--ifsc-green), var(--accent-blue));
       color: white;
-      border-radius: 8px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
+      font-size: 1.35rem;
+      box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
     }
 
     .brand-title {
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: white;
     }
@@ -109,26 +111,28 @@
     .deck-controls {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     .btn-nav {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid var(--border-color);
       color: white;
-      padding: 0.4rem 0.9rem;
+      padding: 0.45rem 1rem;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
       align-items: center;
       gap: 0.4rem;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+      font-weight: 600;
     }
 
     .btn-nav:hover:not(:disabled) {
       background: var(--ifsc-green);
       border-color: var(--ifsc-green);
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
     }
 
     .btn-nav:disabled {
@@ -138,9 +142,10 @@
 
     .slide-counter {
       font-size: 0.9rem;
-      color: var(--text-muted);
+      color: var(--accent-amber);
       min-width: 65px;
       text-align: center;
+      font-weight: 700;
     }
 
     /* BARRA DE PROGRESSO */
@@ -152,7 +157,7 @@
 
     .progress-bar-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--ifsc-green), var(--accent-blue));
+      background: linear-gradient(90deg, var(--ifsc-green), var(--accent-blue), var(--accent-purple));
       width: 0%;
       transition: width 0.3s ease;
     }
@@ -174,7 +179,7 @@
       visibility: hidden;
       transition: all 0.4s ease;
       transform: translateX(30px);
-      padding: 2rem 4rem;
+      padding: 2rem 4rem 5rem 4rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -189,17 +194,17 @@
 
     /* CARDS & GLASSMORPHISM */
     .glass-card {
-      background: rgba(19, 27, 46, 0.7);
+      background: rgba(19, 27, 46, 0.75);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 1.75rem;
+      padding: 1.5rem;
       backdrop-filter: blur(10px);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       transition: all 0.3s ease;
     }
 
     .glass-card:hover {
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.25);
       transform: translateY(-2px);
     }
 
@@ -216,20 +221,81 @@
       gap: 0.4rem;
     }
 
-    /* ESTILOS DE INTERDISCIPLINARIDADE */
-    .inter-card {
-      border-left: 4px solid var(--accent-blue);
-      background: var(--bg-card);
-      border-radius: var(--radius-md);
-      padding: 1.25rem;
-      height: 100%;
+    .badge-docente {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-blue);
+      padding: 0.3rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
     }
 
-    .inter-card-health { border-left-color: var(--accent-rose); }
-    .inter-card-agro { border-left-color: var(--accent-emerald); }
-    .inter-card-games { border-left-color: var(--accent-purple); }
-    .inter-card-cities { border-left-color: var(--accent-amber); }
-    .inter-card-edu { border-left-color: var(--accent-blue); }
+    /* CARDS INTERDISCIPLINARES ILUSTRADOS */
+    .inter-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .inter-card:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+    }
+
+    .inter-card-civil { border-left-color: var(--accent-amber); }
+    .inter-card-math { border-left-color: var(--accent-purple); }
+    .inter-card-physics { border-left-color: var(--accent-cyan); }
+    .inter-card-env { border-left-color: var(--accent-emerald); }
+
+    /* BARRA FLUTUANTE INFERIOR COM BOTÕES VISUAIS */
+    .floating-bottom-bar {
+      position: absolute;
+      bottom: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(19, 27, 46, 0.92);
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(16px);
+      border-radius: 50px;
+      padding: 0.4rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+
+    .btn-slide-nav {
+      background: var(--ifsc-green);
+      color: white;
+      border: none;
+      padding: 0.4rem 1.1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    }
+
+    .btn-slide-nav:hover:not(:disabled) {
+      background: #15803d;
+      transform: scale(1.04);
+    }
+
+    .btn-slide-nav:disabled {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
 
     /* TIMELINE DE PIPELINE */
     .pipeline-step {
@@ -253,27 +319,6 @@
       justify-content: center;
       margin-bottom: 0.75rem;
     }
-
-    /* FOOTER TECLADO */
-    .keyboard-hint {
-      position: absolute;
-      bottom: 1rem;
-      right: 2.5rem;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      z-index: 10;
-    }
-
-    .key-badge {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--border-color);
-      padding: 0.1rem 0.4rem;
-      border-radius: 4px;
-      font-family: monospace;
-    }
   </style>
 </head>
 
@@ -285,19 +330,22 @@
     <header class="app-header">
       <div class="brand-logo">
         <div class="logo-icon">
-          <i class="bi bi-lightbulb-fill"></i>
+          <i class="bi bi-diagram-3-fill"></i>
         </div>
         <div>
           <h1 class="brand-title font-outfit">Projeto Integrador 1 — Aula 1</h1>
-          <p class="brand-subtitle">Curso Técnico Integrado em Informática (Info 25) • IFSC Garopaba</p>
+          <p class="brand-subtitle">Curso Técnico Integrado em Informática (Turma Info 25) • IFSC Garopaba</p>
         </div>
       </div>
 
       <div class="deck-controls">
+        <span class="badge-docente me-2 d-none d-md-inline-block">
+          <i class="bi bi-people-fill me-1"></i> Prof. André Moraes \& Profª. Josimara Krausen
+        </span>
         <button class="btn-nav" id="btn-prev" onclick="prevSlide()" disabled>
           <i class="bi bi-arrow-left"></i> Anterior
         </button>
-        <span class="slide-counter font-code" id="slide-counter">1 / 8</span>
+        <span class="slide-counter font-code" id="slide-counter">1 / 9</span>
         <button class="btn-nav" id="btn-next" onclick="nextSlide()">
           Próximo <i class="bi bi-arrow-right"></i>
         </button>
@@ -312,50 +360,60 @@
     <!-- ÁREA DE CONTEÚDO DOS SLIDES -->
     <main class="slides-wrapper">
 
-      <!-- SLIDE 1: CAPA & VISÃO INSPIRADORA -->
+      <!-- SLIDE 1: CAPA IMPACTANTE & CORPO DOCENTE -->
       <section class="slide active" id="slide-1">
         <div class="row align-items-center">
           <div class="col-lg-8">
             <span class="badge-custom mb-3">
-              <i class="bi bi-rocket-takeoff-fill"></i> Bem-vindos à Aula Inaugural de PI-1 (2026-2)
+              <i class="bi bi-rocket-takeoff-fill"></i> Aula Inaugural de PI-1 (2026-2)
             </span>
             <h2 class="display-5 fw-bold font-outfit text-white mb-3">
               Jornada do Projeto Integrador: <br>
-              <span class="text-success">O Poder da Informática Conectada ao Mundo Real</span>
+              <span class="text-success">Computação, Engenharia e Exatas Conectadas ao Mundo Real</span>
             </h2>
             <p class="lead text-secondary mb-4">
-              Como transformamos uma ideia em solução real, um código em experimento científico e um desafio da sociedade em inovação tecnológica?
+              Como transformamos problemas reais em projetos inovadores integrando <strong>Ciência da Computação, Engenharia Civil, Física, Matemática e Engenharia Ambiental</strong>?
             </p>
 
-            <div class="d-flex gap-3 flex-wrap">
-              <div class="glass-card py-2 px-3 d-flex align-items-center gap-2">
-                <i class="bi bi-people-fill text-success fs-4"></i>
-                <div>
-                  <div class="fw-bold small">Turma Info 25</div>
-                  <div class="text-muted extra-small" style="font-size: 0.75rem;">2º Ano Integrado</div>
+            <!-- CARD CORPO DOCENTE -->
+            <div class="glass-card p-3 mb-3">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="p-2 bg-success bg-opacity-20 rounded-3 text-success fs-3">
+                      <i class="bi bi-code-slash"></i>
+                    </div>
+                    <div>
+                      <div class="fw-bold text-white">Prof. André Moraes</div>
+                      <div class="text-info extra-small" style="font-size: 0.78rem;">Ciência da Computação (UFSC/PPGCC)</div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="glass-card py-2 px-3 d-flex align-items-center gap-2">
-                <i class="bi bi-journal-code text-info fs-4"></i>
-                <div>
-                  <div class="fw-bold small">Docente Responsável</div>
-                  <div class="text-muted extra-small" style="font-size: 0.75rem;">Prof. André Moraes</div>
-                </div>
-              </div>
-              <div class="glass-card py-2 px-3 d-flex align-items-center gap-2">
-                <i class="bi bi-award-fill text-warning fs-4"></i>
-                <div>
-                  <div class="fw-bold small">Carga Horária</div>
-                  <div class="text-muted extra-small" style="font-size: 0.75rem;">40 Horas Semestrais</div>
+
+                <div class="col-md-6">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="p-2 bg-warning bg-opacity-20 rounded-3 text-warning fs-3">
+                      <i class="bi bi-building-gear"></i>
+                    </div>
+                    <div>
+                      <div class="fw-bold text-white">Profª. Josimara M. Krausen</div>
+                      <div class="text-warning extra-small" style="font-size: 0.78rem;">Engª Civil (UNISUL) | Mat. & Física | Engª Ambiental</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="col-lg-4 text-center d-none d-lg-block">
             <div class="glass-card p-4 text-center">
-              <i class="bi bi-cpu-fill text-success" style="font-size: 5rem;"></i>
-              <h3 class="h6 font-outfit text-white mt-3 mb-1">Informática Interdisciplinar</h3>
-              <p class="text-muted small mb-0">Computação conectada à Saúde, Meio Ambiente, Educação e Sociedade.</p>
+              <div class="d-flex justify-content-center gap-3 mb-3 text-success fs-1">
+                <i class="bi bi-cpu"></i>
+                <i class="bi bi-buildings"></i>
+                <i class="bi bi-water"></i>
+              </div>
+              <h3 class="h6 font-outfit text-white mb-1">Interdisciplinaridade Prática</h3>
+              <p class="text-muted extra-small mb-0">Turma Info 25 • 40 Horas de Aprendizagem por Projetos em Laboratório.</p>
             </div>
           </div>
         </div>
@@ -363,12 +421,12 @@
 
       <!-- SLIDE 2: O MAPA DA MINA (VISÃO GERAL PANORÂMICA) -->
       <section class="slide" id="slide-2">
-        <div class="mb-4">
+        <div class="mb-3">
           <span class="badge-custom mb-2">
             <i class="bi bi-map-fill"></i> Visão Panorâmica do Semestre
           </span>
           <h2 class="h3 fw-bold font-outfit text-white">O Mapa da Mina: As 4 Etapas da Nossa Jornada</h2>
-          <p class="text-secondary small">Uma visão geral de como seu projeto nascerá, evoluirá e será apresentado ao final do semestre.</p>
+          <p class="text-secondary small">Uma visão geral de como seu projeto nascerá, evoluirá e será submetido a eventos científicos.</p>
         </div>
 
         <div class="row g-3">
@@ -377,16 +435,16 @@
               <div class="pipeline-number">1</div>
               <h3 class="h6 font-outfit text-success fw-bold">Problema \& Ideia</h3>
               <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
-                Identificar uma dor real da sociedade ou comunidade. Formular a pergunta de pesquisa e o Diário de Bordo.
+                Identificar uma dor real da sociedade/comunidade. Formular a pergunta de pesquisa e o Diário de Bordo.
               </p>
             </div>
           </div>
           <div class="col-md-3">
             <div class="pipeline-step">
               <div class="pipeline-number" style="background: var(--accent-blue);">2</div>
-              <h3 class="h6 font-outfit text-info fw-bold">Planejamento \& Prototipação</h3>
+              <h3 class="h6 font-outfit text-info fw-bold">Planejamento \& Modelagem</h3>
               <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
-                Criar a EAP (WBS), cronograma no Gantt, quadro Kanban (Trello/GitHub) e desenhar as telas no Figma.
+                Criar a EAP (WBS), cronograma no Gantt, Kanban (GitHub Projects), fluxogramas e protótipos de tela (Figma).
               </p>
             </div>
           </div>
@@ -411,81 +469,132 @@
         </div>
       </section>
 
-      <!-- SLIDE 3: O SUPERPODER DA INFORMÁTICA (CONEXÃO INTERDISCIPLINAR LÚDICA) -->
+      <!-- SLIDE 3: INTERDISCIPLINARIDADE EM AÇÃO (COMPUTAÇÃO + ENG. CIVIL + EXATAS) -->
       <section class="slide" id="slide-3">
         <div class="mb-3">
           <span class="badge-custom mb-2">
-            <i class="bi bi-controller"></i> Conexões Interdisciplinares
+            <i class="bi bi-diagram-3"></i> Conexões Interdisciplinares da Ciência
           </span>
-          <h2 class="h3 fw-bold font-outfit text-white">O "Superpoder" da Informática: Conectando Áreas</h2>
-          <p class="text-secondary small">A informática não existe isolada. Ela é o motor que resolve problemas em todas as ciências!</p>
+          <h2 class="h3 fw-bold font-outfit text-white">Computação + Engenharia Civil + Matemática + Física</h2>
+          <p class="text-secondary small">Veja como a tecnologia se conecta com as especialidades da nossa equipe docente!</p>
         </div>
 
         <div class="row g-3">
-          <div class="col-md-4">
-            <div class="inter-card inter-card-health">
-              <div class="d-flex align-items-center gap-2 mb-2">
-                <i class="bi bi-heart-pulse-fill text-danger fs-4"></i>
-                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Saúde \& Medicina</h3>
-              </div>
-              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
-                Algoritmos que detectam sintomas, relógios inteligentes monitorando batimentos e plataformas de auxílio a pacientes.
-              </p>
-            </div>
-          </div>
 
-          <div class="col-md-4">
-            <div class="inter-card inter-card-agro">
-              <div class="d-flex align-items-center gap-2 mb-2">
-                <i class="bi bi-tree-fill text-success fs-4"></i>
-                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Meio Ambiente \& Agro</h3>
-              </div>
-              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
-                Sensores de umidade no solo, monitoramento de queimadas por satélite e irrigação automatizada em hortas comunitárias.
-              </p>
-            </div>
-          </div>
-
-          <div class="col-md-4">
-            <div class="inter-card inter-card-games">
-              <div class="d-flex align-items-center gap-2 mb-2">
-                <i class="bi bi-palette-fill text-purple fs-4" style="color: var(--accent-purple);"></i>
-                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Arte, Jogos \& Cultura</h3>
-              </div>
-              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
-                Jogos educativos sobre história local, geradores de música procedural e museus virtuais com realidade aumentada.
-              </p>
-            </div>
-          </div>
-
+          <!-- ENGENHARIA CIVIL & CIDADES -->
           <div class="col-md-6">
-            <div class="inter-card inter-card-cities">
+            <div class="inter-card inter-card-civil">
               <div class="d-flex align-items-center gap-2 mb-2">
-                <i class="bi bi-buildings-fill text-warning fs-4"></i>
-                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Cidades Inteligentes \& Mobilidade</h3>
+                <i class="bi bi-building-fill-gear text-warning fs-3"></i>
+                <div>
+                  <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Engenharia Civil \& Orçamento (BIM)</h3>
+                  <span class="badge bg-warning text-dark extra-small" style="font-size: 0.68rem;">Especialidade Profª. Josimara</span>
+                </div>
               </div>
               <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
-                Monitoramento de linhas de ônibus em tempo real, rotas otimizadas para coleta de lixo e gestão inteligente de trânsito.
+                Modelagem 3D de edifícios (BIM), softwares de cálculo de orçamento/cronograma de obras, sensores estruturais em pontes e prédios inteligentes.
               </p>
             </div>
           </div>
 
+          <!-- MATEMÁTICA & FÍSICA APLICADA -->
           <div class="col-md-6">
-            <div class="inter-card inter-card-edu">
+            <div class="inter-card inter-card-math">
               <div class="d-flex align-items-center gap-2 mb-2">
-                <i class="bi bi-person-wheelchair text-info fs-4"></i>
-                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Inclusão Social \& Acessibilidade</h3>
+                <i class="bi bi-[#a855f7] bi-calculator-fill fs-3" style="color: var(--accent-purple);"></i>
+                <div>
+                  <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Matemática \& Física Computacional</h3>
+                  <span class="badge bg-purple text-white extra-small" style="background: var(--accent-purple); font-size: 0.68rem;">Especialidade Profª. Josimara</span>
+                </div>
               </div>
               <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
-                Tecnologias assistivas para pessoas com deficiência visual/auditiva, leitor de telas inteligentes e teclados adaptados.
+                Simulação física em tempo real (motores de jogos), algoritmos de cálculo numérico, estatística de dados e equações para dinâmica de fluidos.
               </p>
             </div>
           </div>
+
+          <!-- ENGENHARIA SANITÁRIA & AMBIENTAL -->
+          <div class="col-md-6">
+            <div class="inter-card inter-card-env">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-droplet-half text-emerald fs-3" style="color: var(--accent-emerald);"></i>
+                <div>
+                  <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Engenharia Sanitária \& Ambiental</h3>
+                  <span class="badge bg-success extra-small" style="font-size: 0.68rem;">Impacto Local em Garopaba</span>
+                </div>
+              </div>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Sensores IoT para monitoramento da qualidade da água, simulação de bacias hidrográficas e alertas preditivos de alagamentos/queimadas.
+              </p>
+            </div>
+          </div>
+
+          <!-- CIÊNCIA DA COMPUTAÇÃO -->
+          <div class="col-md-6">
+            <div class="inter-card">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-cpu-fill text-info fs-3"></i>
+                <div>
+                  <h3 class="h6 font-outfit fw-bold text-white mb-0">Ciência da Computação \& Arquitetura</h3>
+                  <span class="badge bg-info text-dark extra-small" style="font-size: 0.68rem;">Especialidade Prof. André</span>
+                </div>
+              </div>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Estrutura de dados, algoritmos de inteligência artificial, bancos de dados, versionamento Git/GitHub e arquitetura web desacoplada.
+              </p>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <!-- SLIDE 4: AFUNILANDO: O QUE É UM PROJETO? -->
+      <!-- SLIDE 4: EXEMPLOS VASTOS E ILUSTRADOS DE PROJETOS -->
       <section class="slide" id="slide-4">
+        <div class="mb-3">
+          <span class="badge-custom mb-2">
+            <i class="bi bi-images"></i> Exemplos Práticos Ilustrados
+          </span>
+          <h2 class="h3 fw-bold font-outfit text-white">Ideias de Projetos Interdisciplinares para Inspirar</h2>
+          <p class="text-secondary small">Exemplos concretos que você e sua equipe podem desenvolver durante o semestre:</p>
+        </div>
+
+        <div class="row g-3">
+
+          <div class="col-md-4">
+            <div class="glass-card h-100 text-center p-3">
+              <div class="fs-1 text-warning mb-2"><i class="bi bi-house-gear-fill"></i></div>
+              <h3 class="h6 font-outfit text-white fw-bold">EcoConstrução Garopaba</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Software web para cálculo de orçamento e pegada de carbono em obras civis sustentáveis da região.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="glass-card h-100 text-center p-3">
+              <div class="fs-1 text-info mb-2"><i class="bi bi-water"></i></div>
+              <h3 class="h6 font-outfit text-white fw-bold">MonitoraÁgua Garopaba</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Painel web conectado a sensores de turbidez/pH para acompanhamento comunitário das bacias de água.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="glass-card h-100 text-center p-3">
+              <div class="fs-1 text-purple mb-2" style="color: var(--accent-purple);"><i class="bi bi-controller"></i></div>
+              <h3 class="h6 font-outfit text-white fw-bold">Simulador Físico de Ondas</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Jogo/Simulador educativo em Canvas/JS aplicando equações físicas de refração e ondas para surfe.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 5: AFUNILANDO: O QUE É UM PROJETO? -->
+      <section class="slide" id="slide-5">
         <div class="mb-4">
           <span class="badge-custom mb-2">
             <i class="bi bi-funnel-fill"></i> Afunilando Conceitos
@@ -527,8 +636,8 @@
         </div>
       </section>
 
-      <!-- SLIDE 5: OS 4 PILARES DO NOSSO SEMESTRE -->
-      <section class="slide" id="slide-5">
+      <!-- SLIDE 6: OS 4 PILARES DO NOSSO SEMESTRE -->
+      <section class="slide" id="slide-6">
         <div class="mb-3">
           <span class="badge-custom mb-2">
             <i class="bi bi-columns-gap"></i> Estrutura da UC
@@ -596,8 +705,8 @@
         </div>
       </section>
 
-      <!-- SLIDE 6: A ARTE DE IDENTIFICAR UM BOM PROBLEMA -->
-      <section class="slide" id="slide-6">
+      <!-- SLIDE 7: A ARTE DE IDENTIFICAR UM BOM PROBLEMA -->
+      <section class="slide" id="slide-7">
         <div class="mb-4">
           <span class="badge-custom mb-2">
             <i class="bi bi-search"></i> Primeiro Conceito Prático
@@ -611,12 +720,12 @@
             <div class="glass-card">
               <h3 class="h6 font-outfit text-success fw-bold mb-3">A Fórmula da Pergunta-Problema:</h3>
               <div class="p-3 rounded-3 mb-3 font-code text-info" style="background: rgba(0,0,0,0.5); font-size: 0.85rem;">
-                "Como a <span class="text-warning">[SOLUÇÃO TECNOLÓGICA]</span> pode ajudar <span class="text-success">[PÚBLICO-ALVO]</span> a resolver <span class="text-rose" style="color: var(--accent-rose);">[PROBLEMA ESPECÍFICO]</span> no contexto de <span class="text-white">[CIDADE / ESCOLA / ÁREA]</span>?"
+                "Como a <span class="text-warning">[SOLUÇÃO TECNOLÓGICA]</span> pode ajudar <span class="text-success">[PÚBLICO-ALVO]</span> a resolver <span class="text-rose" style="color: var(--accent-rose);">[PROBLEMA ESPECÍFICO]</span> no contexto de <span class="text-white">[GAROPABA / COMUNIDADE]</span>?"
               </div>
               
               <h4 class="h6 font-outfit text-white fw-bold mb-2">Exemplo Prático:</h4>
               <p class="text-secondary small mb-0">
-                <em>"Como uma <strong>planta web interativa de reciclagem</strong> pode ajudar <strong>moradores de Garopaba</strong> a descartar <strong>lixo eletrônico corretamente</strong> nas associações do município?"</em>
+                <em>"Como um <strong>sistema web de mapas interativos</strong> pode ajudar <strong>moradores de Garopaba</strong> a monitorar a <strong>qualidade da água</strong> das praias e lagoas locais?"</em>
               </p>
             </div>
           </div>
@@ -635,8 +744,8 @@
         </div>
       </section>
 
-      <!-- SLIDE 7: FERRAMENTAS DA NOSSA JORNADA -->
-      <section class="slide" id="slide-7">
+      <!-- SLIDE 8: NOSSO KIT DE FERRAMENTAS -->
+      <section class="slide" id="slide-8">
         <div class="mb-4">
           <span class="badge-custom mb-2">
             <i class="bi bi-tools"></i> Nosso Kit de Ferramentas
@@ -688,8 +797,8 @@
         </div>
       </section>
 
-      <!-- SLIDE 8: PRIMEIRO DESAFIO PRÁTICO (DINÂMICA DA AULA) -->
-      <section class="slide" id="slide-8">
+      <!-- SLIDE 9: ATIVIDADE PRÁTICA DA AULA -->
+      <section class="slide" id="slide-9">
         <div class="mb-4 text-center">
           <span class="badge-custom mb-2">
             <i class="bi bi-flag-fill"></i> Atividade Prática da Aula 1
@@ -718,7 +827,7 @@
                     <h3 class="h6 font-outfit fw-bold mb-0">Passo 2: 3 Ideias</h3>
                   </div>
                   <p class="text-secondary extra-small mb-0" style="font-size: 0.82rem;">
-                    Discuta e proponha <strong>3 ideias de problemas reais</strong> conectando Informática com Saúde, Meio Ambiente, Educação ou Sociedade.
+                    Discuta e proponha <strong>3 ideias de problemas reais</strong> conectando Informática com Engenharia, Física, Saúde ou Meio Ambiente.
                   </p>
                 </div>
 
@@ -739,9 +848,17 @@
 
     </main>
 
-    <!-- HINT TECLADO -->
-    <div class="keyboard-hint">
-      Navegue com as setas do teclado: <span class="key-badge">←</span> <span class="key-badge">→</span> ou <span class="key-badge">Espaço</span>
+    <!-- BARRA FLUTUANTE INFERIOR COM BOTÕES VISUAIS DE NAVEGAÇÃO DOS SLIDES -->
+    <div class="floating-bottom-bar">
+      <button class="btn-slide-nav" id="btn-bottom-prev" onclick="prevSlide()" disabled>
+        <i class="bi bi-arrow-left-circle-fill"></i> Anterior
+      </button>
+
+      <span class="slide-counter font-code" id="bottom-slide-counter">1 / 9</span>
+
+      <button class="btn-slide-nav" id="btn-bottom-next" onclick="nextSlide()">
+        Próximo <i class="bi bi-arrow-right-circle-fill"></i>
+      </button>
     </div>
 
   </div>
@@ -751,9 +868,12 @@
     const slides = document.querySelectorAll('.slide');
     const totalSlides = slides.length;
     const slideCounter = document.getElementById('slide-counter');
+    const bottomSlideCounter = document.getElementById('bottom-slide-counter');
     const progressBar = document.getElementById('progress-bar');
     const btnPrev = document.getElementById('btn-prev');
     const btnNext = document.getElementById('btn-next');
+    const btnBottomPrev = document.getElementById('btn-bottom-prev');
+    const btnBottomNext = document.getElementById('btn-bottom-next');
 
     function updateSlide() {
       slides.forEach((slide, index) => {
@@ -764,12 +884,21 @@
         }
       });
 
-      slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+      const textCounter = `${currentSlide + 1} / ${totalSlides}`;
+      slideCounter.textContent = textCounter;
+      bottomSlideCounter.textContent = textCounter;
+
       const progressPercent = ((currentSlide + 1) / totalSlides) * 100;
       progressBar.style.width = `${progressPercent}%`;
 
-      btnPrev.disabled = (currentSlide === 0);
-      btnNext.disabled = (currentSlide === totalSlides - 1);
+      const isFirst = (currentSlide === 0);
+      const isLast = (currentSlide === totalSlides - 1);
+
+      btnPrev.disabled = isFirst;
+      btnBottomPrev.disabled = isFirst;
+
+      btnNext.disabled = isLast;
+      btnBottomNext.disabled = isLast;
     }
 
     function nextSlide() {
