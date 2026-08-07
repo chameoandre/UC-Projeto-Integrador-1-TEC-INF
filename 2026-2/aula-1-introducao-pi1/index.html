@@ -253,6 +253,30 @@
       text-transform: uppercase;
     }
 
+    /* BOTÕES DE REFERÊNCIA EXTERNA */
+    .btn-ref-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--accent-blue);
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-ref-link:hover {
+      background: var(--accent-blue);
+      color: #090d16;
+      border-color: var(--accent-blue);
+      transform: translateY(-1px);
+    }
+
     /* CARDS INTERDISCIPLINARES ILUSTRADOS */
     .inter-card {
       background: var(--bg-card);
@@ -570,102 +594,132 @@
         </div>
       </section>
 
-      <!-- SLIDE 4: EXEMPLOS VASTOS (LIBRAS, VÍDEO 360, APL GAROPABA & IFSC SC) -->
+      <!-- SLIDE 4: EXEMPLOS VASTOS (LIBRAS, VÍDEO 360, APL GAROPABA & LINKS DE REFERÊNCIA) -->
       <section class="slide" id="slide-4">
         <div class="mb-3">
           <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
             <span class="badge-custom">
-              <i class="bi bi-stars"></i> Ideias de Projetos Inspiradores
+              <i class="bi bi-stars"></i> Ideias de Projetos Inspiradores com Links
             </span>
             <span class="text-muted extra-small">Conectados ao IFSC SC \& Arranjo Produtivo de Garopaba</span>
           </div>
-          <h2 class="h3 fw-bold font-outfit text-white mb-1">Exemplos Práticos: Libras, Vídeo 360° \& Impacto Local</h2>
-          <p class="text-secondary extra-small mb-0">Inspirações reais de como a computação resolve demandas de acessibilidade, cultura e ecologia:</p>
+          <h2 class="h3 fw-bold font-outfit text-white mb-1">Exemplos Práticos com Materiais de Referência</h2>
+          <p class="text-secondary extra-small mb-0">Clique nos botões de referência de cada card para acessar exemplos e portais reais:</p>
         </div>
 
         <div class="row g-3">
 
           <!-- 1. LIBRAS & TECNOLOGIA ASSISTIVA -->
           <div class="col-md-4">
-            <div class="glass-card h-100 p-3 border-info">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <i class="bi bi-sign-language-fill text-info fs-2"></i>
-                <span class="badge-ifsc">NAPNE IFSC SC</span>
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between border-info">
+              <div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <i class="bi bi-sign-language-fill text-info fs-2"></i>
+                  <span class="badge-ifsc">NAPNE IFSC SC</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">Comunicação em Libras na Escola</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.78rem;">
+                  Plataforma web/app interativo de sinais em <strong>Libras (Língua Brasileira de Sinais)</strong> com vídeos, avatares e glossário técnico para inclusão de alunos surdos no IFSC e órgãos de Garopaba.
+                </p>
               </div>
-              <h3 class="h6 font-outfit text-white fw-bold mb-1">Comunicação em Libras na Escola</h3>
-              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
-                Plataforma web/app interativo de sinais em <strong>Libras (Língua Brasileira de Sinais)</strong> com vídeos, avatares e glossário técnico para inclusão de alunos surdos no IFSC e órgãos de Garopaba.
-              </p>
+              <a href="https://www.vlibras.gov.br" target="_blank" class="btn-ref-link font-code mt-2">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Referência: VLibras Govt
+              </a>
             </div>
           </div>
 
           <!-- 2. VÍDEO 360 & EXPLORAÇÃO AMBIENTAL -->
           <div class="col-md-4">
-            <div class="glass-card h-100 p-3 border-purple">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <i class="bi bi-camera-reconstitution text-purple fs-2" style="color: var(--accent-purple);"></i>
-                <span class="badge-ifsc">Câmpus Garopaba</span>
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between border-purple">
+              <div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <i class="bi bi-camera-reconstitution text-purple fs-2" style="color: var(--accent-purple);"></i>
+                  <span class="badge-ifsc">Câmpus Garopaba</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">Tour Virtual 360° de Ambientes</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.78rem;">
+                  Exploração imersiva em <strong>Vídeo/Foto 360°</strong> para visitação virtual guiada aos laboratórios do IFSC, patrimônio histórico do Centro de Garopaba e acervos de museus catarinenses.
+                </p>
               </div>
-              <h3 class="h6 font-outfit text-white fw-bold mb-1">Tour Virtual 360° de Ambientes</h3>
-              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
-                Exploração imersiva em <strong>Vídeo/Foto 360°</strong> para visitação virtual guiada aos laboratórios do IFSC, patrimônio histórico do Centro de Garopaba e acervos de museus catarinenses.
-              </p>
+              <a href="https://artsandculture.google.com" target="_blank" class="btn-ref-link font-code mt-2" style="color: var(--accent-purple); border-color: rgba(168, 85, 247, 0.4);">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Referência: Google Arts 360°
+              </a>
             </div>
           </div>
 
           <!-- 3. ROTA DA BALEIA FRANCA / TURISMO APL GAROPABA -->
           <div class="col-md-4">
-            <div class="glass-card h-100 p-3 border-amber">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <i class="bi bi-water text-warning fs-2"></i>
-                <span class="badge-apl">APL Garopaba</span>
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between border-amber">
+              <div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <i class="bi bi-water text-warning fs-2"></i>
+                  <span class="badge-apl">APL Garopaba</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">Rota da Baleia Franca \& EcoTurismo</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.78rem;">
+                  Sistema web interativo para avistamento de cetáceos, catalogação da fauna marinha local e guia de trilhas sustentáveis para turistas e moradores de Garopaba.
+                </p>
               </div>
-              <h3 class="h6 font-outfit text-white fw-bold mb-1">Rota da Baleia Franca \& EcoTurismo</h3>
-              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
-                Sistema web interativo para avistamento de cetáceos, catalogação da fauna marinha local e guia de trilhas sustentáveis para turistas e moradores de Garopaba.
-              </p>
+              <a href="https://rotadabaleiafranca.com.br" target="_blank" class="btn-ref-link font-code mt-2" style="color: var(--accent-amber); border-color: rgba(245, 158, 11, 0.4);">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Referência: Rota Baleia Franca
+              </a>
             </div>
           </div>
 
           <!-- 4. BIM & ECO-CONSTRUÇÃO LITORÂNEA -->
           <div class="col-md-4">
-            <div class="glass-card h-100 p-3 border-warning">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <i class="bi bi-house-gear-fill text-warning fs-2"></i>
-                <span class="badge-docente">Engª Civil</span>
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between border-warning">
+              <div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <i class="bi bi-house-gear-fill text-warning fs-2"></i>
+                  <span class="badge-docente">Engª Civil</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">EcoConstrução \& Orçamento (BIM)</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.78rem;">
+                  Calculadora web e simulador visual para orçamento de obras ecoeficientes e planejamento de construções sustentáveis adaptadas ao litoral catarinense.
+                </p>
               </div>
-              <h3 class="h6 font-outfit text-white fw-bold mb-1">EcoConstrução \& Orçamento (BIM)</h3>
-              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
-                Calculadora web e simulador visual para orçamento de obras ecoeficientes e planejamento de construções sustentáveis adaptadas ao litoral catarinense.
-              </p>
+              <a href="https://www.gov.br/casacivil/pt-br/assuntos/estrategia-bim-br" target="_blank" class="btn-ref-link font-code mt-2" style="color: var(--accent-amber); border-color: rgba(245, 158, 11, 0.4);">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Referência: Estratégia BIM BR
+              </a>
             </div>
           </div>
 
           <!-- 5. MONITORAMENTO SANITÁRIO DAS LAGOAS -->
           <div class="col-md-4">
-            <div class="glass-card h-100 p-3 border-emerald">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <i class="bi bi-activity text-emerald fs-2" style="color: var(--accent-emerald);"></i>
-                <span class="badge-apl">Lagoa Ibiraquera</span>
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between border-emerald">
+              <div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <i class="bi bi-activity text-emerald fs-2" style="color: var(--accent-emerald);"></i>
+                  <span class="badge-apl">Lagoa Ibiraquera</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">MonitoraLagoas Garopaba</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.78rem;">
+                  Dashboard conectado a sensores comunitários para acompanhamento da balneabilidade, salinidade e qualidade da água nas lagoas e bacias locais.
+                </p>
               </div>
-              <h3 class="h6 font-outfit text-white fw-bold mb-1">MonitoraLagoas Garopaba</h3>
-              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
-                Dashboard conectado a sensores comunitários para acompanhamento da balneabilidade, salinidade e qualidade da água nas lagoas e bacias locais.
-              </p>
+              <a href="https://balneabilidade.ima.sc.gov.br" target="_blank" class="btn-ref-link font-code mt-2" style="color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.4);">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Referência: IMA Balneabilidade
+              </a>
             </div>
           </div>
 
           <!-- 6. SIMULADOR FÍSICO / JOGOS EDUCATIVOS -->
           <div class="col-md-4">
-            <div class="glass-card h-100 p-3 border-rose">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <i class="bi bi-controller text-danger fs-2"></i>
-                <span class="badge-docente">Mat. \& Física</span>
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between border-rose">
+              <div>
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <i class="bi bi-controller text-danger fs-2"></i>
+                  <span class="badge-docente">Mat. \& Física</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">Simulador Físico/Matemático</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.78rem;">
+                  Motor gráfico web em Canvas/JS para simulação reativa de refração de ondas de surfe, mecânica dos esportes praianos ou equações de física do ensino médio.
+                </p>
               </div>
-              <h3 class="h6 font-outfit text-white fw-bold mb-1">Simulador Físico/Matemático</h3>
-              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
-                Motor gráfico web em Canvas/JS para simulação reativa de refração de ondas de surfe, mecânica dos esportes praianos ou equações de física do ensino médio.
-              </p>
+              <a href="https://phet.colorado.edu/pt_BR/" target="_blank" class="btn-ref-link font-code mt-2" style="color: var(--accent-rose); border-color: rgba(244, 63, 94, 0.4);">
+                <i class="bi bi-box-arrow-up-right me-1"></i> Referência: PhET Simulações
+              </a>
             </div>
           </div>
 
