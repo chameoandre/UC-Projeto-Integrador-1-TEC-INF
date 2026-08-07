@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aula 1: Jornada do Projeto Integrador 1 — Técnico em Informática (IFSC Garopaba)</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap 5 CSS & Bootstrap Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <style>
+    :root {
+      --ifsc-green: #16a34a;
+      --ifsc-green-dark: #15803d;
+      --bg-dark: #090d16;
+      --bg-card: #131b2e;
+      --bg-card-hover: #1c2742;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --accent-blue: #38bdf8;
+      --accent-purple: #a855f7;
+      --accent-amber: #f59e0b;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    .font-outfit {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .font-code {
+      font-family: 'Fira Code', monospace;
+    }
+
+    .deck-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER FIXO */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.5rem;
+      background: rgba(19, 27, 46, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 100;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo .logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--ifsc-green);
+      color: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .brand-subtitle {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .deck-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: white;
+      padding: 0.4rem 0.9rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    .btn-nav:hover:not(:disabled) {
+      background: var(--ifsc-green);
+      border-color: var(--ifsc-green);
+    }
+
+    .btn-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    .slide-counter {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      min-width: 65px;
+      text-align: center;
+    }
+
+    /* BARRA DE PROGRESSO */
+    .progress-bar-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--ifsc-green), var(--accent-blue));
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* ÁREA DE SLIDES */
+    .slides-wrapper {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      transform: translateX(30px);
+      padding: 2rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+    }
+
+    /* CARDS & GLASSMORPHISM */
+    .glass-card {
+      background: rgba(19, 27, 46, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .badge-custom {
+      background: rgba(22, 163, 74, 0.15);
+      border: 1px solid rgba(22, 163, 74, 0.3);
+      color: #4ade80;
+      padding: 0.35rem 0.85rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* ESTILOS DE INTERDISCIPLINARIDADE */
+    .inter-card {
+      border-left: 4px solid var(--accent-blue);
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      height: 100%;
+    }
+
+    .inter-card-health { border-left-color: var(--accent-rose); }
+    .inter-card-agro { border-left-color: var(--accent-emerald); }
+    .inter-card-games { border-left-color: var(--accent-purple); }
+    .inter-card-cities { border-left-color: var(--accent-amber); }
+    .inter-card-edu { border-left-color: var(--accent-blue); }
+
+    /* TIMELINE DE PIPELINE */
+    .pipeline-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      position: relative;
+      height: 100%;
+    }
+
+    .pipeline-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--ifsc-green);
+      color: white;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    /* FOOTER TECLADO */
+    .keyboard-hint {
+      position: absolute;
+      bottom: 1rem;
+      right: 2.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      z-index: 10;
+    }
+
+    .key-badge {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="deck-container">
+
+    <!-- CABEÇALHO FIXO -->
+    <header class="app-header">
+      <div class="brand-logo">
+        <div class="logo-icon">
+          <i class="bi bi-lightbulb-fill"></i>
+        </div>
+        <div>
+          <h1 class="brand-title font-outfit">Projeto Integrador 1 — Aula 1</h1>
+          <p class="brand-subtitle">Curso Técnico Integrado em Informática (Info 25) • IFSC Garopaba</p>
+        </div>
+      </div>
+
+      <div class="deck-controls">
+        <button class="btn-nav" id="btn-prev" onclick="prevSlide()" disabled>
+          <i class="bi bi-arrow-left"></i> Anterior
+        </button>
+        <span class="slide-counter font-code" id="slide-counter">1 / 8</span>
+        <button class="btn-nav" id="btn-next" onclick="nextSlide()">
+          Próximo <i class="bi bi-arrow-right"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- BARRA DE PROGRESSO DA APRESENTAÇÃO -->
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progress-bar"></div>
+    </div>
+
+    <!-- ÁREA DE CONTEÚDO DOS SLIDES -->
+    <main class="slides-wrapper">
+
+      <!-- SLIDE 1: CAPA & VISÃO INSPIRADORA -->
+      <section class="slide active" id="slide-1">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <span class="badge-custom mb-3">
+              <i class="bi bi-rocket-takeoff-fill"></i> Bem-vindos à Aula Inaugural de PI-1 (2026-2)
+            </span>
+            <h2 class="display-5 fw-bold font-outfit text-white mb-3">
+              Jornada do Projeto Integrador: <br>
+              <span class="text-success">O Poder da Informática Conectada ao Mundo Real</span>
+            </h2>
+            <p class="lead text-secondary mb-4">
+              Como transformamos uma ideia em solução real, um código em experimento científico e um desafio da sociedade em inovação tecnológica?
+            </p>
+
+            <div class="d-flex gap-3 flex-wrap">
+              <div class="glass-card py-2 px-3 d-flex align-items-center gap-2">
+                <i class="bi bi-people-fill text-success fs-4"></i>
+                <div>
+                  <div class="fw-bold small">Turma Info 25</div>
+                  <div class="text-muted extra-small" style="font-size: 0.75rem;">2º Ano Integrado</div>
+                </div>
+              </div>
+              <div class="glass-card py-2 px-3 d-flex align-items-center gap-2">
+                <i class="bi bi-journal-code text-info fs-4"></i>
+                <div>
+                  <div class="fw-bold small">Docente Responsável</div>
+                  <div class="text-muted extra-small" style="font-size: 0.75rem;">Prof. André Moraes</div>
+                </div>
+              </div>
+              <div class="glass-card py-2 px-3 d-flex align-items-center gap-2">
+                <i class="bi bi-award-fill text-warning fs-4"></i>
+                <div>
+                  <div class="fw-bold small">Carga Horária</div>
+                  <div class="text-muted extra-small" style="font-size: 0.75rem;">40 Horas Semestrais</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 text-center d-none d-lg-block">
+            <div class="glass-card p-4 text-center">
+              <i class="bi bi-cpu-fill text-success" style="font-size: 5rem;"></i>
+              <h3 class="h6 font-outfit text-white mt-3 mb-1">Informática Interdisciplinar</h3>
+              <p class="text-muted small mb-0">Computação conectada à Saúde, Meio Ambiente, Educação e Sociedade.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: O MAPA DA MINA (VISÃO GERAL PANORÂMICA) -->
+      <section class="slide" id="slide-2">
+        <div class="mb-4">
+          <span class="badge-custom mb-2">
+            <i class="bi bi-map-fill"></i> Visão Panorâmica do Semestre
+          </span>
+          <h2 class="h3 fw-bold font-outfit text-white">O Mapa da Mina: As 4 Etapas da Nossa Jornada</h2>
+          <p class="text-secondary small">Uma visão geral de como seu projeto nascerá, evoluirá e será apresentado ao final do semestre.</p>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-3">
+            <div class="pipeline-step">
+              <div class="pipeline-number">1</div>
+              <h3 class="h6 font-outfit text-success fw-bold">Problema \& Ideia</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Identificar uma dor real da sociedade ou comunidade. Formular a pergunta de pesquisa e o Diário de Bordo.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="pipeline-step">
+              <div class="pipeline-number" style="background: var(--accent-blue);">2</div>
+              <h3 class="h6 font-outfit text-info fw-bold">Planejamento \& Prototipação</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Criar a EAP (WBS), cronograma no Gantt, quadro Kanban (Trello/GitHub) e desenhar as telas no Figma.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="pipeline-step">
+              <div class="pipeline-number" style="background: var(--accent-purple);">3</div>
+              <h3 class="h6 font-outfit text-purple fw-bold" style="color: var(--accent-purple);">Código \& Versionamento</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Codificar com Git e GitHub em equipe, versionando a produção e publicando a página no GitHub Pages.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="pipeline-step">
+              <div class="pipeline-number" style="background: var(--accent-amber);">4</div>
+              <h3 class="h6 font-outfit text-warning fw-bold">Experimento \& Artigo SBC</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Executar testes empíricos, tabular dados, escrever o Artigo Científico e submeter ao evento acadêmico (SEPE).
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: O SUPERPODER DA INFORMÁTICA (CONEXÃO INTERDISCIPLINAR LÚDICA) -->
+      <section class="slide" id="slide-3">
+        <div class="mb-3">
+          <span class="badge-custom mb-2">
+            <i class="bi bi-controller"></i> Conexões Interdisciplinares
+          </span>
+          <h2 class="h3 fw-bold font-outfit text-white">O "Superpoder" da Informática: Conectando Áreas</h2>
+          <p class="text-secondary small">A informática não existe isolada. Ela é o motor que resolve problemas em todas as ciências!</p>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="inter-card inter-card-health">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-heart-pulse-fill text-danger fs-4"></i>
+                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Saúde \& Medicina</h3>
+              </div>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Algoritmos que detectam sintomas, relógios inteligentes monitorando batimentos e plataformas de auxílio a pacientes.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="inter-card inter-card-agro">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-tree-fill text-success fs-4"></i>
+                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Meio Ambiente \& Agro</h3>
+              </div>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Sensores de umidade no solo, monitoramento de queimadas por satélite e irrigação automatizada em hortas comunitárias.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-4">
+            <div class="inter-card inter-card-games">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-palette-fill text-purple fs-4" style="color: var(--accent-purple);"></i>
+                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Arte, Jogos \& Cultura</h3>
+              </div>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Jogos educativos sobre história local, geradores de música procedural e museus virtuais com realidade aumentada.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="inter-card inter-card-cities">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-buildings-fill text-warning fs-4"></i>
+                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Cidades Inteligentes \& Mobilidade</h3>
+              </div>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Monitoramento de linhas de ônibus em tempo real, rotas otimizadas para coleta de lixo e gestão inteligente de trânsito.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="inter-card inter-card-edu">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="bi bi-person-wheelchair text-info fs-4"></i>
+                <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Inclusão Social \& Acessibilidade</h3>
+              </div>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                Tecnologias assistivas para pessoas com deficiência visual/auditiva, leitor de telas inteligentes e teclados adaptados.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: AFUNILANDO: O QUE É UM PROJETO? -->
+      <section class="slide" id="slide-4">
+        <div class="mb-4">
+          <span class="badge-custom mb-2">
+            <i class="bi bi-funnel-fill"></i> Afunilando Conceitos
+          </span>
+          <h2 class="h3 fw-bold font-outfit text-white">O que é um "Projeto" de Fato?</h2>
+          <p class="text-secondary small">A diferença entre "fazer uma gambiarra rápida" e construir Engenharia com Método Científico.</p>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="glass-card border-danger h-100">
+              <div class="d-flex align-items-center gap-2 text-danger mb-3">
+                <i class="bi bi-x-circle-fill fs-3"></i>
+                <h3 class="h6 font-outfit fw-bold mb-0">O que NÃO é um Projeto de PI-1:</h3>
+              </div>
+              <ul class="text-secondary small ps-3 mb-0">
+                <li class="mb-2">Apenas escrever linhas de código sem saber para quem serve.</li>
+                <li class="mb-2">Começar a programar no primeiro dia sem planejamento visual.</li>
+                <li class="mb-2">Guardar o código apenas no pendrive pessoal sem versionamento.</li>
+                <li class="mb-0">Não testar com pessoas nem registrar resultados empíricos.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="glass-card border-success h-100">
+              <div class="d-flex align-items-center gap-2 text-success mb-3">
+                <i class="bi bi-check-circle-fill fs-3"></i>
+                <h3 class="h6 font-outfit fw-bold mb-0">O que É um Projeto Integrador Completo:</h3>
+              </div>
+              <ul class="text-secondary small ps-3 mb-0">
+                <li class="mb-2">Resolver um <strong>problema real e identificado</strong> da sociedade.</li>
+                <li class="mb-2">Desenhar a arquitetura, prototipar telas e planejar no Kanban.</li>
+                <li class="mb-2">Versionar em equipe no Git/GitHub com histórico transparente.</li>
+                <li class="mb-0">Medir os resultados, redigir o Artigo Científico e publicar no SEPE!</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 5: OS 4 PILARES DO NOSSO SEMESTRE -->
+      <section class="slide" id="slide-5">
+        <div class="mb-3">
+          <span class="badge-custom mb-2">
+            <i class="bi bi-columns-gap"></i> Estrutura da UC
+          </span>
+          <h2 class="h3 fw-bold font-outfit text-white">Os 4 Pilares da Disciplina de PI-1</h2>
+          <p class="text-secondary small">Nossa fórmula para conduzir os trabalhos do início ao fim com tranquilidade.</p>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="glass-card d-flex gap-3">
+              <div class="p-3 bg-success bg-opacity-20 rounded-3 text-success fs-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                <i class="bi bi-journal-bookmark-fill"></i>
+              </div>
+              <div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">Pilar 1: Gestão \& Método Científico</h3>
+                <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                  Formulação da pergunta-problema, hipóteses, diário de bordo digital e registro sistemático das produções.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="glass-card d-flex gap-3">
+              <div class="p-3 bg-info bg-opacity-20 rounded-3 text-info fs-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                <i class="bi bi-diagram-3-fill"></i>
+              </div>
+              <div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">Pilar 2: Planejamento \& Modelagem Visual</h3>
+                <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                  WBS/EAP, cronograma no Gantt, quadro Kanban no GitHub Projects e prototipação de wireframes no Figma.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="glass-card d-flex gap-3">
+              <div class="p-3 bg-purple bg-opacity-20 rounded-3 text-purple fs-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px; color: var(--accent-purple);">
+                <i class="bi bi-git"></i>
+              </div>
+              <div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">Pilar 3: Versionamento \& Controle de Código</h3>
+                <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                  Git fundamental, fluxo de branches em equipe, repositório no GitHub e publicação viva no GitHub Pages.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="glass-card d-flex gap-3">
+              <div class="p-3 bg-warning bg-opacity-20 rounded-3 text-warning fs-3 d-flex align-items-center justify-content-center" style="width: 54px; height: 54px;">
+                <i class="bi bi-file-earmark-pdf-fill"></i>
+              </div>
+              <div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">Pilar 4: Checkpoints \& Artigo Científico</h3>
+                <p class="text-secondary extra-small mb-0" style="font-size: 0.8rem;">
+                  Desenvolvimento por checkpoints (1, 2 e 3), testes empíricos, escrita no modelo SBC/IFSC e submissão ao SEPE.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: A ARTE DE IDENTIFICAR UM BOM PROBLEMA -->
+      <section class="slide" id="slide-6">
+        <div class="mb-4">
+          <span class="badge-custom mb-2">
+            <i class="bi bi-search"></i> Primeiro Conceito Prático
+          </span>
+          <h2 class="h3 fw-bold font-outfit text-white">A Arte de Identificar um Bom Problema Real</h2>
+          <p class="text-secondary small">Como transformar uma insatisfação do dia a dia em um projeto de tecnologia significativo?</p>
+        </div>
+
+        <div class="row g-4 align-items-center">
+          <div class="col-md-7">
+            <div class="glass-card">
+              <h3 class="h6 font-outfit text-success fw-bold mb-3">A Fórmula da Pergunta-Problema:</h3>
+              <div class="p-3 rounded-3 mb-3 font-code text-info" style="background: rgba(0,0,0,0.5); font-size: 0.85rem;">
+                "Como a <span class="text-warning">[SOLUÇÃO TECNOLÓGICA]</span> pode ajudar <span class="text-success">[PÚBLICO-ALVO]</span> a resolver <span class="text-rose" style="color: var(--accent-rose);">[PROBLEMA ESPECÍFICO]</span> no contexto de <span class="text-white">[CIDADE / ESCOLA / ÁREA]</span>?"
+              </div>
+              
+              <h4 class="h6 font-outfit text-white fw-bold mb-2">Exemplo Prático:</h4>
+              <p class="text-secondary small mb-0">
+                <em>"Como uma <strong>planta web interativa de reciclagem</strong> pode ajudar <strong>moradores de Garopaba</strong> a descartar <strong>lixo eletrônico corretamente</strong> nas associações do município?"</em>
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-5">
+            <div class="glass-card">
+              <h3 class="h6 font-outfit text-warning fw-bold mb-2">Perguntas de Filtro:</h3>
+              <ul class="text-secondary extra-small ps-3 mb-0" style="font-size: 0.8rem;">
+                <li class="mb-2">O problema realmente afeta pessoas reais?</li>
+                <li class="mb-2">É viável desenvolver um protótipo durante o semestre?</li>
+                <li class="mb-2">Conseguimos testar o protótipo com os usuários?</li>
+                <li class="mb-0">Dá para extrair dados e escrever um artigo sobre isso?</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7: FERRAMENTAS DA NOSSA JORNADA -->
+      <section class="slide" id="slide-7">
+        <div class="mb-4">
+          <span class="badge-custom mb-2">
+            <i class="bi bi-tools"></i> Nosso Kit de Ferramentas
+          </span>
+          <h2 class="h3 fw-bold font-outfit text-white">Nosso "Kit de Sobrevivência" Tecnológico</h2>
+          <p class="text-secondary small">As ferramentas profissionais que usaremos ao longo de todo o semestre.</p>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-3">
+            <div class="glass-card text-center p-3">
+              <i class="bi bi-github text-white display-5 mb-2"></i>
+              <h3 class="h6 font-outfit text-white fw-bold">GitHub \& Projects</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Repositório oficial da equipe, histórico de código e quadro Kanban de tarefas.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="glass-card text-center p-3">
+              <i class="bi bi-file-earmark-tex-fill text-info display-5 mb-2"></i>
+              <h3 class="h6 font-outfit text-white fw-bold">Overleaf (LaTeX)</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Editor online em nuvem para escrita do Artigo Científico no padrão oficial da SBC.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="glass-card text-center p-3">
+              <i class="bi bi-kanban-fill text-warning display-5 mb-2"></i>
+              <h3 class="h6 font-outfit text-white fw-bold">Figma / Wireframes</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Ferramenta para prototipação visual de telas e experiência do usuário (UI/UX).
+              </p>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="glass-card text-center p-3">
+              <i class="bi bi-journal-text text-success display-5 mb-2"></i>
+              <h3 class="h6 font-outfit text-white fw-bold">Diário de Bordo</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Registro semanal das reuniões, decisões da equipe e avanços no projeto.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 8: PRIMEIRO DESAFIO PRÁTICO (DINÂMICA DA AULA) -->
+      <section class="slide" id="slide-8">
+        <div class="mb-4 text-center">
+          <span class="badge-custom mb-2">
+            <i class="bi bi-flag-fill"></i> Atividade Prática da Aula 1
+          </span>
+          <h2 class="h3 fw-bold font-outfit text-white">Desafio Prático Inicial: Formação de Equipes \& Brainstorming</h2>
+          <p class="text-secondary small">Colocando a mão na massa hoje mesmo no laboratório!</p>
+        </div>
+
+        <div class="row justify-content-center">
+          <div class="col-lg-10">
+            <div class="glass-card border-success p-4">
+              <div class="row g-4">
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center gap-2 mb-2 text-success">
+                    <i class="bi bi-1-circle-fill fs-4"></i>
+                    <h3 class="h6 font-outfit fw-bold mb-0">Passo 1: Equipes</h3>
+                  </div>
+                  <p class="text-secondary extra-small mb-0" style="font-size: 0.82rem;">
+                    Forme sua equipe de trabalho para o semestre (grupos de 3 a 4 estudantes da Turma Info 25).
+                  </p>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center gap-2 mb-2 text-info">
+                    <i class="bi bi-2-circle-fill fs-4"></i>
+                    <h3 class="h6 font-outfit fw-bold mb-0">Passo 2: 3 Ideias</h3>
+                  </div>
+                  <p class="text-secondary extra-small mb-0" style="font-size: 0.82rem;">
+                    Discuta e proponha <strong>3 ideias de problemas reais</strong> conectando Informática com Saúde, Meio Ambiente, Educação ou Sociedade.
+                  </p>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="d-flex align-items-center gap-2 mb-2 text-warning">
+                    <i class="bi bi-3-circle-fill fs-4"></i>
+                    <h3 class="h6 font-outfit fw-bold mb-0">Passo 3: Registro</h3>
+                  </div>
+                  <p class="text-secondary extra-small mb-0" style="font-size: 0.82rem;">
+                    Crie o repositório da equipe no GitHub e faça o primeiro registro das 3 ideias no Diário de Bordo!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- HINT TECLADO -->
+    <div class="keyboard-hint">
+      Navegue com as setas do teclado: <span class="key-badge">←</span> <span class="key-badge">→</span> ou <span class="key-badge">Espaço</span>
+    </div>
+
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const slideCounter = document.getElementById('slide-counter');
+    const progressBar = document.getElementById('progress-bar');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+
+    function updateSlide() {
+      slides.forEach((slide, index) => {
+        if (index === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      slideCounter.textContent = `${currentSlide + 1} / ${totalSlides}`;
+      const progressPercent = ((currentSlide + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      btnPrev.disabled = (currentSlide === 0);
+      btnNext.disabled = (currentSlide === totalSlides - 1);
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    // NAVEGAÇÃO POR TECLADO
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevSlide();
+      }
+    });
+
+    // INICIALIZAÇÃO
+    updateSlide();
+  </script>
+
+</body>
+
+</html>
