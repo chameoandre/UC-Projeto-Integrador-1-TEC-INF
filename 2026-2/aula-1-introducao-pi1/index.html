@@ -253,6 +253,16 @@
       text-transform: uppercase;
     }
 
+    .badge-tech {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-family: 'Fira Code', monospace;
+    }
+
     /* BOTÕES DE REFERÊNCIA EXTERNA */
     .btn-ref-link {
       display: inline-flex;
@@ -275,6 +285,28 @@
       color: #090d16;
       border-color: var(--accent-blue);
       transform: translateY(-1px);
+    }
+
+    .btn-youtube-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      text-decoration: none;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-youtube-link:hover {
+      background: #ef4444;
+      color: white;
+      border-color: #ef4444;
     }
 
     /* CARDS INTERDISCIPLINARES ILUSTRADOS */
@@ -391,7 +423,7 @@
         <button class="btn-nav" id="btn-prev" onclick="prevSlide()" disabled>
           <i class="bi bi-arrow-left"></i> Anterior
         </button>
-        <span class="slide-counter font-code" id="slide-counter">1 / 9</span>
+        <span class="slide-counter font-code" id="slide-counter">1 / 10</span>
         <button class="btn-nav" id="btn-next" onclick="nextSlide()">
           Próximo <i class="bi bi-arrow-right"></i>
         </button>
@@ -726,8 +758,278 @@
         </div>
       </section>
 
-      <!-- SLIDE 5: AFUNILANDO: O QUE É UM PROJETO? -->
+      <!-- SLIDE 5 (NOVO): VITRINE DOS PROJETOS DA TURMA INF 24 (PROJETO INTEGRADOR II) -->
       <section class="slide" id="slide-5">
+        <div class="mb-3">
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
+            <span class="badge-custom" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); border-color: rgba(56, 189, 248, 0.3);">
+              <i class="bi bi-mortarboard-fill"></i> Projetos Reais da Turma INF 24 (PI-2)
+            </span>
+            <span class="text-muted extra-small">Projetos em Desenvolvimento no IFSC Garopaba</span>
+          </div>
+          <h2 class="h3 fw-bold font-outfit text-white mb-1">O que os Estudantes do 3º Ano Estão Criando?</h2>
+          <p class="text-secondary extra-small mb-0">Exemplos reais com repositórios no GitHub e vídeos de pitch dos colegas veteranos:</p>
+        </div>
+
+        <div class="row g-3">
+
+          <!-- 1. SMC: MONTAGEM DE COMPUTADORES -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-success extra-small">Hardware \& Game</span>
+                  <span class="text-muted extra-small font-code">Lucas, Bernardo, Henrique</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">1. SMC: Montagem de PCs</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.75rem;">
+                  Ferramenta virtual estilo drag-and-drop no Godot para aprendizado prático e interativo de peças de hardware.
+                </p>
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge-tech">Godot</span>
+                  <span class="badge-tech">Drag-n-Drop</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="https://github.com/henriquec30-web/projeto_pi.git" target="_blank" class="btn-ref-link font-code flex-grow-1">
+                  <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://youtu.be/CPQ0VqHQGHg" target="_blank" class="btn-youtube-link font-code">
+                  <i class="bi bi-youtube"></i> Pitch
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. JIFTV STREAMING -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-info text-dark extra-small">Streaming \& Redes</span>
+                  <span class="text-muted extra-small font-code">Rodrigo, Eluney, João, Anderson</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">2. JifTV: Streaming Adaptativo</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.75rem;">
+                  Transmissão ao vivo em tempo real dos jogos do IFSC (JIF) via streaming adaptativo + catálogo web de partidas.
+                </p>
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge-tech">Docker</span>
+                  <span class="badge-tech">OBS</span>
+                  <span class="badge-tech">Nginx</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="https://github.com/yaurodzz/JifTV-StreamingAdaptativo.git" target="_blank" class="btn-ref-link font-code flex-grow-1">
+                  <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://youtu.be/B0tZgwmd4vg" target="_blank" class="btn-youtube-link font-code">
+                  <i class="bi bi-youtube"></i> Pitch
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. CURSO POPULAR DE INFORMÁTICA -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-warning text-dark extra-small">Extensão \& Inclusão</span>
+                  <span class="text-muted extra-small font-code">Pietro, Artur, Lucas Sehn</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">3. Curso Popular de Informática</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.75rem;">
+                  Plataforma de extensão para capacitação de trabalhadores locais no uso de ferramentas computacionais acadêmicas.
+                </p>
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge-tech">Extensão</span>
+                  <span class="badge-tech">Google Docs</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="https://github.com/PietroFachini/PI-Curso-Popular-de-Inform-tica-do-Trabalhador" target="_blank" class="btn-ref-link font-code flex-grow-1">
+                  <i class="bi bi-github"></i> GitHub Repos
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. RASPORTA: FECHADURA BIOMÉTRICA -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-danger extra-small">IoT \& Biometria</span>
+                  <span class="text-muted extra-small font-code">Petrus, Martin, Felipe</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">4. RasPorta: Fechadura Biométrica</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.75rem;">
+                  Fechadura automática inteligente controlada por biometria, leitor de digitais, Raspberry Pi, Flask e SQLite.
+                </p>
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge-tech">Raspberry Pi</span>
+                  <span class="badge-tech">Flask</span>
+                  <span class="badge-tech">SQLite</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="https://github.com/petrusgunder/projeto-rasptraca" target="_blank" class="btn-ref-link font-code flex-grow-1">
+                  <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://youtu.be/qFKXWlbp3Lg" target="_blank" class="btn-youtube-link font-code">
+                  <i class="bi bi-youtube"></i> Pitch
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. D20HUB: RPG DE MESA -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-purple text-white extra-small" style="background: var(--accent-purple);">Web \& RPG Cultura</span>
+                  <span class="text-muted extra-small font-code">Nicolas, Eduardo, H. Gama</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">5. D20Hub: Gerenciador de RPG</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.75rem;">
+                  Plataforma web de fichas de personagens, salas em tempo real e incentivo ao RPG de mesa como ferramenta educacional.
+                </p>
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge-tech">Django</span>
+                  <span class="badge-tech">TypeScript</span>
+                  <span class="badge-tech">WebSockets</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="https://github.com/Nicolas0413/d20hub_project" target="_blank" class="btn-ref-link font-code flex-grow-1">
+                  <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://youtu.be/UQryzKcBu1A" target="_blank" class="btn-youtube-link font-code">
+                  <i class="bi bi-youtube"></i> Pitch
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 6. ACERVO MAGE 3D -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-primary extra-small">Modelagem 3D</span>
+                  <span class="text-muted extra-small font-code">Raul, Pedro, Augusto, Cecília</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">6. Acervo Digital MAGe 3D</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.75rem;">
+                  Visualizador web de modelos 3D fotogramétricos dos equipamentos do laboratório MAGe do IFSC Garopaba.
+                </p>
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge-tech">Blender</span>
+                  <span class="badge-tech">Polycam</span>
+                  <span class="badge-tech">Sketchfab</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="https://github.com/PedroHvieiraC/Acervo-Digital-MAGe.git" target="_blank" class="btn-ref-link font-code flex-grow-1">
+                  <i class="bi bi-github"></i> GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. MÚSICA, JOGO E ATENÇÃO -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-secondary extra-small">Gamificação \& Educação</span>
+                  <span class="text-muted extra-small font-code">Luisa Narvaz</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">7. Música, Jogo e Atenção</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.75rem;">
+                  Jogo musical interativo em Pygame e Raspberry Pi para auxílio de crianças com dificuldades de atenção escolar.
+                </p>
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge-tech">Pygame</span>
+                  <span class="badge-tech">Raspberry Pi</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="https://github.com/luisablankenburg08/jogo_pygame.git" target="_blank" class="btn-ref-link font-code flex-grow-1">
+                  <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://youtu.be/Wm4SfQHkzHI" target="_blank" class="btn-youtube-link font-code">
+                  <i class="bi bi-youtube"></i> Pitch
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. ESTAÇÃO METEOROLÓGICA -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-success extra-small">IoT \& Clima</span>
+                  <span class="text-muted extra-small font-code">Beatriz, Laura, Oriana, Sophie, Vic</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">8. Estação Meteorológica IFSC</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.75rem;">
+                  Estação meteorológica de baixo custo com Raspberry Pi e sensores (BME280) para dados de clima educacionais.
+                </p>
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge-tech">BME280</span>
+                  <span class="badge-tech">Python</span>
+                  <span class="badge-tech">Raspberry</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="https://github.com/sophirie/Estacao-Meteorologica-no-IFSC-Garopaba.git" target="_blank" class="btn-ref-link font-code flex-grow-1">
+                  <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://youtu.be/Vu1pXKOnp58" target="_blank" class="btn-youtube-link font-code">
+                  <i class="bi bi-youtube"></i> Pitch
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 9. SCOUT DE VÔLEI -->
+          <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-warning text-dark extra-small">Web App \& Esportes</span>
+                  <span class="text-muted extra-small font-code">Nathan, João Contreira, Pedro E</span>
+                </div>
+                <h3 class="h6 font-outfit text-white fw-bold mb-1">9. Volleyball Scout</h3>
+                <p class="text-secondary extra-small mb-2" style="font-size: 0.75rem;">
+                  Aplicativo web móvel para estatísticas de scout em partidas de vôlei para autoanálise e estratégias de equipe.
+                </p>
+                <div class="d-flex gap-1 flex-wrap mb-2">
+                  <span class="badge-tech">TypeScript</span>
+                  <span class="badge-tech">Web App</span>
+                  <span class="badge-tech">PWA</span>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <a href="https://github.com/ImEnrik/Volleyball-scout" target="_blank" class="btn-ref-link font-code flex-grow-1">
+                  <i class="bi bi-github"></i> GitHub
+                </a>
+                <a href="https://www.youtube.com/watch?v=-PZDz0iYYZQ" target="_blank" class="btn-youtube-link font-code">
+                  <i class="bi bi-youtube"></i> Pitch
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 6: AFUNILANDO: O QUE É UM PROJETO? -->
+      <section class="slide" id="slide-6">
         <div class="mb-4">
           <span class="badge-custom mb-2">
             <i class="bi bi-funnel-fill"></i> Afunilando Conceitos
@@ -769,8 +1071,8 @@
         </div>
       </section>
 
-      <!-- SLIDE 6: OS 4 PILARES DO NOSSO SEMESTRE -->
-      <section class="slide" id="slide-6">
+      <!-- SLIDE 7: OS 4 PILARES DO NOSSO SEMESTRE -->
+      <section class="slide" id="slide-7">
         <div class="mb-3">
           <span class="badge-custom mb-2">
             <i class="bi bi-columns-gap"></i> Estrutura da UC
@@ -838,8 +1140,8 @@
         </div>
       </section>
 
-      <!-- SLIDE 7: A ARTE DE IDENTIFICAR UM BOM PROBLEMA -->
-      <section class="slide" id="slide-7">
+      <!-- SLIDE 8: A ARTE DE IDENTIFICAR UM BOM PROBLEMA -->
+      <section class="slide" id="slide-8">
         <div class="mb-4">
           <span class="badge-custom mb-2">
             <i class="bi bi-search"></i> Primeiro Conceito Prático
@@ -877,8 +1179,8 @@
         </div>
       </section>
 
-      <!-- SLIDE 8: NOSSO KIT DE FERRAMENTAS -->
-      <section class="slide" id="slide-8">
+      <!-- SLIDE 9: NOSSO KIT DE FERRAMENTAS -->
+      <section class="slide" id="slide-9">
         <div class="mb-4">
           <span class="badge-custom mb-2">
             <i class="bi bi-tools"></i> Nosso Kit de Ferramentas
@@ -930,8 +1232,8 @@
         </div>
       </section>
 
-      <!-- SLIDE 9: ATIVIDADE PRÁTICA DA AULA -->
-      <section class="slide" id="slide-9">
+      <!-- SLIDE 10: ATIVIDADE PRÁTICA DA AULA -->
+      <section class="slide" id="slide-10">
         <div class="mb-4 text-center">
           <span class="badge-custom mb-2">
             <i class="bi bi-flag-fill"></i> Atividade Prática da Aula 1
@@ -960,7 +1262,7 @@
                     <h3 class="h6 font-outfit fw-bold mb-0">Passo 2: 3 Ideias</h3>
                   </div>
                   <p class="text-secondary extra-small mb-0" style="font-size: 0.82rem;">
-                    Discuta e proponha <strong>3 ideias de problemas reais</strong> (incluindo Libras, Vídeo 360°, Turismo Local ou Saneamento).
+                    Discuta e proponha <strong>3 ideias de problemas reais</strong> (inspire-se nos projetos da INF 24, Libras, Vídeo 360° ou Ecologia).
                   </p>
                 </div>
 
@@ -987,7 +1289,7 @@
         <i class="bi bi-arrow-left-circle-fill"></i> Anterior
       </button>
 
-      <span class="slide-counter font-code" id="bottom-slide-counter">1 / 9</span>
+      <span class="slide-counter font-code" id="bottom-slide-counter">1 / 10</span>
 
       <button class="btn-slide-nav" id="btn-bottom-next" onclick="nextSlide()">
         Próximo <i class="bi bi-arrow-right-circle-fill"></i>
