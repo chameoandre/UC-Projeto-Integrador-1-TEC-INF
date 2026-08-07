@@ -1,0 +1,297 @@
+\documentclass[12pt,a4paper]{article}
+
+% =====================================================
+% PACOTES E CONFIGURAÇÕES DE PÁGINA
+% =====================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil,shorthands=off]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[table]{xcolor}
+\usepackage{hyperref}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{newtxtext,newtxmath}
+\usepackage[most]{tcolorbox}
+\usepackage{float}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.0cm,
+    right=2.0cm
+}
+
+\onehalfspacing
+
+% =====================================================
+% CORES INSTITUCIONAIS (IFSC)
+% =====================================================
+\definecolor{ifscGreen}{RGB}{22,163,74}
+\definecolor{azulTitulo}{RGB}{30,60,90}
+\definecolor{cinzaCabecalho}{RGB}{235,240,245}
+\definecolor{cinzaLinha}{RGB}{248,250,252}
+\definecolor{borderGray}{RGB}{200,210,220}
+
+% =====================================================
+% CONFIGURAÇÃO DE HIPERLINKS
+% =====================================================
+\hypersetup{
+    colorlinks=true,
+    linkcolor=azulTitulo,
+    urlcolor=ifscGreen,
+    citecolor=azulTitulo
+}
+
+% =====================================================
+% ESTILOS DE SEÇÃO
+% =====================================================
+\titleformat{\section}
+{\normalfont\large\bfseries\color{azulTitulo}}
+{\thesection}
+{1em}
+{}
+[\vspace{0.2cm}\hrule\vspace{0.2cm}]
+
+\titleformat{\subsection}
+{\normalfont\bfseries\color{azulTitulo}}
+{\thesubsection}
+{1em}
+{}
+
+% =====================================================
+% CABEÇALHO E RODAPÉ
+% =====================================================
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhead[L]{
+\textbf{IFSC Câmpus Garopaba}
+}
+
+\fancyhead[R]{
+\textbf{Plano de Ensino — 2026/2}\\
+\small UC: Projeto Integrador 1 (Info 25)\\
+\small Técnico Integrado em Informática — IFSC
+}
+
+\fancyfoot[L]{\small\textit{Plano de Ensino — UC Projeto Integrador 1 (Turma Info 25)}}
+\fancyfoot[C]{}
+\fancyfoot[R]{\small Página \thepage}
+\renewcommand{\footrulewidth}{1.5pt}
+
+\setlength{\headheight}{35pt}
+
+% =====================================================
+% DOCUMENTO PRINCIPAL
+% =====================================================
+\begin{document}
+
+% -----------------------------------------------------
+% CABEÇALHO DE IDENTIFICAÇÃO INSTITUCIONAL
+% -----------------------------------------------------
+\begin{center}
+    {\Large \textbf{MINISTÉRIO DA EDUCAÇÃO}}\\
+    {\large SECRETARIA DE EDUCAÇÃO PROFISSIONAL E TECNOLÓGICA}\\
+    {\large INSTITUTO FEDERAL DE EDUCAÇÃO, CIÊNCIA E TECNOLOGIA DE SANTA CATARINA}\\
+    {\large CÂMPUS GAROPABA}\\[0.4cm]
+    {\Large \textbf{PLANO DE ENSINO — UNIDADE CURRICULAR}}\\[0.2cm]
+    {\large \textbf{Semestre Letivo: 2026/2 | Turma: Info 25 (2º Ano)}}
+\end{center}
+
+\vspace{0.3cm}
+
+% -----------------------------------------------------
+% 1. DADOS DE IDENTIFICAÇÃO
+% -----------------------------------------------------
+\section{Dados de Identificação}
+
+\begin{table}[H]
+\centering
+\small
+\arrayrulecolor{borderGray}
+\begin{tabularx}{\textwidth}{|l|X|}
+\hline
+\rowcolor{cinzaCabecalho}
+\multicolumn{2}{|c|}{\textbf{INFORMAÇÕES DA UNIDADE CURRICULAR}} \\ \hline
+\textbf{Curso:} & Curso Técnico Integrado em Informática ao Ensino Médio \\ \hline
+\textbf{Unidade Curricular (UC):} & Projeto Integrador 1 (PI-1) \\ \hline
+\textbf{Turma:} & Info 25 (2ª Fase / 2º Ano) \\ \hline
+\textbf{Carga Horária Total:} & 40 horas semestrais \\ \hline
+\textbf{Carga Horária Semanal:} & 2 horas/aula semanais \\ \hline
+\textbf{Pré-requisito(s):} & Unidades Curriculares do 1º Ano do Curso Técnico em Informática \\ \hline
+\textbf{Docente Responsável:} & Prof. André Moraes (\texttt{chameoandre}) \\ \hline
+\textbf{E-mail do Docente:} & \url{andre.moraes@ifsc.edu.br} \\ \hline
+\end{tabularx}
+\end{table}
+
+% -----------------------------------------------------
+% 2. EMENTA (PPC DE INFORMÁTICA INTEGRADO)
+% -----------------------------------------------------
+\section{Ementa}
+
+Conceitos fundamentais de gestão de projetos tecnológicos e método científico; Problematização, formulação de hipóteses, diário de bordo e registro sistemático da produção técnica e científica; Ferramentas de planejamento de projetos, Estrutura Analítica do Projeto (WBS/EAP), cronogramas de Gantt e quadros visuais de acompanhamento Kanban; Modelagem visual de ideias, fluxogramas de processos, arquiteturas de informação e prototipação rápida de interfaces (Wireframes); Ferramentas de controle de código-fonte, versionamento distribuído com Git, colaboração em equipe no GitHub e publicação contínua no GitHub Pages; Metodologia de desenvolvimento por experimentação prática e \textit{checkpoints} de produção; Redação científica no padrão SBC/IFSC, tabulação de dados empíricos, análise de resultados e preparação de submissão de recortes do trabalho para eventos científicos (ex: SEPE / Simpósio de Pesquisa e Extensão).
+
+% -----------------------------------------------------
+% 3. OBJETIVOS
+% -----------------------------------------------------
+\section{Objetivos de Aprendizagem}
+
+\subsection{Objetivo Geral}
+Capacitar os estudantes da Turma Info 25 na concepção, planejamento, execução, versionamento e registro científico de projetos integradores na área de informática, combinando a solução de problemas reais por experimentação prática com a produção técnica e científica orientada à publicação em eventos acadêmicos.
+
+\subsection{Objetivos Específicos}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Pilar 1 — Gestão \& Método Científico:} Compreender os elementos constitutivos de um projeto (problema, justificativa, hipóteses, objetivos e metodologia) e registrar sistematicamente o progresso em diários de bordo e relatórios técnicos;
+    \item \textbf{Pilar 2 — Planejamento \& Modelagem Visual:} Utilizar ferramentas visuais de planejamento (quadros Kanban, cronogramas de Gantt) e diagramas de modelagem (fluxogramas e wireframes) para esboçar e controlar o andamento das ideias;
+    \item \textbf{Pilar 3 — Versionamento \& Produção de Código:} Dominar o uso do Git e GitHub para versionamento de código, colaboração em grupo e publicação contínua da documentação do projeto via GitHub Pages;
+    \item \textbf{Pilar 4 — Experimentação \& Produção Científica:} Executar projetos por meio de \textit{checkpoints} práticos de experimentação, coletar dados empíricos, redigir artigos científicos no padrão SBC/IFSC e submeter os resultados para eventos científicos institucionais.
+\end{itemize}
+
+% -----------------------------------------------------
+% 4. CONTEÚDO PROGRAMÁTICO E CRONOGRAMA SEMESTRAL
+% -----------------------------------------------------
+\section{Conteúdo Programático e Cronograma de Aulas (40h / 20 Encontros)}
+
+O conteúdo está estruturado em torno dos **4 Pilares Pedagógicos da Disciplina**:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|c|c|X|c|}
+\hline
+\rowcolor{cinzaCabecalho}
+\textbf{Encontro} & \textbf{Pilar} & \textbf{Conteúdo Programático e Atividades Práticas} & \textbf{CH} \\ \hline
+\rowcolor{cinzaLinha}
+01 & **Pilar 1** & \textbf{Apresentação da UC \& Método Científico} — Objetivos do Projeto Integrador 1, conceitos de pesquisa científica, diário de bordo e problematização. & 2h \\ \hline
+02 & **Pilar 1** & \textbf{Estruturação de Projetos} — Formulação de problemas reais, justificativa, objetivos gerais e específicos, e definição de hipóteses de solução. & 2h \\ \hline
+\rowcolor{cinzaLinha}
+03 & **Pilar 1** & \textbf{Pesquisa Bibliográfica \& Trabalhos Correlatos} — Mapeamento de literatura técnica/científica e registro sistemático de referências. & 2h \\ \hline
+04 & **Pilar 1** & \textbf{Definição do Escopo dos Grupos} — Formação das equipes de trabalho, escolha da temática integradora e validação do problema. & 2h \\ \hline
+\rowcolor{cinzaLinha}
+05 & **Pilar 2** & \textbf{Ferramentas de Planejamento (WBS \& Gantt)} — Estrutura Analítica do Projeto (EAP/WBS) e construção de cronogramas no Gantt. & 2h \\ \hline
+06 & **Pilar 2** & \textbf{Gestão Ágil de Tarefas com Kanban} — Configuração do quadro visual de acompanhamento de produção no GitHub Projects / Trello. & 2h \\ \hline
+\rowcolor{cinzaLinha}
+07 & **Pilar 2** & \textbf{Modelagem Visual \& Fluxogramas} — Desenho de fluxos de processos, diagramas de arquitetura e visão geral do sistema. & 2h \\ \hline
+08 & **Pilar 2** & \textbf{Prototipação Rápida de Interfaces} — Esboço de telas, wireframes e fluxo de navegação do usuário (Figma / Excalidraw). & 2h \\ \hline
+\rowcolor{cinzaLinha}
+09 & **Pilar 3** & \textbf{Controle de Código com Git} — Instalação do Git, comandos fundamentais (\texttt{init}, \texttt{add}, \texttt{commit}, \texttt{status}, \texttt{log}). & 2h \\ \hline
+10 & **Pilar 3** & \textbf{Gestão de Repositórios no GitHub} — Criação do repositório da equipe, controle de branches, pull requests e revisão de código. & 2h \\ \hline
+\rowcolor{cinzaLinha}
+11 & **Pilar 3** & \textbf{Documentação Viva \& GitHub Pages} — Construção do README institucional e publicação da página web do projeto no GitHub Pages. & 2h \\ \hline
+12 & **Pilar 3** & \textbf{Mentoria de Versionamento \& Organização} — Auditoria dos repositórios de código, branches e quadros Kanban das equipes. & 2h \\ \hline
+\rowcolor{cinzaLinha}
+13 & **Pilar 4** & \textbf{Checkpoint 1 — Produção por Experimentação Mínima} — Construção do protótipo experimental inicial e execução dos primeiros testes. & 2h \\ \hline
+14 & **Pilar 4** & \textbf{Checkpoint 1 — Coleta \& Tabulação de Dados} — Coleta de métricas e resultados empíricos do experimento em tabela. & 2h \\ \hline
+\rowcolor{cinzaLinha}
+15 & **Pilar 4** & \textbf{Checkpoint 2 — Redação Científica (Padrão SBC/IFSC)} — Estrutura do Artigo: Introdução, Trabalhos Relacionados e Metodologia. & 2h \\ \hline
+16 & **Pilar 4** & \textbf{Checkpoint 2 — Análise de Resultados \& Discussão} — Elaboração de gráficos, discussão dos dados obtidos e Conclusão. & 2h \\ \hline
+\rowcolor{cinzaLinha}
+17 & **Pilar 4** & \textbf{Checkpoint 3 — Revisão do Artigo \& Formatação} — Ajustes finais de linguagem, normas ABNT/SBC e revisão por pares entre turmas. & 2h \\ \hline
+18 & **Pilar 4** & \textbf{Checkpoint 3 — Submissão para Evento Científico} — Preparação do pacote de submissão para o SEPE / Simpósio de Pesquisa e Extensão. & 2h \\ \hline
+\rowcolor{cinzaLinha}
+19 & **Pilar 4** & \textbf{Apresentação Final \& Defesa Demonstrativa} — Exposição demonstrativa dos projetos e bancas de avaliação pedagógica. & 2h \\ \hline
+20 & **Pilar 4** & \textbf{Encerramento do Semestre \& Recuperação Paralela} — Apuração final de notas, consolidação de arquivos e encerramento letivo. & 2h \\ \hline
+\multicolumn{3}{|r|}{\textbf{Carga Horária Total Semestral:}} & \textbf{40h} \\ \hline
+\end{tabularx}
+\end{table}
+
+% -----------------------------------------------------
+% 5. METODOLOGIA DE ENSINO
+% -----------------------------------------------------
+\section{Metodologia de Ensino e Aprendizagem}
+
+A Unidade Curricular é desenvolvida no formato de **Oficina de Projetos e Laboratório de Pesquisa Aplicada**, combinando sessões teóricas de orientação com trabalho prático das equipes:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Aprendizagem Baseada em Projetos (PBL):} Os estudantes trabalham em equipes na resolução de um problema real com foco na área de informática;
+    \item \textbf{Metodologia por Checkpoints:} O semestre é dividido em marcos de entrega (\textit{checkpoints}), garantindo ritmo constante de produção sem acúmulo no final do período;
+    \item \textbf{Mentoria e Orientação em Laboratório:} Atendimento personalizado pelo docente a cada equipe para solução de dúvidas de arquitetura, Git e redação científica;
+    \item \textbf{Cultura de Versionamento e Transparência:} Todo o progresso do projeto (código, documentos, quadros Kanban e diário de bordo) é mantido obrigatoriamente no GitHub.
+\end{itemize}
+
+% -----------------------------------------------------
+% 6. PROCEDIMENTOS DE AVALIAÇÃO
+% -----------------------------------------------------
+\section{Procedimentos de Avaliação da Aprendizagem}
+
+A avaliação é contínua, formativa e processual, composta por **três instrumentos avaliativos**:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{|l|X|c|}
+\hline
+\rowcolor{cinzaCabecalho}
+\textbf{Instrumento Avaliativo} & \textbf{Descrição e Critérios de Desempenho} & \textbf{Peso} \\ \hline
+\textbf{Avaliação Teórico-Conceitual (A1)} & Avaliação individual escrita/prática sobre conceitos de gestão de projetos, método científico, ferramentas de planejamento e comandos Git. & \textbf{20\%} \\ \hline
+\rowcolor{cinzaLinha}
+\textbf{Avaliação Contínua de Produção (A2)} & \textbf{Conjunto de Participação + Pontualidade de Entrega:} Avaliação contínua da assiduidade, engajamento nos atendimentos de mentoria, atualização semanal do quadro Kanban, diário de bordo e pontualidade nos Checkpoints 1, 2 e 3. & \textbf{35\%} \\ \hline
+\textbf{Artigo Científico \& Protótipo Final (A3)} & \textbf{Trabalho Prático Integrador de Extensão:} Entrega do Artigo Científico formatado (Modelo SBC/IFSC), repositório Git no GitHub com código testado, site no GitHub Pages, comprovante de submissão a evento científico e defesa oral demonstrativa. & \textbf{45\%} \\ \hline
+\end{tabularx}
+\end{table}
+
+\subsection{Critérios de Aprovação}
+\begin{itemize}[leftmargin=*]
+    \item Frequência mínima exigida de \textbf{75\%} dos encontros presenciais;
+    \item Média Final (\textbf{MF}) igual ou superior a \textbf{6,0 (seis)}, calculada pela fórmula:
+    \[
+    \text{MF} = (\text{A1} \times 0{,}20) + (\text{A2} \times 0{,}35) + (\text{A3} \times 0{,}45)
+    \]
+\end{itemize}
+
+\subsection{Recuperação Paralela da Aprendizagem}
+Conforme a Organização Didática do IFSC, a recuperação paralela ocorrerá de forma contínua ao longo do semestre. As equipes com rendimento insatisfatório nos checkpoints terão oportunidade de refatorar seus protótipos, ajustar o artigo científico conforme parecer do docente e submeter nova versão no repositório GitHub.
+
+% -----------------------------------------------------
+% 7. BIBLIOGRAFIA E REFERÊNCIAS
+% -----------------------------------------------------
+\section{Bibliografia e Fontes de Consulta}
+
+\subsection{Bibliografia Básica}
+\begin{enumerate}[leftmargin=*]
+    \item KERZNER, Harold. \textbf{Gestão de Projetos: As Melhores Práticas}. 3. ed. Porto Alegre: Bookman, 2017.
+    \item VAZ, Caroline; SELEME, Robson. \textbf{Elaboração e Gestão de Projetos}. Curitiba: Intersaberes, 2016.
+    \item GIL, Antonio Carlos. \textbf{Como Elaborar Projetos de Pesquisa}. 7. ed. São Paulo: Atlas, 2022.
+\end{enumerate}
+
+\subsection{Bibliografia Complementar}
+\begin{enumerate}[leftmargin=*]
+    \item CHACON, Scott; STRAUB, Ben. \textbf{Pro Git}. 2. ed. Apress, 2014. Disponível em: \url{https://git-scm.com/book/en/v2}. Acesso em: 2026.
+    \item SOCIEDADE BRASILEIRA DE COMPUTAÇÃO (SBC). \textbf{Manual de Estilo de Escrita da SBC}. Disponível em: \url{https://www.sbc.org.br}. Acesso em: 2026.
+    \item PRESSMAN, Roger S.; MAXIM, Bruce R. \textbf{Engenharia de Software: Uma Abordagem Profissional}. 9. ed. Porto Alegre: AMGH, 2021.
+    \item GITHUB DOCS. \textbf{Documentação Oficial do GitHub e GitHub Pages}. Disponível em: \url{https://docs.github.com}. Acesso em: 2026.
+\end{enumerate}
+
+\vspace{1.2cm}
+
+% -----------------------------------------------------
+% 8. ASSINATURAS INSTITUCIONAIS
+% -----------------------------------------------------
+\begin{center}
+\small
+Garopaba (SC), \dots\dots\dots de \dots\dots\dots\dots\dots\dots\dots\dots\dots de 2026.
+
+\vspace{1.8cm}
+
+\begin{minipage}{0.45\textwidth}
+\centering
+\hrulefill \\
+\textbf{Prof. André Moraes}\\
+Docente Responsável — IFSC Garopaba
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+\centering
+\hrulefill \\
+\textbf{Coordenadoria do Curso}\\
+Técnico Integrado em Informática
+\end{minipage}
+\end{center}
+
+\end{document}
