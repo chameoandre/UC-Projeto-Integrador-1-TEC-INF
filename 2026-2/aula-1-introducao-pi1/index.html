@@ -71,7 +71,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.9rem 2.5rem;
+      padding: 0.8rem 2.5rem;
       background: rgba(19, 27, 46, 0.9);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border-color);
@@ -179,7 +179,7 @@
       visibility: hidden;
       transition: all 0.4s ease;
       transform: translateX(30px);
-      padding: 2rem 4rem 5rem 4rem;
+      padding: 1.8rem 4rem 5.5rem 4rem;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -197,7 +197,7 @@
       background: rgba(19, 27, 46, 0.75);
       border: 1px solid var(--border-color);
       border-radius: var(--radius-lg);
-      padding: 1.5rem;
+      padding: 1.4rem;
       backdrop-filter: blur(10px);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       transition: all 0.3s ease;
@@ -229,6 +229,28 @@
       border-radius: 50px;
       font-size: 0.8rem;
       font-weight: 600;
+    }
+
+    .badge-apl {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: var(--accent-amber);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .badge-ifsc {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: var(--accent-emerald);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
     }
 
     /* CARDS INTERDISCIPLINARES ILUSTRADOS */
@@ -372,7 +394,7 @@
               <span class="text-success">Computação, Engenharia e Exatas Conectadas ao Mundo Real</span>
             </h2>
             <p class="lead text-secondary mb-4">
-              Como transformamos problemas reais em projetos inovadores integrando <strong>Ciência da Computação, Engenharia Civil, Física, Matemática e Engenharia Ambiental</strong>?
+              Como transformamos problemas reais em projetos inovadores integrando <strong>Ciência da Computação, Engenharia Civil, Física, Matemática e Engenharia Ambiental</strong> com o contexto de Garopaba e IFSC/SC?
             </p>
 
             <!-- CARD CORPO DOCENTE -->
@@ -397,7 +419,7 @@
                     </div>
                     <div>
                       <div class="fw-bold text-white">Profª. Josimara M. Krausen</div>
-                      <div class="text-warning extra-small" style="font-size: 0.78rem;">Engª Civil (UNISUL) | Mat. & Física | Engª Ambiental</div>
+                      <div class="text-warning extra-small" style="font-size: 0.78rem;">Engª Civil (UNISUL) | Mat. \& Física | Engª Ambiental</div>
                     </div>
                   </div>
                 </div>
@@ -501,7 +523,7 @@
           <div class="col-md-6">
             <div class="inter-card inter-card-math">
               <div class="d-flex align-items-center gap-2 mb-2">
-                <i class="bi bi-[#a855f7] bi-calculator-fill fs-3" style="color: var(--accent-purple);"></i>
+                <i class="bi bi-calculator-fill fs-3" style="color: var(--accent-purple);"></i>
                 <div>
                   <h3 class="h6 font-outfit fw-bold text-white mb-0">TI + Matemática \& Física Computacional</h3>
                   <span class="badge bg-purple text-white extra-small" style="background: var(--accent-purple); font-size: 0.68rem;">Especialidade Profª. Josimara</span>
@@ -548,44 +570,101 @@
         </div>
       </section>
 
-      <!-- SLIDE 4: EXEMPLOS VASTOS E ILUSTRADOS DE PROJETOS -->
+      <!-- SLIDE 4: EXEMPLOS VASTOS (LIBRAS, VÍDEO 360, APL GAROPABA & IFSC SC) -->
       <section class="slide" id="slide-4">
         <div class="mb-3">
-          <span class="badge-custom mb-2">
-            <i class="bi bi-images"></i> Exemplos Práticos Ilustrados
-          </span>
-          <h2 class="h3 fw-bold font-outfit text-white">Ideias de Projetos Interdisciplinares para Inspirar</h2>
-          <p class="text-secondary small">Exemplos concretos que você e sua equipe podem desenvolver durante o semestre:</p>
+          <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-1">
+            <span class="badge-custom">
+              <i class="bi bi-stars"></i> Ideias de Projetos Inspiradores
+            </span>
+            <span class="text-muted extra-small">Conectados ao IFSC SC \& Arranjo Produtivo de Garopaba</span>
+          </div>
+          <h2 class="h3 fw-bold font-outfit text-white mb-1">Exemplos Práticos: Libras, Vídeo 360° \& Impacto Local</h2>
+          <p class="text-secondary extra-small mb-0">Inspirações reais de como a computação resolve demandas de acessibilidade, cultura e ecologia:</p>
         </div>
 
         <div class="row g-3">
 
+          <!-- 1. LIBRAS & TECNOLOGIA ASSISTIVA -->
           <div class="col-md-4">
-            <div class="glass-card h-100 text-center p-3">
-              <div class="fs-1 text-warning mb-2"><i class="bi bi-house-gear-fill"></i></div>
-              <h3 class="h6 font-outfit text-white fw-bold">EcoConstrução Garopaba</h3>
+            <div class="glass-card h-100 p-3 border-info">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <i class="bi bi-sign-language-fill text-info fs-2"></i>
+                <span class="badge-ifsc">NAPNE IFSC SC</span>
+              </div>
+              <h3 class="h6 font-outfit text-white fw-bold mb-1">Comunicação em Libras na Escola</h3>
               <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
-                Software web para cálculo de orçamento e pegada de carbono em obras civis sustentáveis da região.
+                Plataforma web/app interativo de sinais em <strong>Libras (Língua Brasileira de Sinais)</strong> com vídeos, avatares e glossário técnico para inclusão de alunos surdos no IFSC e órgãos de Garopaba.
               </p>
             </div>
           </div>
 
+          <!-- 2. VÍDEO 360 & EXPLORAÇÃO AMBIENTAL -->
           <div class="col-md-4">
-            <div class="glass-card h-100 text-center p-3">
-              <div class="fs-1 text-info mb-2"><i class="bi bi-water"></i></div>
-              <h3 class="h6 font-outfit text-white fw-bold">MonitoraÁgua Garopaba</h3>
+            <div class="glass-card h-100 p-3 border-purple">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <i class="bi bi-camera-reconstitution text-purple fs-2" style="color: var(--accent-purple);"></i>
+                <span class="badge-ifsc">Câmpus Garopaba</span>
+              </div>
+              <h3 class="h6 font-outfit text-white fw-bold mb-1">Tour Virtual 360° de Ambientes</h3>
               <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
-                Painel web conectado a sensores de turbidez/pH para acompanhamento comunitário das bacias de água.
+                Exploração imersiva em <strong>Vídeo/Foto 360°</strong> para visitação virtual guiada aos laboratórios do IFSC, patrimônio histórico do Centro de Garopaba e acervos de museus catarinenses.
               </p>
             </div>
           </div>
 
+          <!-- 3. ROTA DA BALEIA FRANCA / TURISMO APL GAROPABA -->
           <div class="col-md-4">
-            <div class="glass-card h-100 text-center p-3">
-              <div class="fs-1 text-purple mb-2" style="color: var(--accent-purple);"><i class="bi bi-controller"></i></div>
-              <h3 class="h6 font-outfit text-white fw-bold">Simulador Físico de Ondas</h3>
+            <div class="glass-card h-100 p-3 border-amber">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <i class="bi bi-water text-warning fs-2"></i>
+                <span class="badge-apl">APL Garopaba</span>
+              </div>
+              <h3 class="h6 font-outfit text-white fw-bold mb-1">Rota da Baleia Franca \& EcoTurismo</h3>
               <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
-                Jogo/Simulador educativo em Canvas/JS aplicando equações físicas de refração e ondas para surfe.
+                Sistema web interativo para avistamento de cetáceos, catalogação da fauna marinha local e guia de trilhas sustentáveis para turistas e moradores de Garopaba.
+              </p>
+            </div>
+          </div>
+
+          <!-- 4. BIM & ECO-CONSTRUÇÃO LITORÂNEA -->
+          <div class="col-md-4">
+            <div class="glass-card h-100 p-3 border-warning">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <i class="bi bi-house-gear-fill text-warning fs-2"></i>
+                <span class="badge-docente">Engª Civil</span>
+              </div>
+              <h3 class="h6 font-outfit text-white fw-bold mb-1">EcoConstrução \& Orçamento (BIM)</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Calculadora web e simulador visual para orçamento de obras ecoeficientes e planejamento de construções sustentáveis adaptadas ao litoral catarinense.
+              </p>
+            </div>
+          </div>
+
+          <!-- 5. MONITORAMENTO SANITÁRIO DAS LAGOAS -->
+          <div class="col-md-4">
+            <div class="glass-card h-100 p-3 border-emerald">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <i class="bi bi-activity text-emerald fs-2" style="color: var(--accent-emerald);"></i>
+                <span class="badge-apl">Lagoa Ibiraquera</span>
+              </div>
+              <h3 class="h6 font-outfit text-white fw-bold mb-1">MonitoraLagoas Garopaba</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Dashboard conectado a sensores comunitários para acompanhamento da balneabilidade, salinidade e qualidade da água nas lagoas e bacias locais.
+              </p>
+            </div>
+          </div>
+
+          <!-- 6. SIMULADOR FÍSICO / JOGOS EDUCATIVOS -->
+          <div class="col-md-4">
+            <div class="glass-card h-100 p-3 border-rose">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <i class="bi bi-controller text-danger fs-2"></i>
+                <span class="badge-docente">Mat. \& Física</span>
+              </div>
+              <h3 class="h6 font-outfit text-white fw-bold mb-1">Simulador Físico/Matemático</h3>
+              <p class="text-secondary extra-small mb-0" style="font-size: 0.78rem;">
+                Motor gráfico web em Canvas/JS para simulação reativa de refração de ondas de surfe, mecânica dos esportes praianos ou equações de física do ensino médio.
               </p>
             </div>
           </div>
@@ -725,7 +804,7 @@
               
               <h4 class="h6 font-outfit text-white fw-bold mb-2">Exemplo Prático:</h4>
               <p class="text-secondary small mb-0">
-                <em>"Como um <strong>sistema web de mapas interativos</strong> pode ajudar <strong>moradores de Garopaba</strong> a monitorar a <strong>qualidade da água</strong> das praias e lagoas locais?"</em>
+                <em>"Como um <strong>tour virtual em vídeo 360°</strong> pode ajudar <strong>alunos visitantes</strong> a conhecer os <strong>laboratórios do IFSC Câmpus Garopaba</strong> antes do início das aulas?"</em>
               </p>
             </div>
           </div>
@@ -827,7 +906,7 @@
                     <h3 class="h6 font-outfit fw-bold mb-0">Passo 2: 3 Ideias</h3>
                   </div>
                   <p class="text-secondary extra-small mb-0" style="font-size: 0.82rem;">
-                    Discuta e proponha <strong>3 ideias de problemas reais</strong> conectando Informática com Engenharia, Física, Saúde ou Meio Ambiente.
+                    Discuta e proponha <strong>3 ideias de problemas reais</strong> (incluindo Libras, Vídeo 360°, Turismo Local ou Saneamento).
                   </p>
                 </div>
 
