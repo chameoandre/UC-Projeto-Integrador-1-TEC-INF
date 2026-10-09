@@ -28,8 +28,6 @@ Todo projeto de software em informática resolve um problema real. A escrita dos
   $$\text{[Verbo de Ação]} + \text{[O que será criado]} + \text{[Público-Alvo / Contexto]} + \text{[Propósito / Benefício]}$$
 * **Exemplo:** *"Desenvolver uma plataforma web interativa para apoio à aprendizagem de LIBRAS voltada a estudantes do ensino fundamental, visando facilitar a inclusão escolar e a comunicação acessível."*
 
-> 📺 **Vídeo de Apoio Rápido (3 min):** [Como Definir Objetivo Geral e Específicos no YouTube](https://www.youtube.com/watch?v=fGfE0Fj5T5s)
-
 #### B. Objetivos Específicos (Os 4 Degraus de Execução)
 Crie 3 a 4 passos práticos cobrindo:
 1. **Mapeamento & Requisitos:** Identificar necessidades dos usuários e regras de negócio;
@@ -51,8 +49,6 @@ Crie 3 a 4 passos práticos cobrindo:
    - Clique em **Share** (Compartilhar);
    - Ative **"Anyone with this link can view"**;
    - Copie o link gerado (a URL deve conter obrigatoriamente `/read/`).
-
-> 📺 **Vídeo de Apoio Rápido (3 min):** [Primeiros Passos no Overleaf e Compartilhamento de Link](https://www.youtube.com/watch?v=J3e3p-Z3V_0)
 
 ---
 
