@@ -28,9 +28,9 @@ var CONFIG = {
   // ativo entra independentemente do domínio.
   DOMINIOS_PERMITIDOS: ['ifsc.edu.br', 'aluno.ifsc.edu.br'],
 
-  MAX_TEXTO: 1500,
-  MAX_CAMPO: 600,
-  MAX_ENVIOS_POR_HORA: 12,
+  MAX_TEXTO: 5000,
+  MAX_CAMPO: 5000,
+  MAX_ENVIOS_POR_HORA: 20,
   AVANCOS_NA_PLANILHA: 6,   // quantos registros recentes espelhar na coluna AVANÇOS
   NOTIFICAR_EMAIL: true     // Ativar envio de e-mails em avanços, devolutivas e demandas
 };
