@@ -753,21 +753,47 @@ function lerProjetos_() {
   var dados = aba.getDataRange().getValues();
   var projetos = [];
 
-  for (var r = 3; r < dados.length; r++) {
+  for (var r = 0; r < dados.length; r++) {
     var row = dados[r];
-    if (!row || !row[0] || isNaN(row[0])) continue;
+    if (!row || !row[0]) continue;
+    var rawId = String(row[0]).trim();
+    if (!/^\d+$/.test(rawId)) continue; // apenas linhas cujo primeiro campo seja o número do ID
+
+    var projId = Number(rawId);
     projetos.push({
-      id: Number(row[COL.id - 1]),
-      title: String(row[COL.title - 1] || ''),
-      team: String(row[COL.team - 1] || ''),
-      objective: String(row[COL.objective - 1] || ''),
+      id: projId,
+      title: String(row[COL.title - 1] || ('Projeto #' + projId)),
+      rawTitle: String(row[COL.title - 1] || ''),
+      team: String(row[COL.team - 1] || 'A definir'),
+      objective: String(row[COL.objective - 1] || 'Objetivo em consolidação junto aos docentes orientadores.'),
       github: String(row[COL.github - 1] || ''),
       overleaf: String(row[COL.relatorio - 1] || ''),
       canva: String(row[COL.canva - 1] || ''),
       pitch: String(row[COL.pitch - 1] || ''),
-      advances: String(row[COL.advances - 1] || ''),
-      nextSteps: String(row[COL.nextSteps - 1] || ''),
-      difficulties: String(row[COL.difficulties - 1] || '')
+      relatedWorks: String(row[COL.relatedWorks - 1] || 'Pendente de inserção pela equipe.'),
+      experiments: {
+        exp1: String(row[COL.exp1 - 1] || 'PENDENTE'),
+        exp2: String(row[COL.exp2 - 1] || 'PENDENTE'),
+        exp3: String(row[COL.exp3 - 1] || 'PENDENTE'),
+        exp4: String(row[COL.exp4 - 1] || 'PENDENTE')
+      },
+      experimentResults: {
+        exp1: String(row[COL.exp1res - 1] || ''),
+        exp2: String(row[COL.exp2res - 1] || ''),
+        exp3: String(row[COL.exp3res - 1] || ''),
+        exp4: String(row[COL.exp4res - 1] || '')
+      },
+      papers: {
+        sepei: String(row[COL.paper1 - 1] || 'PENDENTE'),
+        snct: String(row[COL.paper2 - 1] || 'PENDENTE'),
+        paper3: String(row[COL.paper3 - 1] || 'PENDENTE'),
+        cotb: String(row[COL.paper4 - 1] || 'PENDENTE')
+      },
+      advances: String(row[COL.advances - 1] || 'Aguardando primeiro registro de atividades.'),
+      nextSteps: String(row[COL.nextSteps - 1] || 'Definição do escopo, repositório GitHub e artigo Overleaf.'),
+      difficulties: String(row[COL.difficulties - 1] || 'Nenhuma dificuldade reportada no momento.'),
+      technologies: String(row[COL.techs - 1] || 'A definir').split(/[,;]/).map(function (t) { return t.trim(); }).filter(Boolean),
+      observations: String(row[COL.observations - 1] || '')
     });
   }
 

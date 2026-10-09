@@ -164,23 +164,164 @@
     renderDemandasTab();
   }
 
-  // ============================ REGISTROS E DEMANDAS ============================
+  // ============================ REGISTROS, DEMANDAS E PROJETOS AO VIVO ============================
 
-  async function sincronizarRegistros() {
-    if (!cfg.apiUrl) return;
-    try {
-      var resp = await fetch(cfg.apiUrl);
-      var data = await resp.json();
-      if (data.ok) {
-        if (data.registros) state.registros = data.registros;
-        if (data.demandas) state.demandas = data.demandas;
-        if (typeof window.renderProjects === 'function') window.renderProjects();
-        renderDemandasTab();
+  var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/15PBDpzugjiZJsEJEcbT6CHrNGcXB_OPKdZkfsHQf9RU/export?format=csv&gid=891834841';
+
+  async function sincronizarRegistros(manual) {
+    var syncIcon = document.getElementById('sync-icon');
+    if (syncIcon) syncIcon.classList.add('fa-spin');
+
+    var atualizou = false;
+
+    // 1. Tenta carregar via Apps Script API (dados mais recentes + registros + demandas)
+    if (cfg.apiUrl) {
+      try {
+        var resp = await fetch(cfg.apiUrl);
+        var data = await resp.json();
+        if (data.ok) {
+          if (data.projetos && data.projetos.length > 0) {
+            window.projectsData = data.projetos;
+            atualizou = true;
+          }
+          if (data.registros) state.registros = data.registros;
+          if (data.demandas) state.demandas = data.demandas;
+        }
+      } catch (e) {
+        console.warn('Falha ao carregar pela API Apps Script, tentando fallback CSV:', e);
       }
-    } catch (e) {
-      console.warn('Não foi possível carregar registros ao vivo:', e);
+    }
+
+    // 2. Fallback ou sincronização direta do CSV da planilha pública
+    if (!atualizou) {
+      try {
+        var respCsv = await fetch(SHEET_CSV_URL + '&_t=' + Date.now());
+        var csvTxt = await respCsv.text();
+        var projsCsv = parsearCsvProjetos(csvTxt);
+        if (projsCsv && projsCsv.length > 0) {
+          window.projectsData = projsCsv;
+          atualizou = true;
+        }
+      } catch (errCsv) {
+        console.warn('Falha ao sincronizar CSV direto da planilha:', errCsv);
+      }
+    }
+
+    if (typeof window.renderProjects === 'function') {
+      window.renderProjects();
+    }
+    renderDemandasTab();
+
+    if (syncIcon) {
+      setTimeout(function () {
+        syncIcon.classList.remove('fa-spin');
+      }, 500);
+    }
+
+    if (manual && typeof window.showToast === 'function') {
+      window.showToast('Projetos sincronizados com a planilha oficial!');
     }
   }
+
+  function parsearCsvProjetos(csvText) {
+    var lines = [];
+    var row = [];
+    var cur = '';
+    var inQuotes = false;
+
+    for (var i = 0; i < csvText.length; i++) {
+      var c = csvText[i];
+      var next = csvText[i + 1];
+
+      if (c === '"') {
+        if (inQuotes && next === '"') {
+          cur += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (c === ',' && !inQuotes) {
+        row.push(cur);
+        cur = '';
+      } else if ((c === '\r' || c === '\n') && !inQuotes) {
+        if (c === '\r' && next === '\n') i++;
+        row.push(cur);
+        cur = '';
+        lines.push(row);
+        row = [];
+      } else {
+        cur += c;
+      }
+    }
+    if (cur || row.length) {
+      row.push(cur);
+      lines.push(row);
+    }
+
+    var headerIdx = -1;
+    for (var r = 0; r < lines.length; r++) {
+      if (lines[r][0] && String(lines[r][0]).trim().toUpperCase() === 'ID') {
+        headerIdx = r;
+        break;
+      }
+    }
+    if (headerIdx === -1) return [];
+
+    var projs = [];
+    for (var r = headerIdx + 1; r < lines.length; r++) {
+      var rowData = lines[r];
+      if (!rowData || !rowData[0]) continue;
+      var rawId = String(rowData[0]).trim();
+      if (!/^\d+$/.test(rawId)) continue;
+
+      var pId = Number(rawId);
+      function col(idx, padrao) {
+        return (rowData[idx] ? String(rowData[idx]).trim() : '') || padrao || '';
+      }
+
+      projs.push({
+        id: pId,
+        title: col(1, 'Projeto #' + pId),
+        rawTitle: col(1, ''),
+        team: col(2, 'A definir'),
+        objective: col(3, 'Objetivo em consolidação junto aos docentes orientadores.'),
+        github: col(4, ''),
+        overleaf: col(5, ''),
+        canva: col(6, ''),
+        pitch: col(7, ''),
+        relatedWorks: col(8, 'Pendente de inserção pela equipe.'),
+        experiments: {
+          exp1: col(9, 'PENDENTE'),
+          exp2: col(11, 'PENDENTE'),
+          exp3: col(13, 'PENDENTE'),
+          exp4: col(15, 'PENDENTE')
+        },
+        experimentResults: {
+          exp1: col(10, ''),
+          exp2: col(12, ''),
+          exp3: col(14, ''),
+          exp4: col(16, '')
+        },
+        papers: {
+          sepei: col(17, 'PENDENTE'),
+          snct: col(18, 'PENDENTE'),
+          paper3: col(19, 'PENDENTE'),
+          cotb: col(20, 'PENDENTE')
+        },
+        advances: col(21, 'Aguardando primeiro registro de atividades.'),
+        nextSteps: col(22, 'Definição do escopo, repositório GitHub e artigo Overleaf.'),
+        difficulties: col(23, 'Nenhuma dificuldade reportada no momento.'),
+        technologies: col(24, 'A definir').split(/[,;]/).map(function (t) { return t.trim(); }).filter(Boolean),
+        observations: col(25, '')
+      });
+    }
+    return projs;
+  }
+
+  // Sobrescrever liveSyncFromSheet global para usar a sincronização inteligente
+  window.liveSyncFromSheet = function () {
+    sincronizarRegistros(true);
+  };
 
   function podeEditarProjeto(projId) {
     if (!state.usuario || state.usuario.status !== 'ativo') return false;
