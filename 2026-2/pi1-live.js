@@ -1,5 +1,5 @@
 /**
- * PI-1 Live Layer — Integração OAuth Google, Registros de Avanços, Dificuldades e Devolutivas Docentes.
+ * PI-1 Live Layer — Integração OAuth Google, Registros de Avanços, Dificuldades, Devolutivas Docentes e Demandas/Checkpoints.
  * IFSC Campus Garopaba - Turma Info 2025 / 2026-2
  */
 
@@ -11,6 +11,7 @@
     usuario: null,
     idToken: localStorage.getItem('pi1_google_token') || '',
     registros: [],
+    demandas: [],
     carregando: false
   };
 
@@ -66,6 +67,7 @@
     localStorage.removeItem('pi1_google_token');
     renderizarBotaoLogin();
     if (typeof window.renderProjects === 'function') window.renderProjects();
+    renderDemandasTab();
     if (typeof window.showToast === 'function') window.showToast('Sessão encerrada.');
   }
 
@@ -134,8 +136,11 @@
     authContainer.innerHTML = `
       <div class="pi1-auth-container">
         ${state.usuario.papel === 'docente' ? `
-          <button class="btn-action" id="pi1-btn-painel-docente" style="background:var(--accent-purple);color:#fff;font-size:0.78rem;padding:0.35rem 0.65rem;" title="Gerenciar membros e acessos">
+          <button class="btn-action" id="pi1-btn-painel-docente" style="background:var(--accent-purple);color:#fff;font-size:0.78rem;padding:0.35rem 0.65rem;" title="Gerenciar membros e solicitações">
             <i class="fa-solid fa-users-gear"></i> Painel Docente
+          </button>
+          <button class="btn-action" id="pi1-btn-criar-demanda-top" style="background:var(--accent-blue);color:#fff;font-size:0.78rem;padding:0.35rem 0.65rem;" title="Criar nova demanda docente">
+            <i class="fa-solid fa-bullhorn"></i> Nova Demanda
           </button>
         ` : ''}
         <div class="pi1-user-badge">
@@ -152,19 +157,25 @@
     var btnPainel = document.getElementById('pi1-btn-painel-docente');
     if (btnPainel) btnPainel.addEventListener('click', abrirPainelDocente);
 
+    var btnDemandaTop = document.getElementById('pi1-btn-criar-demanda-top');
+    if (btnDemandaTop) btnDemandaTop.addEventListener('click', function () { abrirModalCriarDemanda('*'); });
+
     if (typeof window.renderProjects === 'function') window.renderProjects();
+    renderDemandasTab();
   }
 
-  // ============================ REGISTROS E DEVOLUTIVAS ============================
+  // ============================ REGISTROS E DEMANDAS ============================
 
   async function sincronizarRegistros() {
     if (!cfg.apiUrl) return;
     try {
       var resp = await fetch(cfg.apiUrl);
       var data = await resp.json();
-      if (data.ok && data.registros) {
-        state.registros = data.registros;
+      if (data.ok) {
+        if (data.registros) state.registros = data.registros;
+        if (data.demandas) state.demandas = data.demandas;
         if (typeof window.renderProjects === 'function') window.renderProjects();
+        renderDemandasTab();
       }
     } catch (e) {
       console.warn('Não foi possível carregar registros ao vivo:', e);
@@ -196,6 +207,10 @@
     var modalContent = document.getElementById('modalContent');
     if (!modal || !modalContent) return;
 
+    var demandasAbertas = state.demandas.filter(function (d) {
+      return (d.projeto === '*' || Number(d.projeto) === projId) && d.status !== 'concluida';
+    });
+
     modalContent.innerHTML = `
       <div style="margin-bottom:1rem;">
         <span class="proj-badge">PROJETO #${projId}</span>
@@ -203,6 +218,17 @@
         <p style="color:var(--text-muted);font-size:0.85rem;">Os dados serão sincronizados com a planilha oficial e o orientador será notificado por e-mail.</p>
       </div>
       <form id="pi1-form-registro" class="pi1-modal-form">
+        ${demandasAbertas.length > 0 ? `
+          <div class="pi1-form-group" style="background:var(--chip-bg);padding:0.75rem;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+            <label style="color:var(--accent-cyan);"><i class="fa-solid fa-link"></i> Este avanço cumpre alguma demanda do orientador?</label>
+            <select id="pi1-reg-demanda">
+              <option value="">Nenhuma / Avanço geral de rotina</option>
+              ${demandasAbertas.map(function(d) {
+                return `<option value="${d.id}">[${d.projeto === '*' ? 'Geral' : '#' + d.projeto}] ${escapeHtml(d.titulo)} (Prazo: ${escapeHtml(d.prazo || 'Sem prazo')})</option>`;
+              }).join('')}
+            </select>
+          </div>
+        ` : ''}
         <div class="pi1-form-group">
           <label>O que a equipe realizou recentemente? *</label>
           <textarea id="pi1-reg-texto" rows="3" required placeholder="Ex: Desenvolvemos o diagrama de arquitetura no draw.io e estruturamos as pastas no GitHub..."></textarea>
@@ -231,11 +257,15 @@
       btn.disabled = true;
       btn.innerText = 'Gravando...';
 
+      var selDemanda = document.getElementById('pi1-reg-demanda');
+      var demandaId = selDemanda ? selDemanda.value : '';
+
       var payload = {
         projetoId: projId,
         texto: document.getElementById('pi1-reg-texto').value.trim(),
         dificuldades: document.getElementById('pi1-reg-dificuldades').value.trim(),
         proximosPassos: document.getElementById('pi1-reg-passos').value.trim(),
+        demandaId: demandaId,
         tipo: 'avanco'
       };
 
@@ -253,6 +283,204 @@
     };
 
     modal.classList.add('open');
+  }
+
+  // ============================ GESTÃO DE DEMANDAS / CHECKPOINTS ============================
+
+  function abrirModalCriarDemanda(projPredefinido) {
+    if (!state.usuario || state.usuario.papel !== 'docente') {
+      alert('Apenas docentes podem criar demandas para os projetos.');
+      return;
+    }
+
+    var modal = document.getElementById('projectModal');
+    var modalContent = document.getElementById('modalContent');
+    if (!modal || !modalContent) return;
+
+    modalContent.innerHTML = `
+      <div style="margin-bottom:1.25rem;">
+        <span class="proj-badge">ORIENTAÇÃO DOCENTE</span>
+        <h2 style="font-size:1.35rem;font-weight:700;margin-top:0.4rem;color:var(--text-main);">Criar Nova Demanda / Checkpoint</h2>
+        <p style="color:var(--text-muted);font-size:0.85rem;">Defina metas específicas por projeto ou dispare para todos os 11 grupos simultaneamente.</p>
+      </div>
+      <form id="pi1-form-criar-demanda" class="pi1-modal-form">
+        <div class="pi1-form-group">
+          <label>Escopo da Demanda (Alvo) *</label>
+          <select id="pi1-dem-projeto" required>
+            <option value="*" ${projPredefinido === '*' ? 'selected' : ''}>📣 TODOS OS PROJETOS (Broadcast Geral)</option>
+            ${[1,2,3,4,5,6,7,8,9,10,11].map(function(num) {
+              return `<option value="${num}" ${String(projPredefinido) === String(num) ? 'selected' : ''}>Projeto #${num}</option>`;
+            }).join('')}
+          </select>
+        </div>
+        <div class="pi1-form-group">
+          <label>Título da Demanda / Meta *</label>
+          <input type="text" id="pi1-dem-titulo" required placeholder="Ex: Entrega do Diagrama de Arquitetura e Estrutura no GitHub" />
+        </div>
+        <div class="pi1-form-group">
+          <label>Data Limite / Prazo Sugerido</label>
+          <input type="date" id="pi1-dem-prazo" />
+        </div>
+        <div class="pi1-form-group">
+          <label>Orientações e Critérios de Aceite</label>
+          <textarea id="pi1-dem-desc" rows="3" placeholder="Descreva os requisitos para conclusão desta meta..."></textarea>
+          <span class="pi1-form-hint">Os estudantes destinatários receberão uma notificação imediata por e-mail.</span>
+        </div>
+        <div class="pi1-modal-footer">
+          <button type="button" class="btn-detail" onclick="closeModal()">Cancelar</button>
+          <button type="submit" class="btn-action" style="background:var(--accent-blue);color:#fff;" id="pi1-btn-submit-dem">
+            <i class="fa-solid fa-paper-plane"></i> Publicar & Notificar E-mail
+          </button>
+        </div>
+      </form>
+    `;
+
+    document.getElementById('pi1-form-criar-demanda').onsubmit = async function (e) {
+      e.preventDefault();
+      var btn = document.getElementById('pi1-btn-submit-dem');
+      btn.disabled = true;
+      btn.innerText = 'Disparando...';
+
+      var payload = {
+        projeto: document.getElementById('pi1-dem-projeto').value,
+        titulo: document.getElementById('pi1-dem-titulo').value.trim(),
+        prazo: document.getElementById('pi1-dem-prazo').value,
+        descricao: document.getElementById('pi1-dem-desc').value.trim()
+      };
+
+      var res = await apiCall('criarDemanda', payload);
+      if (res.ok) {
+        if (typeof window.showToast === 'function') window.showToast('Demanda criada e e-mails enviados com sucesso!');
+        else alert('Demanda criada e e-mails enviados com sucesso!');
+        if (typeof window.closeModal === 'function') window.closeModal();
+        sincronizarRegistros();
+      } else {
+        alert('Erro ao criar demanda: ' + (res.erro || 'Falha na requisição'));
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Publicar & Notificar E-mail';
+      }
+    };
+
+    modal.classList.add('open');
+  }
+
+  async function concluirDemanda(demandaId) {
+    if (!state.usuario) {
+      alert('Faça login para concluir esta demanda.');
+      return;
+    }
+
+    var texto = prompt('Informe uma breve justificativa ou link de evidência da conclusão:');
+    if (texto === null) return;
+
+    var res = await apiCall('concluirDemanda', { demandaId: demandaId, texto: texto });
+    if (res.ok) {
+      if (typeof window.showToast === 'function') window.showToast('Demanda marcada como concluída!');
+      sincronizarRegistros();
+    } else {
+      alert('Erro: ' + (res.erro || 'Não foi possível concluir'));
+    }
+  }
+
+  async function removerDemanda(demandaId) {
+    if (!state.usuario || state.usuario.papel !== 'docente') return;
+    if (!confirm('Deseja realmente remover esta demanda?')) return;
+
+    var res = await apiCall('removerDemanda', { demandaId: demandaId });
+    if (res.ok) {
+      if (typeof window.showToast === 'function') window.showToast('Demanda removida.');
+      sincronizarRegistros();
+    } else {
+      alert('Erro: ' + (res.erro || 'Não foi possível remover'));
+    }
+  }
+
+  function renderDemandasTab() {
+    var container = document.getElementById('tab-demandas');
+    if (!container) return;
+
+    var demandas = state.demandas || [];
+    var isDocente = state.usuario && state.usuario.papel === 'docente';
+
+    if (demandas.length === 0) {
+      container.innerHTML = `
+        <div style="text-align: center; padding: 3.5rem 1rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-muted);">
+          <i class="fa-solid fa-list-check" style="font-size: 2.5rem; margin-bottom: 0.75rem; color: var(--text-dim);"></i>
+          <h3 style="color:var(--text-main);font-size:1.15rem;margin-bottom:0.35rem;">Nenhuma Demanda Ativa no Momento</h3>
+          <p style="font-size:0.88rem;max-width:480px;margin:0 auto 1.25rem;">O professor orientador pode criar demandas e checkpoints para guiar as entregas dos grupos.</p>
+          ${isDocente ? `
+            <button class="btn-action" onclick="PI1.abrirModalCriarDemanda('*')" style="background:var(--accent-blue);color:#fff;">
+              <i class="fa-solid fa-plus"></i> Criar Primeira Demanda
+            </button>
+          ` : ''}
+        </div>
+      `;
+      return;
+    }
+
+    var pendentes = demandas.filter(function (d) { return d.status !== 'concluida'; });
+    var concluidas = demandas.filter(function (d) { return d.status === 'concluida'; });
+
+    container.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+        <div>
+          <h3 style="font-size:1.25rem;font-weight:700;color:var(--text-main);margin-bottom:0.25rem;">Demandas & Checkpoints da Turma</h3>
+          <p style="font-size:0.85rem;color:var(--text-muted);">Acompanhamento de metas direcionadas pelo professor orientador.</p>
+        </div>
+        ${isDocente ? `
+          <button class="btn-action" onclick="PI1.abrirModalCriarDemanda('*')" style="background:var(--accent-blue);color:#fff;">
+            <i class="fa-solid fa-plus"></i> Nova Demanda / Broadcast
+          </button>
+        ` : ''}
+      </div>
+
+      <div class="pi1-demandas-grid">
+        ${demandas.map(function(d) {
+          var isBroadcast = d.projeto === '*';
+          var isDone = d.status === 'concluida';
+          var podeConcluir = state.usuario && (isDocente || podeEditarProjeto(d.projeto));
+
+          return `
+            <div class="pi1-demanda-card ${isDone ? 'concluida' : ''}">
+              <div>
+                <div class="pi1-demanda-header">
+                  <span class="${isBroadcast ? 'pi1-badge-broadcast' : 'pi1-badge-projeto'}">
+                    ${isBroadcast ? '<i class="fa-solid fa-bullhorn"></i> Geral (Turma)' : 'Projeto #' + d.projeto}
+                  </span>
+                  <span class="status-tag ${isDone ? 'tag-ok' : 'tag-pendente'}">
+                    ${isDone ? '<i class="fa-solid fa-check"></i> Concluída' : '<i class="fa-solid fa-clock"></i> Pendente'}
+                  </span>
+                </div>
+                <h4 class="pi1-demanda-title">${escapeHtml(d.titulo)}</h4>
+                <p class="pi1-demanda-desc">${escapeHtml(d.descricao || 'Sem descrição adicional.')}</p>
+              </div>
+
+              <div>
+                <div class="pi1-demanda-meta">
+                  <span class="pi1-demanda-prazo">
+                    <i class="fa-solid fa-calendar-day"></i> ${d.prazo ? ('Prazo: ' + escapeHtml(d.prazo)) : 'Sem data limite'}
+                  </span>
+                  <span style="font-size:0.75rem;">Por: ${escapeHtml(d.criadoPor)}</span>
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;gap:0.4rem;margin-top:0.75rem;padding-top:0.5rem;border-top:1px solid var(--border-color);">
+                  ${(!isDone && podeConcluir) ? `
+                    <button class="btn-detail" onclick="PI1.concluirDemanda('${d.id}')" style="color:var(--ifsc-green-light);border-color:rgba(34,197,94,0.3);">
+                      <i class="fa-solid fa-check-double"></i> Concluir
+                    </button>
+                  ` : ''}
+                  ${isDocente ? `
+                    <button class="btn-detail" onclick="PI1.removerDemanda('${d.id}')" style="color:var(--ifsc-red);border-color:rgba(239,68,68,0.3);" title="Excluir demanda">
+                      <i class="fa-solid fa-trash"></i>
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
   }
 
   function abrirModalSolicitarAcesso(projId) {
@@ -480,6 +708,10 @@
   window.PI1 = {
     state: state,
     abrirModalAvanco: abrirModalAvanco,
+    abrirModalCriarDemanda: abrirModalCriarDemanda,
+    concluirDemanda: concluirDemanda,
+    removerDemanda: removerDemanda,
+    renderDemandasTab: renderDemandasTab,
     abrirModalSolicitarAcesso: abrirModalSolicitarAcesso,
     abrirPainelDocente: abrirPainelDocente,
     decidirAcesso: decidirAcesso,

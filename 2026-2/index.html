@@ -887,6 +887,9 @@
       <button class="tab-btn" onclick="switchTab('auditoria')">
         <i class="fa-solid fa-clipboard-check"></i> Matriz de Auditoria
       </button>
+      <button class="tab-btn" onclick="switchTab('demandas')">
+        <i class="fa-solid fa-list-check"></i> Demandas & Checkpoints
+      </button>
       <button class="tab-btn" onclick="switchTab('roteiros')">
         <i class="fa-solid fa-book-open"></i> Os 4 Pilares & Roteiros
       </button>
@@ -1123,6 +1126,13 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- =========================================================================
+         ABA 6: DEMANDAS & CHECKPOINTS
+         ========================================================================= -->
+    <section id="tab-demandas" class="tab-content">
+      <!-- Injetado dinamicamente via pi1-live.js -->
     </section>
 
   </main>
@@ -1769,42 +1779,74 @@
         <!-- Linha do Tempo Dinâmica & Devolutivas Docentes -->
         <div id="pi1-modal-timeline-container" style="margin-bottom: 1.25rem;">
           ${(function() {
-            var regs = (window.PI1 && window.PI1.state && window.PI1.state.registros) ? window.PI1.state.registros.filter(function(r) { return Number(r.projeto) === p.id; }) : [];
-            if (!regs.length) return '';
             var isDocente = window.PI1 && window.PI1.state.usuario && window.PI1.state.usuario.papel === 'docente';
-            return `
-              <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-cyan); letter-spacing: 0.05em; margin-bottom: 0.5rem;">
-                <i class="fa-solid fa-clock-rotate-left"></i> Histórico de Registros & Devolutivas
-              </h4>
-              <div class="pi1-timeline">
-                ${regs.map(function(r) {
-                  return `
-                    <div class="pi1-timeline-item">
-                      <div class="pi1-timeline-header">
-                        <span class="pi1-timeline-author">${r.autor}</span>
-                        <span>${String(r.data).slice(0, 16).replace('T', ' ')}</span>
-                      </div>
-                      <div class="pi1-timeline-body">
-                        <div>${r.texto}</div>
-                        ${r.dificuldades ? `<div class="pi1-difficulty-tag"><strong>Dificuldade:</strong> ${r.dificuldades}</div>` : ''}
-                        ${r.devolutiva ? `
-                          <div class="pi1-devolutiva-box">
-                            <header>
-                              <span><i class="fa-solid fa-chalkboard-user"></i> Devolutiva do Orientador (${r.devolutivaAutor || 'Docente'})</span>
-                              <span>${String(r.devolutivaData || '').slice(0, 10)}</span>
-                            </header>
-                            <p style="margin:0;">${r.devolutiva}</p>
+            var projsDemandas = (window.PI1 && window.PI1.state && window.PI1.state.demandas) ? window.PI1.state.demandas.filter(function(d) { return d.projeto === '*' || Number(d.projeto) === p.id; }) : [];
+            var demandasHtml = '';
+            if (projsDemandas.length > 0) {
+              demandasHtml = `
+                <div style="margin-bottom: 1.25rem; background: var(--chip-bg); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;">
+                    <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-blue); letter-spacing: 0.05em; margin:0;">
+                      <i class="fa-solid fa-bullhorn"></i> Demandas & Metas Atribuídas (${projsDemandas.length})
+                    </h4>
+                    ${isDocente ? `<button class="btn-detail" onclick="PI1.abrirModalCriarDemanda(${p.id})" style="font-size:0.72rem;padding:0.2rem 0.5rem;color:var(--accent-blue);"><i class="fa-solid fa-plus"></i> Nova Demanda</button>` : ''}
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                    ${projsDemandas.map(function(d) {
+                      var isDone = d.status === 'concluida';
+                      return `
+                        <div style="display:flex;justify-content:space-between;align-items:center;background:var(--bg-card);padding:0.6rem 0.8rem;border-radius:6px;border-left:3px solid ${isDone ? 'var(--ifsc-green)' : 'var(--accent-amber)'};font-size:0.82rem;">
+                          <div>
+                            <strong>${d.projeto === '*' ? '[Geral] ' : ''}${d.titulo}</strong>
+                            ${d.prazo ? `<span style="color:var(--accent-amber);font-size:0.75rem;margin-left:0.5rem;"><i class="fa-solid fa-calendar-day"></i> Prazo: ${d.prazo}</span>` : ''}
                           </div>
-                        ` : (isDocente ? `
-                          <button class="pi1-btn-devolutiva" onclick="PI1.abrirModalDevolutiva('${r.id}', ${p.id}, '${r.dificuldades || r.texto}')">
-                            <i class="fa-solid fa-reply"></i> Dar Devolutiva
-                          </button>
-                        ` : '')}
+                          <span class="status-tag ${isDone ? 'tag-ok' : 'tag-pendente'}" style="font-size:0.7rem;">${isDone ? 'Concluída' : 'Pendente'}</span>
+                        </div>
+                      `;
+                    }).join('')}
+                  </div>
+                </div>
+              `;
+            }
+
+            var regs = (window.PI1 && window.PI1.state && window.PI1.state.registros) ? window.PI1.state.registros.filter(function(r) { return Number(r.projeto) === p.id; }) : [];
+            if (!regs.length && !demandasHtml) return '';
+            return `
+              ${demandasHtml}
+              ${regs.length ? `
+                <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-cyan); letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                  <i class="fa-solid fa-clock-rotate-left"></i> Histórico de Registros & Devolutivas
+                </h4>
+                <div class="pi1-timeline">
+                  ${regs.map(function(r) {
+                    return `
+                      <div class="pi1-timeline-item">
+                        <div class="pi1-timeline-header">
+                          <span class="pi1-timeline-author">${r.autor}</span>
+                          <span>${String(r.data).slice(0, 16).replace('T', ' ')}</span>
+                        </div>
+                        <div class="pi1-timeline-body">
+                          <div>${r.texto}</div>
+                          ${r.dificuldades ? `<div class="pi1-difficulty-tag"><strong>Dificuldade:</strong> ${r.dificuldades}</div>` : ''}
+                          ${r.devolutiva ? `
+                            <div class="pi1-devolutiva-box">
+                              <header>
+                                <span><i class="fa-solid fa-chalkboard-user"></i> Devolutiva do Orientador (${r.devolutivaAutor || 'Docente'})</span>
+                                <span>${String(r.devolutivaData || '').slice(0, 10)}</span>
+                              </header>
+                              <p style="margin:0;">${r.devolutiva}</p>
+                            </div>
+                          ` : (isDocente ? `
+                            <button class="pi1-btn-devolutiva" onclick="PI1.abrirModalDevolutiva('${r.id}', ${p.id}, '${r.dificuldades || r.texto}')">
+                              <i class="fa-solid fa-reply"></i> Dar Devolutiva
+                            </button>
+                          ` : '')}
+                        </div>
                       </div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
+                    `;
+                  }).join('')}
+                </div>
+              ` : ''}
             `;
           })()}
         </div>
@@ -1839,6 +1881,10 @@
 
       const btn = Array.from(document.querySelectorAll(".tab-btn")).find(b => b.getAttribute("onclick").includes(tabId));
       if (btn) btn.classList.add("active");
+
+      if (tabId === 'demandas' && window.PI1 && typeof window.PI1.renderDemandasTab === 'function') {
+        window.PI1.renderDemandasTab();
+      }
 
       window.scrollTo({ top: 0, behavior: "smooth" });
     }

@@ -32,7 +32,7 @@ var CONFIG = {
   MAX_CAMPO: 600,
   MAX_ENVIOS_POR_HORA: 12,
   AVANCOS_NA_PLANILHA: 6,   // quantos registros recentes espelhar na coluna AVANÇOS
-  NOTIFICAR_EMAIL: true     // Ativar envio de e-mails em avanços e devolutivas
+  NOTIFICAR_EMAIL: true     // Ativar envio de e-mails em avanços, devolutivas e demandas
 };
 
 // Colunas da aba Visao-geral (1 = A).
@@ -52,6 +52,7 @@ var CAB_MEMBROS = ['email', 'nome', 'projetos', 'papel', 'status', 'solicitado_e
 var CAB_REGISTROS = ['id', 'data', 'projeto', 'email', 'autor', 'tipo', 'texto', 'evidencia', 'experimento',
   'proximos_passos', 'dificuldades', 'oculto', 'devolutiva', 'devolutiva_autor', 'devolutiva_data'];
 var CAB_ALTERACOES = ['data', 'projeto', 'email', 'autor', 'campo', 'valor_anterior', 'valor_novo'];
+var CAB_DEMANDAS = ['id', 'data', 'projeto', 'titulo', 'descricao', 'prazo', 'criado_por', 'status', 'concluida_em', 'evidencia', 'concluida_por'];
 
 // Cache em memória durante a execução
 var MEMO = { controleId: null, usuario: {} };
@@ -73,6 +74,7 @@ function instalar() {
   var membros = garantirAba_(ss, 'membros', CAB_MEMBROS);
   garantirAba_(ss, 'registros', CAB_REGISTROS);
   garantirAba_(ss, 'alteracoes', CAB_ALTERACOES);
+  garantirAba_(ss, 'demandas', CAB_DEMANDAS);
   var padrao = ss.getSheetByName('Sheet1') || ss.getSheetByName('Página1') || ss.getSheetByName('Planilha1');
   if (padrao && ss.getSheets().length > 1) ss.deleteSheet(padrao);
 
@@ -107,11 +109,13 @@ function doGet(e) {
   try {
     var dados = lerProjetos_();
     var registros = lerRegistrosPublicos_();
+    var demandas = lerDemandasPublicas_();
     return json_({
       ok: true,
       atualizadoEm: dados.atualizadoEm,
       projetos: dados.projetos,
-      registros: registros
+      registros: registros,
+      demandas: demandas
     });
   } catch (err) {
     return json_({ ok: false, erro: String(err.message || err) });
@@ -157,6 +161,15 @@ function doPost(e) {
     }
     if (acao === 'ocultar') {
       return json_(ocultarRegistro_(usuario, body.registroId, body.oculto));
+    }
+    if (acao === 'criarDemanda') {
+      return json_(criarDemanda_(usuario, body));
+    }
+    if (acao === 'concluirDemanda') {
+      return json_(concluirDemanda_(usuario, body));
+    }
+    if (acao === 'removerDemanda') {
+      return json_(removerDemanda_(usuario, body.demandaId));
     }
 
     throw new Error('Ação desconhecida: ' + acao);
@@ -221,6 +234,11 @@ function registrarAvanco_(usuario, body) {
     proxPassos, dificuldades, '', '', '', ''
   ]);
 
+  // Se o avanço cumpre uma demanda específica, marcar como concluída
+  if (body.demandaId) {
+    concluirDemandaSilenciosa_(usuario, body.demandaId, texto, evidencia);
+  }
+
   // Espelhar na planilha pública de projetos
   espelharNaPlanilha_(projeto, proxPassos, dificuldades);
 
@@ -268,6 +286,125 @@ function salvarDevolutiva_(usuario, body) {
   }
 
   return { ok: true, registroId: regId };
+}
+
+// ============================ GESTÃO DE DEMANDAS / CHECKPOINTS ============================
+
+function criarDemanda_(usuario, body) {
+  if (usuario.papel !== 'docente') throw new Error('Apenas docentes podem criar demandas.');
+
+  var projeto = String(body.projeto || '*').trim(); // '*' = todos os projetos
+  var titulo = seguro_(body.titulo, 150);
+  var descricao = seguro_(body.descricao, CONFIG.MAX_TEXTO);
+  var prazo = seguro_(body.prazo, 30); // ex: '2026-10-25'
+
+  if (!titulo) throw new Error('Informe o título da demanda.');
+
+  var id = 'D' + Date.now().toString(36).toUpperCase();
+  var agora = new Date().toISOString();
+  var autor = formatarAutor_(usuario);
+
+  var ss = getControle_();
+  var aba = garantirAba_(ss, 'demandas', CAB_DEMANDAS);
+  aba.appendRow([id, agora, projeto, titulo, descricao, prazo, autor, 'pendente', '', '', '']);
+
+  // Disparar e-mails para os estudantes
+  if (CONFIG.NOTIFICAR_EMAIL) {
+    enviarEmailDemanda_(projeto, titulo, descricao, prazo, autor);
+  }
+
+  return { ok: true, id: id };
+}
+
+function concluirDemanda_(usuario, body) {
+  var demandaId = String(body.demandaId || '').trim();
+  if (!demandaId) throw new Error('Demanda não informada.');
+
+  var ss = getControle_();
+  var aba = garantirAba_(ss, 'demandas', CAB_DEMANDAS);
+  var dados = aba.getDataRange().getValues();
+  var achou = false;
+
+  for (var i = 1; i < dados.length; i++) {
+    if (String(dados[i][0]) === demandaId) {
+      var projDemanda = String(dados[i][2]);
+      if (usuario.papel !== 'docente' && !podeEscreverProjeto_(usuario, projDemanda)) {
+        throw new Error('Você não tem permissão para concluir demandas deste projeto.');
+      }
+      var agora = new Date().toISOString();
+      var autor = formatarAutor_(usuario);
+      var evidencia = urlValida_(body.evidencia) || seguro_(body.texto, 300);
+
+      aba.getRange(i + 1, 8).setValue('concluida');
+      aba.getRange(i + 1, 9).setValue(agora);
+      aba.getRange(i + 1, 10).setValue(evidencia);
+      aba.getRange(i + 1, 11).setValue(autor);
+      achou = true;
+      break;
+    }
+  }
+
+  if (!achou) throw new Error('Demanda não encontrada.');
+  return { ok: true, demandaId: demandaId };
+}
+
+function concluirDemandaSilenciosa_(usuario, demandaId, texto, evidencia) {
+  try {
+    var ss = getControle_();
+    var aba = ss.getSheetByName('demandas');
+    if (!aba) return;
+    var dados = aba.getDataRange().getValues();
+    for (var i = 1; i < dados.length; i++) {
+      if (String(dados[i][0]) === String(demandaId)) {
+        aba.getRange(i + 1, 8).setValue('concluida');
+        aba.getRange(i + 1, 9).setValue(new Date().toISOString());
+        aba.getRange(i + 1, 10).setValue(evidencia || texto);
+        aba.getRange(i + 1, 11).setValue(formatarAutor_(usuario));
+        break;
+      }
+    }
+  } catch (e) {
+    Logger.log('Erro ao concluir demanda silenciosa: ' + e);
+  }
+}
+
+function removerDemanda_(usuario, demandaId) {
+  if (usuario.papel !== 'docente') throw new Error('Apenas docentes podem remover demandas.');
+  var ss = getControle_();
+  var aba = ss.getSheetByName('demandas');
+  if (!aba) return { ok: true };
+  var dados = aba.getDataRange().getValues();
+  for (var i = 1; i < dados.length; i++) {
+    if (String(dados[i][0]) === String(demandaId)) {
+      aba.deleteRow(i + 1);
+      return { ok: true, removido: demandaId };
+    }
+  }
+  return { ok: true };
+}
+
+function lerDemandasPublicas_() {
+  var ss = getControle_();
+  var aba = ss.getSheetByName('demandas');
+  if (!aba || aba.getLastRow() < 2) return [];
+  var dados = aba.getDataRange().getValues();
+  var list = [];
+  for (var i = 1; i < dados.length; i++) {
+    list.push({
+      id: String(dados[i][0]),
+      data: String(dados[i][1]),
+      projeto: String(dados[i][2]),
+      titulo: String(dados[i][3]),
+      descricao: String(dados[i][4]),
+      prazo: String(dados[i][5]),
+      criadoPor: String(dados[i][6]),
+      status: String(dados[i][7] || 'pendente'),
+      concluidaEm: String(dados[i][8] || ''),
+      evidencia: String(dados[i][9] || ''),
+      concluidaPor: String(dados[i][10] || '')
+    });
+  }
+  return list.reverse();
 }
 
 function atualizarFicha_(usuario, body) {
@@ -421,6 +558,46 @@ function ocultarRegistro_(usuario, registroId, oculto) {
 
 // ============================ NOTIFICAÇÕES POR E-MAIL ============================
 
+function enviarEmailDemanda_(projeto, titulo, descricao, prazo, autor) {
+  try {
+    var emailsDestino = [];
+    var membros = getControle_().getSheetByName('membros').getDataRange().getValues();
+
+    for (var i = 1; i < membros.length; i++) {
+      var e = membros[i][0];
+      var projs = String(membros[i][2] || '').split(',');
+      var status = membros[i][4];
+      if (status === 'ativo' && e.indexOf('@') > 0) {
+        if (projeto === '*' || projs.indexOf(String(projeto)) >= 0 || projs.indexOf('*') >= 0) {
+          if (emailsDestino.indexOf(e) === -1) {
+            emailsDestino.push(e);
+          }
+        }
+      }
+    }
+
+    if (!emailsDestino.length) return;
+
+    var escopoTxt = projeto === '*' ? 'Geral (Todos os Projetos)' : ('Projeto #' + projeto);
+    var assunto = '[PI-1] Nova Demanda Docente: ' + titulo + ' [' + escopoTxt + ']';
+    var corpo = 'Olá,\n\n' +
+      'O professor orientador ' + autor + ' registrou uma nova demanda/meta para você:\n\n' +
+      '🎯 Título: ' + titulo + '\n' +
+      '📋 Escopo: ' + escopoTxt + '\n' +
+      (prazo ? ('📅 Prazo sugerido: ' + prazo + '\n') : '') +
+      (descricao ? ('\n📝 Detalhes e Orientações:\n' + descricao + '\n') : '') +
+      '\nPara acompanhar e marcar a entrega pelo dashboard:\n' +
+      'https://chameoandre.github.io/UC-Projeto-Integrador-1-TEC-INF/2026-2/\n\n' +
+      'Atenciosamente,\nSecretaria Acadêmica / Docência PI-1';
+
+    emailsDestino.forEach(function (to) {
+      GmailApp.sendEmail(to, assunto, corpo);
+    });
+  } catch (e) {
+    Logger.log('Erro ao enviar e-mail de demanda: ' + e);
+  }
+}
+
 function enviarEmailNotificacaoDocente_(usuario, projeto, texto, dificuldades) {
   try {
     var assunto = '[PI-1] Registro de Avanço / Bloqueio — Projeto #' + projeto;
@@ -447,7 +624,6 @@ function enviarEmailDevolutivaAluno_(projetoId, emailAluno, textoDevolutiva, tex
     var emailsDestino = [];
     if (emailAluno && emailAluno.indexOf('@') > 0) emailsDestino.push(emailAluno);
 
-    // Buscar outros membros ativos do mesmo projeto
     var membros = getControle_().getSheetByName('membros').getDataRange().getValues();
     for (var i = 1; i < membros.length; i++) {
       var e = membros[i][0];
@@ -526,7 +702,7 @@ function autenticar_(idToken) {
 function podeEscreverProjeto_(usuario, projId) {
   if (!usuario || usuario.status !== 'ativo') return false;
   if (usuario.papel === 'docente') return true;
-  return usuario.projetos.indexOf(String(projId)) >= 0 || usuario.projetos.indexOf('*') >= 0;
+  return projId === '*' || usuario.projetos.indexOf(String(projId)) >= 0 || usuario.projetos.indexOf('*') >= 0;
 }
 
 function formatarAutor_(usuario) {
