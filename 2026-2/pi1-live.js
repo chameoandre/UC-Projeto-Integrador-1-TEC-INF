@@ -703,11 +703,158 @@
       .replace(/'/g, '&#039;');
   }
 
+  function abrirModalEditarFicha(projId) {
+    if (!state.usuario) {
+      alert('Autenticação Obrigatória:\nPor favor, faça login com sua conta Google/IFSC no canto superior direito para editar a ficha do projeto.');
+      return;
+    }
+    if (!podeEditarProjeto(projId)) {
+      if (state.usuario.status === 'pendente') {
+        alert('Seu pedido de acesso para o Projeto #' + (state.usuario.projetos.join(', ') || projId) + ' está aguardando aprovação do professor.');
+      } else {
+        abrirModalSolicitarAcesso(projId);
+      }
+      return;
+    }
+
+    var proj = (typeof window.projectsData !== 'undefined' ? window.projectsData : []).find(function(p) { return p.id === projId; }) || {};
+    var modal = document.getElementById('projectModal');
+    var modalContent = document.getElementById('modalContent');
+    if (!modal || !modalContent) return;
+
+    var isDocente = state.usuario.papel === 'docente';
+
+    modalContent.innerHTML = `
+      <div style="margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border-color);">
+        <span class="proj-badge">PROJETO #${projId}</span>
+        <h2 style="font-size:1.35rem;font-weight:700;margin-top:0.4rem;color:var(--text-main);">Editar Ficha & Links do Projeto</h2>
+        <p style="color:var(--text-muted);font-size:0.85rem;">Preencha os objetivos, link do Overleaf e trabalhos relacionados. As alterações são sincronizadas com a planilha oficial.</p>
+      </div>
+      <form id="pi1-form-editar-ficha" class="pi1-modal-form">
+        ${isDocente ? `
+          <div class="pi1-form-group">
+            <label>Título do Projeto *</label>
+            <input type="text" id="pi1-ficha-title" value="${escapeHtml(proj.title || '')}" required />
+          </div>
+          <div class="pi1-form-group">
+            <label>Integrantes da Equipe *</label>
+            <input type="text" id="pi1-ficha-team" value="${escapeHtml(proj.team || '')}" required />
+          </div>
+        ` : `
+          <div style="background:var(--chip-bg);padding:0.75rem 1rem;border-radius:var(--radius-sm);border:1px solid var(--border-color);margin-bottom:0.5rem;">
+            <strong style="color:var(--text-main);">${escapeHtml(proj.title || 'Projeto #' + projId)}</strong><br/>
+            <span style="font-size:0.8rem;color:var(--text-muted);"><i class="fa-solid fa-users"></i> ${escapeHtml(proj.team || '')}</span>
+          </div>
+        `}
+
+        <div class="pi1-form-group">
+          <label>Objetivo Geral e Específicos *</label>
+          <textarea id="pi1-ficha-objective" rows="3" required placeholder="Ex: Desenvolver uma plataforma web para... Objetivos específicos: 1) Mapear requisitos; 2) Modelar no draw.io; 3) Implementar...">${escapeHtml(proj.objective && proj.objective !== 'Objetivo em consolidação junto aos docentes orientadores.' ? proj.objective : '')}</textarea>
+          <span class="pi1-form-hint">Inicie com verbo no infinitivo seguindo o Roteiro 1.</span>
+        </div>
+
+        <div class="pi1-form-group">
+          <label><i class="fa-solid fa-file-lines" style="color:var(--accent-amber);"></i> Link de Leitura do Overleaf (/read/) *</label>
+          <input type="url" id="pi1-ficha-overleaf" value="${escapeHtml(proj.overleaf || '')}" placeholder="https://www.overleaf.com/read/xxxxxxxxx" />
+          <span class="pi1-form-hint" style="color:var(--accent-amber);"><i class="fa-solid fa-shield-halved"></i> No Overleaf: Share > Anyone with this link can view (deve conter /read/).</span>
+        </div>
+
+        <div class="pi1-form-group">
+          <label><i class="fa-solid fa-book" style="color:var(--accent-cyan);"></i> Trabalhos Relacionados (COTB / SBC) *</label>
+          <textarea id="pi1-ficha-relatedWorks" rows="3" placeholder="Ex: 1) Silva et al. (2023) - Propôs um app de... Nosso projeto diferencia-se por... 2) Souza (2024)...">${escapeHtml(proj.relatedWorks && proj.relatedWorks !== 'Pendente de inserção pela equipe.' ? proj.relatedWorks : '')}</textarea>
+          <span class="pi1-form-hint">Descreva os 2 artigos encontrados nos anais do Computer on the Beach.</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+          <div class="pi1-form-group">
+            <label><i class="fa-brands fa-github"></i> Repositório GitHub</label>
+            <input type="url" id="pi1-ficha-github" value="${escapeHtml(proj.github || '')}" placeholder="https://github.com/..." />
+          </div>
+          <div class="pi1-form-group">
+            <label><i class="fa-solid fa-diagram-project"></i> Diagrama (draw.io / Canva)</label>
+            <input type="url" id="pi1-ficha-canva" value="${escapeHtml(proj.canva || '')}" placeholder="https://..." />
+          </div>
+        </div>
+
+        <div class="pi1-form-group">
+          <label><i class="fa-solid fa-video"></i> Pitch em Vídeo</label>
+          <input type="url" id="pi1-ficha-pitch" value="${escapeHtml(proj.pitch || '')}" placeholder="https://youtube.com/... ou drive..." />
+        </div>
+
+        <div class="pi1-modal-footer">
+          <button type="button" class="btn-detail" onclick="closeModal()">Cancelar</button>
+          <button type="submit" class="btn-action" style="background:var(--ifsc-green);color:#fff;" id="pi1-btn-submit-ficha">
+            <i class="fa-solid fa-floppy-disk"></i> Salvar Ficha do Projeto
+          </button>
+        </div>
+      </form>
+    `;
+
+    document.getElementById('pi1-form-editar-ficha').onsubmit = async function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('pi1-btn-submit-ficha');
+      var ovUrl = document.getElementById('pi1-ficha-overleaf').value.trim();
+
+      if (ovUrl && ovUrl.indexOf('overleaf.com') >= 0 && ovUrl.indexOf('/read/') === -1) {
+        alert('Atenção: O link do Overleaf deve ser o link de LEITURA (contendo /read/).\nNo Overleaf, vá em Share > Anyone with this link can view.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = 'Salvando na planilha...';
+
+      var campos = {
+        objective: document.getElementById('pi1-ficha-objective').value.trim(),
+        relatorio: ovUrl,
+        relatedWorks: document.getElementById('pi1-ficha-relatedWorks').value.trim(),
+        github: document.getElementById('pi1-ficha-github').value.trim(),
+        canva: document.getElementById('pi1-ficha-canva').value.trim(),
+        pitch: document.getElementById('pi1-ficha-pitch').value.trim()
+      };
+
+      if (isDocente) {
+        var elTitle = document.getElementById('pi1-ficha-title');
+        var elTeam = document.getElementById('pi1-ficha-team');
+        if (elTitle) campos.title = elTitle.value.trim();
+        if (elTeam) campos.team = elTeam.value.trim();
+      }
+
+      var res = await apiCall('atualizarFicha', { projeto: projId, campos: campos });
+      if (res.ok) {
+        if (typeof window.showToast === 'function') window.showToast('Ficha do projeto atualizada com sucesso!');
+        else alert('Ficha do projeto atualizada com sucesso!');
+        if (typeof window.closeModal === 'function') window.closeModal();
+        
+        // Atualizar objeto local em projectsData
+        Object.assign(proj, {
+          objective: campos.objective || proj.objective,
+          overleaf: campos.relatorio || proj.overleaf,
+          relatedWorks: campos.relatedWorks || proj.relatedWorks,
+          github: campos.github || proj.github,
+          canva: campos.canva || proj.canva,
+          pitch: campos.pitch || proj.pitch
+        });
+        if (campos.title) proj.title = campos.title;
+        if (campos.team) proj.team = campos.team;
+
+        if (typeof window.renderProjects === 'function') window.renderProjects();
+        sincronizarRegistros();
+      } else {
+        alert('Erro ao salvar ficha: ' + (res.erro || 'Falha na requisição'));
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar Ficha do Projeto';
+      }
+    };
+
+    modal.classList.add('open');
+  }
+
   // ============================ HOOKS DE INTERFACE ============================
 
   window.PI1 = {
     state: state,
     abrirModalAvanco: abrirModalAvanco,
+    abrirModalEditarFicha: abrirModalEditarFicha,
     abrirModalCriarDemanda: abrirModalCriarDemanda,
     concluirDemanda: concluirDemanda,
     removerDemanda: removerDemanda,

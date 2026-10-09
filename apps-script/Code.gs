@@ -439,6 +439,9 @@ function atualizarFicha_(usuario, body) {
       var novoValor = seguro_(campos[campo], CONFIG.MAX_CAMPO);
       if (CAMPOS_URL.indexOf(campo) >= 0 && novoValor) {
         novoValor = urlValida_(novoValor);
+        if (campo === 'relatorio' && novoValor.indexOf('overleaf.com') >= 0 && novoValor.indexOf('/read/') === -1) {
+          throw new Error('O link do Overleaf deve ser o link de LEITURA (/read/). No Overleaf, clique em Share > Anyone with this link can view.');
+        }
       }
       if (valorAntigo !== novoValor) {
         abaPub.getRange(linha, COL[campo]).setValue(novoValor);
