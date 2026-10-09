@@ -1,0 +1,31 @@
+name: Sincronizar Planilha com Dashboard PI-1
+
+on:
+  schedule:
+    - cron: '0 9,21 * * *' # Roda às 06h e 18h BRT (09:00 e 21:00 UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Executar Sincronização
+        run: python scripts/sync_sheet.py
+
+      - name: Commit e Push das Alterações
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add 2026-2/index.html
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(sync): sincroniza dados da planilha de projetos PI-1 [skip ci]" && git push origin main)

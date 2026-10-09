@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Projeto Integrador I (2026/2 - Turma Info 25) | IFSC Câmpus Garopaba</title>
+  <meta name="description" content="Dashboard Executivo e Acompanhamento de Projetos da Unidade Curricular de Projeto Integrador I — Técnico Integrado em Informática (IFSC Câmpus Garopaba 2026/2).">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* ==========================================================================
+       THEME VARIABLES: DARK & LIGHT MODE (IFSC BRANDING)
+       ========================================================================== */
+    :root, [data-theme="dark"] {
+      --bg-dark: #080d0a;
+      --bg-surface: #0f1712;
+      --bg-card: rgba(18, 28, 22, 0.75);
+      --bg-card-hover: rgba(26, 42, 32, 0.95);
+      --bg-glass: rgba(15, 23, 18, 0.75);
+      --border-color: rgba(34, 197, 94, 0.18);
+      --border-glow: rgba(34, 197, 94, 0.35);
+
+      --ifsc-green: #16a34a;
+      --ifsc-green-light: #4ade80;
+      --ifsc-green-glow: rgba(34, 197, 94, 0.25);
+      --ifsc-red: #ef4444;
+      --ifsc-red-glow: rgba(239, 68, 68, 0.25);
+
+      --accent-cyan: #06b6d4;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --accent-blue: #3b82f6;
+
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --input-bg: rgba(0, 0, 0, 0.4);
+      --input-border: rgba(255, 255, 255, 0.12);
+      --chip-bg: rgba(0, 0, 0, 0.35);
+      --chip-border: rgba(255, 255, 255, 0.08);
+      --modal-bg: #0d1510;
+      --header-bg: rgba(12, 20, 15, 0.85);
+
+      --hero-bg-grad: linear-gradient(135deg, rgba(22, 163, 74, 0.15) 0%, rgba(6, 182, 212, 0.08) 50%, rgba(15, 23, 18, 0.5) 100%);
+      --bg-radial-1: rgba(22, 163, 74, 0.08);
+      --bg-radial-2: rgba(6, 182, 212, 0.06);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-dark: #f4f6f8;
+      --bg-surface: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.9);
+      --bg-card-hover: rgba(255, 255, 255, 1);
+      --bg-glass: rgba(255, 255, 255, 0.85);
+      --border-color: rgba(22, 163, 74, 0.2);
+      --border-glow: rgba(22, 163, 74, 0.4);
+
+      --ifsc-green: #15803d;
+      --ifsc-green-light: #16a34a;
+      --ifsc-green-glow: rgba(22, 163, 74, 0.2);
+      --ifsc-red: #dc2626;
+      --ifsc-red-glow: rgba(220, 38, 38, 0.15);
+
+      --accent-cyan: #0891b2;
+      --accent-amber: #d97706;
+      --accent-purple: #9333ea;
+      --accent-blue: #2563eb;
+
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #64748b;
+
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --chip-bg: rgba(22, 163, 74, 0.08);
+      --chip-border: rgba(22, 163, 74, 0.18);
+      --modal-bg: #ffffff;
+      --header-bg: rgba(255, 255, 255, 0.88);
+
+      --hero-bg-grad: linear-gradient(135deg, rgba(22, 163, 74, 0.1) 0%, rgba(6, 182, 212, 0.08) 50%, rgba(241, 245, 249, 0.8) 100%);
+      --bg-radial-1: rgba(22, 163, 74, 0.05);
+      --bg-radial-2: rgba(6, 182, 212, 0.05);
+
+      --shadow-glass: 0 10px 30px rgba(0, 0, 0, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 10% 15%, var(--bg-radial-1) 0%, transparent 45%),
+        radial-gradient(circle at 90% 85%, var(--bg-radial-2) 0%, transparent 45%);
+      background-attachment: fixed;
+      line-height: 1.5;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-dark);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(34, 197, 94, 0.3);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--ifsc-green);
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--header-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.85rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .logo-badge {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--ifsc-green) 0%, var(--accent-cyan) 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.15rem;
+      box-shadow: 0 4px 12px var(--ifsc-green-glow);
+    }
+
+    .brand-text h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .btn-action {
+      background: var(--chip-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.45rem 0.9rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-action:hover {
+      background: var(--ifsc-green);
+      color: white;
+      border-color: var(--ifsc-green);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px var(--ifsc-green-glow);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      flex: 1;
+      width: 100%;
+    }
+
+    /* Hero Banner */
+    .hero-box {
+      background: var(--hero-bg-grad);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-glass);
+    }
+
+    .hero-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(22, 163, 74, 0.15);
+      border: 1px solid var(--ifsc-green);
+      color: var(--ifsc-green-light);
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.1rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 850px;
+      line-height: 1.5;
+    }
+
+    .hero-teachers {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border-color);
+      flex-wrap: wrap;
+    }
+
+    .teacher-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .teacher-badge strong {
+      color: var(--text-main);
+    }
+
+    /* 4 Pillars Box */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+
+    .pillar-card {
+      background: var(--chip-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .pillar-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--ifsc-green);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .pillar-content h5 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.2rem;
+    }
+
+    .pillar-content p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    /* Tabs Bar */
+    .tabs-nav {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 2rem;
+      overflow-x: auto;
+      box-shadow: var(--shadow-glass);
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.65rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: var(--chip-bg);
+    }
+
+    .tab-btn.active {
+      background: var(--ifsc-green);
+      color: white;
+      box-shadow: 0 4px 12px var(--ifsc-green-glow);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* KPIs Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      box-shadow: var(--shadow-glass);
+      transition: var(--transition);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-glow);
+    }
+
+    .kpi-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .kpi-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--text-main);
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-top: 0.2rem;
+    }
+
+    /* Filter & Search Bar */
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.65rem 1rem 0.65rem 2.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--ifsc-green);
+      box-shadow: 0 0 0 3px var(--ifsc-green-glow);
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.45rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .pill:hover, .pill.active {
+      background: var(--ifsc-green);
+      color: white;
+      border-color: var(--ifsc-green);
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-glass);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .project-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .proj-badge {
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid var(--ifsc-green);
+      color: var(--ifsc-green-light);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      font-family: 'Fira Code', monospace;
+    }
+
+    .project-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.3;
+      margin-bottom: 0.35rem;
+    }
+
+    .project-team {
+      font-size: 0.82rem;
+      color: var(--accent-cyan);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 500;
+    }
+
+    .project-objective {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 1.25rem;
+      flex: 1;
+    }
+
+    .project-links-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .link-btn {
+      background: var(--chip-bg);
+      border: 1px solid var(--chip-border);
+      color: var(--text-muted);
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      transition: var(--transition);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .link-btn.active {
+      color: var(--text-main);
+      border-color: var(--border-color);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .link-btn.active:hover {
+      background: var(--ifsc-green);
+      color: white;
+      border-color: var(--ifsc-green);
+    }
+
+    .link-btn.disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .project-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.78rem;
+    }
+
+    .btn-detail {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.35rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: var(--transition);
+    }
+
+    .btn-detail:hover {
+      background: var(--chip-bg);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      animation: modalFade 0.25s ease;
+    }
+
+    @keyframes modalFade {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-card {
+      background: var(--modal-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 800px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--ifsc-red);
+    }
+
+    /* Audit Table */
+    .audit-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-glass);
+      overflow-x: auto;
+    }
+
+    .audit-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      text-align: left;
+    }
+
+    .audit-table th {
+      background: var(--chip-bg);
+      color: var(--text-muted);
+      padding: 0.85rem 1rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+    }
+
+    .audit-table td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .audit-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .tag-ok { background: rgba(34, 197, 94, 0.15); color: var(--ifsc-green-light); border: 1px solid rgba(34, 197, 94, 0.3); }
+    .tag-pendente { background: rgba(239, 68, 68, 0.15); color: var(--ifsc-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    /* Footer */
+    footer {
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-color);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      margin-top: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Superior -->
+  <header>
+    <div class="brand-group">
+      <div class="logo-container">
+        <div class="logo-badge">
+          <i class="fa-solid fa-code-branch"></i>
+        </div>
+        <div class="brand-text">
+          <h1>Projeto Integrador I</h1>
+          <p>Técnico Integrado em Informática • Turma Info 2025 (2º Ano / 2026-2)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-action" onclick="liveSyncFromSheet()" title="Sincronizar dados com a Planilha Oficial">
+        <i class="fa-solid fa-arrows-rotate" id="sync-icon"></i> Sincronizar ao Vivo
+      </button>
+      <a href="https://docs.google.com/spreadsheets/d/15PBDpzugjiZJsEJEcbT6CHrNGcXB_OPKdZkfsHQf9RU/edit?gid=891834841" target="_blank" class="btn-action">
+        <i class="fa-solid fa-table"></i> Planilha Google
+      </a>
+      <button class="btn-action" onclick="toggleTheme()" title="Alternar Modo Escuro / Claro">
+        <i class="fa-solid fa-moon" id="theme-icon"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Hero Banner -->
+    <section class="hero-box">
+      <div class="hero-header">
+        <div>
+          <span class="hero-tag"><i class="fa-solid fa-laptop-code"></i> Ano 2 • 40h • Eixo Informática</span>
+          <h2 class="hero-title">Painel Executivo de Acompanhamento — Projetos Integradores</h2>
+          <p class="hero-subtitle">
+            Ambiente integrado de acompanhamento da Turma Info 2025 para gestão ágil, controle de versão (Git/GitHub), modelagem visual de arquiteturas (draw.io) e produção científica no formato SBC/IFSC.
+          </p>
+          <div class="hero-teachers">
+            <div class="teacher-badge">
+              <i class="fa-solid fa-chalkboard-user" style="color: var(--ifsc-green);"></i>
+              Docente Responsável: <strong>Prof. Dr. André Moraes</strong> (andre.moraes@ifsc.edu.br)
+            </div>
+            <div class="teacher-badge">
+              <i class="fa-solid fa-building-columns" style="color: var(--accent-cyan);"></i>
+              Instituição: <strong>IFSC Câmpus Garopaba</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Os 4 Pilares Pedagógicos -->
+      <div class="pillars-grid">
+        <div class="pillar-card">
+          <div class="pillar-num">1</div>
+          <div class="pillar-content">
+            <h5>Gestão & Método</h5>
+            <p>Planejamento ágil, definição de escopo e método científico aplicado.</p>
+          </div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-num">2</div>
+          <div class="pillar-content">
+            <h5>Modelagem draw.io</h5>
+            <p>WBS, fluxogramas, wireframes e diagramas de arquitetura vivos.</p>
+          </div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-num">3</div>
+          <div class="pillar-content">
+            <h5>Git & GitHub Pages</h5>
+            <p>Versionamento de código, issues, pull requests e deploy estático.</p>
+          </div>
+        </div>
+        <div class="pillar-card">
+          <div class="pillar-num">4</div>
+          <div class="pillar-content">
+            <h5>Paper SBC & Eventos</h5>
+            <p>Artigo científico no Overleaf e submissão (SEPEI, SNCT, COTB).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Barra de Navegação em Abas -->
+    <nav class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('projetos')">
+        <i class="fa-solid fa-diagram-project"></i> Projetos dos Grupos (11)
+      </button>
+      <button class="tab-btn" onclick="switchTab('raiox')">
+        <i class="fa-solid fa-chart-pie"></i> Raio-X & Métricas
+      </button>
+      <button class="tab-btn" onclick="switchTab('auditoria')">
+        <i class="fa-solid fa-clipboard-check"></i> Matriz de Auditoria
+      </button>
+      <button class="tab-btn" onclick="switchTab('roteiros')">
+        <i class="fa-solid fa-book-open"></i> Os 4 Pilares & Roteiros
+      </button>
+      <button class="tab-btn" onclick="switchTab('plano')">
+        <i class="fa-solid fa-file-lines"></i> Plano de Ensino
+      </button>
+    </nav>
+
+    <!-- =========================================================================
+         ABA 1: PROJETOS DOS GRUPOS
+         ========================================================================= -->
+    <section id="tab-projetos" class="tab-content active">
+      
+      <!-- KPIs Resumidos -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: rgba(34, 197, 94, 0.15); color: var(--ifsc-green-light);">
+            <i class="fa-solid fa-people-group"></i>
+          </div>
+          <div>
+            <div class="kpi-value" id="kpi-total-proj">11</div>
+            <div class="kpi-label">Equipes Cadastradas</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan);">
+            <i class="fa-brands fa-github"></i>
+          </div>
+          <div>
+            <div class="kpi-value" id="kpi-github-count">0</div>
+            <div class="kpi-label">Repositórios GitHub</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">
+            <i class="fa-solid fa-file-code"></i>
+          </div>
+          <div>
+            <div class="kpi-value" id="kpi-overleaf-count">0</div>
+            <div class="kpi-label">Artigos Overleaf (SBC)</div>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--accent-amber);">
+            <i class="fa-solid fa-diagram-project"></i>
+          </div>
+          <div>
+            <div class="kpi-value" id="kpi-canva-count">0</div>
+            <div class="kpi-label">Diagramas Canva/draw.io</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros e Busca -->
+      <div class="filter-bar">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="project-search" class="search-input" placeholder="Buscar por nome do projeto ou integrante..." oninput="filterProjects()">
+        </div>
+        <div class="filter-pills">
+          <span class="pill active" onclick="setFilter('todos', this)">Todos (11)</span>
+          <span class="pill" onclick="setFilter('com-github', this)">Com GitHub</span>
+          <span class="pill" onclick="setFilter('com-overleaf', this)">Com Overleaf</span>
+          <span class="pill" onclick="setFilter('pendentes', this)">Pendentes</span>
+        </div>
+      </div>
+
+      <!-- Grid de Projetos -->
+      <div class="projects-grid" id="projects-container">
+        <!-- Injetado dinamicamente via JS -->
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         ABA 2: RAIO-X & MÉTRICAS
+         ========================================================================= -->
+    <section id="tab-raiox" class="tab-content">
+      <div class="hero-box" style="margin-bottom: 1.5rem;">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.4rem; margin-bottom: 0.5rem;">
+          <i class="fa-solid fa-chart-line" style="color: var(--accent-cyan);"></i> Diagnóstico de Entregas da Turma Info 2025
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Métricas de conformidade técnica e acompanhamento dos checkpoints dos 11 grupos de Projeto Integrador I.
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div class="kpi-card" style="flex-direction: column; align-items: flex-start; gap: 0.75rem;">
+          <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"><i class="fa-brands fa-github" style="color: var(--ifsc-green);"></i> Repositórios GitHub (Pilar 3)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Percentual de equipes com repositório público criado e estruturado com <code>docs/</code> e <code>README.md</code>.</p>
+          <div style="width: 100%; height: 10px; background: var(--chip-bg); border-radius: 9999px; overflow: hidden; margin-top: 0.5rem;">
+            <div id="bar-github" style="width: 0%; height: 100%; background: var(--ifsc-green); transition: width 0.5s ease;"></div>
+          </div>
+          <span id="label-github-pct" style="font-size: 0.8rem; font-weight: 700; color: var(--ifsc-green-light);">0% Conforme</span>
+        </div>
+
+        <div class="kpi-card" style="flex-direction: column; align-items: flex-start; gap: 0.75rem;">
+          <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-file-pen" style="color: var(--accent-purple);"></i> Artigo no Overleaf (Pilar 4)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Percentual de equipes com artigo científico no template SBC e link de leitura compartilhado.</p>
+          <div style="width: 100%; height: 10px; background: var(--chip-bg); border-radius: 9999px; overflow: hidden; margin-top: 0.5rem;">
+            <div id="bar-overleaf" style="width: 0%; height: 100%; background: var(--accent-purple); transition: width 0.5s ease;"></div>
+          </div>
+          <span id="label-overleaf-pct" style="font-size: 0.8rem; font-weight: 700; color: var(--accent-purple);">0% Conforme</span>
+        </div>
+
+        <div class="kpi-card" style="flex-direction: column; align-items: flex-start; gap: 0.75rem;">
+          <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-main);"><i class="fa-solid fa-diagram-project" style="color: var(--accent-cyan);"></i> Modelagem Visual (Pilar 2)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Percentual de equipes com diagramas de arquitetura vivos criados no <code>draw.io</code> / Canva.</p>
+          <div style="width: 100%; height: 10px; background: var(--chip-bg); border-radius: 9999px; overflow: hidden; margin-top: 0.5rem;">
+            <div id="bar-canva" style="width: 0%; height: 100%; background: var(--accent-cyan); transition: width 0.5s ease;"></div>
+          </div>
+          <span id="label-canva-pct" style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan);">0% Conforme</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         ABA 3: MATRIZ DE AUDITORIA
+         ========================================================================= -->
+    <section id="tab-auditoria" class="tab-content">
+      <div class="audit-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700;">Matriz de Auditoria de Artefatos — PI-1</h3>
+            <p style="color: var(--text-muted); font-size: 0.82rem;">Acompanhamento dos 11 grupos da Turma Info 2025 para projeção em sala de aula.</p>
+          </div>
+          <button class="btn-action" onclick="window.print()">
+            <i class="fa-solid fa-print"></i> Imprimir Matriz
+          </button>
+        </div>
+
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Projeto</th>
+              <th>Integrantes</th>
+              <th>GitHub</th>
+              <th>Overleaf</th>
+              <th>Diagrama</th>
+              <th>Pitch</th>
+              <th>Exp 1-4</th>
+              <th>Status Geral</th>
+            </tr>
+          </thead>
+          <tbody id="audit-table-body">
+            <!-- Injetado via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         ABA 4: OS 4 PILARES & ROTEIROS
+         ========================================================================= -->
+    <section id="tab-roteiros" class="tab-content">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        
+        <div class="kpi-card" style="flex-direction: column; align-items: flex-start;">
+          <span class="proj-badge">PILAR 1</span>
+          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0.4rem 0;">Gestão de Projetos & Escopo</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Definição de problema, objetivos SMART, cronograma em Gantt e divisão de responsabilidades da equipe.
+          </p>
+          <a href="https://trello.com" target="_blank" class="btn-action">
+            <i class="fa-solid fa-list-check"></i> Ferramenta Kanban
+          </a>
+        </div>
+
+        <div class="kpi-card" style="flex-direction: column; align-items: flex-start;">
+          <span class="proj-badge">PILAR 2</span>
+          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0.4rem 0;">Modelagem no draw.io (Artefatos Vivos)</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Construção de fluxogramas e arquitetura em <code>.drawio.png</code> dentro da pasta <code>docs/</code> do repositório.
+          </p>
+          <a href="https://app.diagrams.net" target="_blank" class="btn-action">
+            <i class="fa-solid fa-diagram-project"></i> Abrir draw.io
+          </a>
+        </div>
+
+        <div class="kpi-card" style="flex-direction: column; align-items: flex-start;">
+          <span class="proj-badge">PILAR 3</span>
+          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0.4rem 0;">Versionamento com Git & GitHub</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Commits semânticos, branches por funcionalidade, issues de acompanhamento e deploy contínuo no GitHub Pages.
+          </p>
+          <a href="https://github.com" target="_blank" class="btn-action">
+            <i class="fa-brands fa-github"></i> Acessar GitHub
+          </a>
+        </div>
+
+        <div class="kpi-card" style="flex-direction: column; align-items: flex-start;">
+          <span class="proj-badge">PILAR 4</span>
+          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0.4rem 0;">Artigo Científico SBC no Overleaf</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
+            Redação do paper oficial para submissão no SEPEI/SNCT/COTB com template LaTeX da Sociedade Brasileira de Computação.
+          </p>
+          <a href="https://www.overleaf.com/latex/templates/sbc-conferences-articles-template/bzkpfsxspfhs" target="_blank" class="btn-action">
+            <i class="fa-solid fa-file-lines"></i> Template Overleaf SBC
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         ABA 5: PLANO DE ENSINO
+         ========================================================================= -->
+    <section id="tab-plano" class="tab-content">
+      <div class="audit-card">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 0.5rem;">
+          Plano de Ensino — Projeto Integrador I (40h)
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.25rem;">
+          Curso Técnico Integrado em Informática • 2º Ano (Turma Info 2025) • IFSC Câmpus Garopaba.
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; font-size: 0.88rem;">
+          <div style="background: var(--chip-bg); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <h4 style="font-weight: 700; color: var(--ifsc-green); margin-bottom: 0.4rem;">Ementa Oficial</h4>
+            <p style="color: var(--text-muted);">
+              Desenvolvimento de projetos integrando conteúdos técnicos e científicos. Metodologia de pesquisa. Modelagem de software e arquitetura. Versionamento colaborativo. Redação técnica e comunicação científica.
+            </p>
+          </div>
+
+          <div style="background: var(--chip-bg); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <h4 style="font-weight: 700; color: var(--accent-cyan); margin-bottom: 0.4rem;">Objetivo do 2º Ano</h4>
+            <p style="color: var(--text-muted);">
+              Proporcionar aos estudantes a experiência prática de idealização, planejamento visual, prototipagem e validação de um projeto de software relevante para a comunidade ou para a área de informática.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal de Detalhes do Projeto -->
+  <div id="projectModal" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      <div id="modalContent">
+        <!-- Injetado via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p><strong>Instituto Federal de Santa Catarina (IFSC) — Câmpus Garopaba</strong></p>
+    <p style="margin-top: 0.3rem;">Unidade Curricular: Projeto Integrador I • Técnico Integrado em Informática (Turma Info 2025 • 2026-2)</p>
+    <p style="margin-top: 0.3rem; font-size: 0.75rem; color: var(--text-dim);">Docente Responsável: Prof. Dr. André Moraes (andre.moraes@ifsc.edu.br)</p>
+  </footer>
+
+  <!-- =========================================================================
+       JAVASCRIPT: BASE DE DADOS EMBUTIDA & LÓGICA DE EXECUÇÃO
+       ========================================================================= -->
+  <script>
+    // 1. Dados Iniciais Embutidos dos 11 Grupos de PI-1 (Sincronizados com a Planilha Oficial)
+    const projectsData = [
+  {
+    "id": 1,
+    "title": "SELI",
+    "rawTitle": "SELI",
+    "team": "Eduarda, Débora, Luisa, Vitória Garcia",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 2,
+    "title": "Estudos IF",
+    "rawTitle": "Estudos IF",
+    "team": "Vitória Ortiz, Brenda, Kamilly",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 3,
+    "title": "Ancestralidade, Memória e Tecnologia",
+    "rawTitle": "Ancestralidade, Memória e Tecnologia",
+    "team": "Ana Laura Pereira, Mariana",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 4,
+    "title": "Partiu ENEM",
+    "rawTitle": "Partiu ENEM",
+    "team": "Heloisa, Julia, Lucas Sehn",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 5,
+    "title": "Descodifica a Lei",
+    "rawTitle": "Descodifica a Lei",
+    "team": "Clara, Juliana",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 6,
+    "title": "Poup!",
+    "rawTitle": "Poup!",
+    "team": "Marcus, Felipe, Lucas Monguzzi",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 7,
+    "title": "CodeQuest",
+    "rawTitle": "CodeQuest",
+    "team": "Kauan, Davi, Luiz",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 8,
+    "title": "Projeto #8 (Tema a Definir)",
+    "rawTitle": "A definir",
+    "team": "Thomas, Kiara, Vitor Roberto",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 9,
+    "title": "Projeto #9 (Tema a Definir)",
+    "rawTitle": "A definir",
+    "team": "Eliott",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 10,
+    "title": "Study+",
+    "rawTitle": "Study+",
+    "team": "Lorenzo, Victor",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  },
+  {
+    "id": 11,
+    "title": "Projeto #11 (Tema a Definir)",
+    "rawTitle": "A definir",
+    "team": "Dafne, Veronica",
+    "objective": "Objetivo em consolidação junto aos docentes orientadores.",
+    "github": "",
+    "overleaf": "",
+    "canva": "",
+    "pitch": "",
+    "relatedWorks": "Pendente de inserção pela equipe.",
+    "experiments": {
+      "exp1": "PENDENTE",
+      "exp2": "PENDENTE",
+      "exp3": "PENDENTE",
+      "exp4": "PENDENTE"
+    },
+    "experimentResults": {
+      "exp1": "",
+      "exp2": "",
+      "exp3": "",
+      "exp4": ""
+    },
+    "papers": {
+      "sepei": "PENDENTE",
+      "snct": "PENDENTE",
+      "paper3": "PENDENTE",
+      "cotb": "PENDENTE"
+    },
+    "advances": "Aguardando primeiro registro de atividades.",
+    "nextSteps": "Definição do escopo, repositório GitHub e artigo Overleaf.",
+    "difficulties": "Nenhuma dificuldade reportada no momento.",
+    "technologies": [
+      "A definir"
+    ],
+    "observations": ""
+  }
+];
+
+    let currentFilter = 'todos';
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/15PBDpzugjiZJsEJEcbT6CHrNGcXB_OPKdZkfsHQf9RU/export?format=csv&gid=891834841";
+
+    // 2. Renderizar Cards de Projetos
+    function renderProjects(data = projectsData) {
+      const container = document.getElementById("projects-container");
+      const search = (document.getElementById("project-search") ? document.getElementById("project-search").value : "").toLowerCase();
+
+      const filtered = data.filter(p => {
+        const matchesSearch = p.title.toLowerCase().includes(search) || 
+                              p.team.toLowerCase().includes(search) ||
+                              p.objective.toLowerCase().includes(search);
+
+        if (!matchesSearch) return false;
+
+        if (currentFilter === 'com-github') return !!p.github;
+        if (currentFilter === 'com-overleaf') return !!p.overleaf;
+        if (currentFilter === 'pendentes') return !p.github || !p.overleaf;
+        return true;
+      });
+
+      if (!filtered.length) {
+        container.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color); color: var(--text-muted);">
+            <i class="fa-solid fa-folder-open" style="font-size: 2.5rem; margin-bottom: 0.75rem; color: var(--text-dim);"></i>
+            <p>Nenhum projeto corresponde ao filtro selecionado.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(p => {
+        const hasGithub = !!p.github;
+        const hasOverleaf = !!p.overleaf;
+        const hasCanva = !!p.canva;
+        const hasPitch = !!p.pitch;
+
+        return `
+          <div class="project-card">
+            <div>
+              <div class="project-card-header">
+                <span class="proj-badge">#${p.id}</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-users"></i> ${p.team.split(',').length} integrantes</span>
+              </div>
+              <h3 class="project-title">${p.title}</h3>
+              <div class="project-team"><i class="fa-solid fa-user-group"></i> ${p.team}</div>
+              <p class="project-objective">${p.objective}</p>
+            </div>
+
+            <div>
+              <div class="project-links-grid">
+                <a href="${p.github || '#'}" target="_blank" class="link-btn ${hasGithub ? 'active' : 'disabled'}">
+                  <i class="fa-brands fa-github"></i> ${hasGithub ? 'GitHub' : 'Sem GitHub'}
+                </a>
+                <a href="${p.overleaf || '#'}" target="_blank" class="link-btn ${hasOverleaf ? 'active' : 'disabled'}">
+                  <i class="fa-solid fa-file-code"></i> ${hasOverleaf ? 'Overleaf' : 'Sem Overleaf'}
+                </a>
+                <a href="${p.canva || '#'}" target="_blank" class="link-btn ${hasCanva ? 'active' : 'disabled'}">
+                  <i class="fa-solid fa-diagram-project"></i> ${hasCanva ? 'Diagrama' : 'Sem Diagrama'}
+                </a>
+                <a href="${p.pitch || '#'}" target="_blank" class="link-btn ${hasPitch ? 'active' : 'disabled'}">
+                  <i class="fa-solid fa-video"></i> ${hasPitch ? 'Pitch Vídeo' : 'Sem Pitch'}
+                </a>
+              </div>
+
+              <div class="project-footer">
+                <span style="color: var(--text-muted); font-size: 0.75rem;"><i class="fa-solid fa-flask"></i> Exp: ${p.experiments.exp1 !== 'PENDENTE' ? 'Cadastrado' : 'Pendente'}</span>
+                <button class="btn-detail" onclick="openModal(${p.id})">
+                  <i class="fa-solid fa-circle-info"></i> Detalhes
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      updateKpis(data);
+      renderAuditTable(data);
+    }
+
+    // 3. Atualizar Indicadores (KPIs)
+    function updateKpis(data) {
+      const githubCount = data.filter(p => !!p.github).length;
+      const overleafCount = data.filter(p => !!p.overleaf).length;
+      const canvaCount = data.filter(p => !!p.canva).length;
+
+      document.getElementById("kpi-github-count").innerText = githubCount;
+      document.getElementById("kpi-overleaf-count").innerText = overleafCount;
+      document.getElementById("kpi-canva-count").innerText = canvaCount;
+
+      const githubPct = Math.round((githubCount / data.length) * 100);
+      const overleafPct = Math.round((overleafCount / data.length) * 100);
+      const canvaPct = Math.round((canvaCount / data.length) * 100);
+
+      const barGithub = document.getElementById("bar-github");
+      const barOverleaf = document.getElementById("bar-overleaf");
+      const barCanva = document.getElementById("bar-canva");
+      if (barGithub) barGithub.style.width = githubPct + "%";
+      if (barOverleaf) barOverleaf.style.width = overleafPct + "%";
+      if (barCanva) barCanva.style.width = canvaPct + "%";
+
+      const lblGithub = document.getElementById("label-github-pct");
+      const lblOverleaf = document.getElementById("label-overleaf-pct");
+      const lblCanva = document.getElementById("label-canva-pct");
+      if (lblGithub) lblGithub.innerText = `${githubPct}% Conforme (${githubCount}/${data.length})`;
+      if (lblOverleaf) lblOverleaf.innerText = `${overleafPct}% Conforme (${overleafCount}/${data.length})`;
+      if (lblCanva) lblCanva.innerText = `${canvaPct}% Conforme (${canvaCount}/${data.length})`;
+    }
+
+    // 4. Matriz de Auditoria
+    function renderAuditTable(data) {
+      const tbody = document.getElementById("audit-table-body");
+      if (!tbody) return;
+
+      tbody.innerHTML = data.map(p => {
+        const ghTag = p.github ? '<span class="status-tag tag-ok"><i class="fa-solid fa-check"></i> OK</span>' : '<span class="status-tag tag-pendente">Pendente</span>';
+        const ovTag = p.overleaf ? '<span class="status-tag tag-ok"><i class="fa-solid fa-check"></i> OK</span>' : '<span class="status-tag tag-pendente">Pendente</span>';
+        const diaTag = p.canva ? '<span class="status-tag tag-ok"><i class="fa-solid fa-check"></i> OK</span>' : '<span class="status-tag tag-pendente">Pendente</span>';
+        const pitchTag = p.pitch ? '<span class="status-tag tag-ok"><i class="fa-solid fa-check"></i> OK</span>' : '<span class="status-tag tag-pendente">Pendente</span>';
+        const expTag = p.experiments.exp1 !== 'PENDENTE' ? '<span class="status-tag tag-ok"><i class="fa-solid fa-check"></i> OK</span>' : '<span class="status-tag tag-pendente">Pendente</span>';
+
+        const isFullyDone = p.github && p.overleaf && p.experiments.exp1 !== 'PENDENTE';
+        const statusGeral = isFullyDone 
+          ? '<span class="status-tag tag-ok">Regular</span>' 
+          : '<span class="status-tag tag-pendente">Em Andamento</span>';
+
+        return `
+          <tr>
+            <td><strong>#${p.id}</strong></td>
+            <td><strong>${p.title}</strong></td>
+            <td><span style="font-size: 0.8rem; color: var(--text-muted);">${p.team}</span></td>
+            <td>${ghTag}</td>
+            <td>${ovTag}</td>
+            <td>${diaTag}</td>
+            <td>${pitchTag}</td>
+            <td>${expTag}</td>
+            <td>${statusGeral}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // 5. Modal de Detalhes Completo
+    function openModal(id) {
+      const p = projectsData.find(item => item.id === id);
+      if (!p) return;
+
+      const modal = document.getElementById("projectModal");
+      const content = document.getElementById("modalContent");
+
+      content.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+          <div>
+            <span class="proj-badge">PROJETO #${p.id}</span>
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; margin-top: 0.4rem; color: var(--text-main);">${p.title}</h2>
+            <div style="color: var(--accent-cyan); font-size: 0.88rem; margin-top: 0.2rem;"><i class="fa-solid fa-users"></i> ${p.team}</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-cyan); letter-spacing: 0.05em; margin-bottom: 0.35rem;">Objetivo do Projeto</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">${p.objective}</p>
+        </div>
+
+        <div style="margin-bottom: 1.25rem; background: var(--chip-bg); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+          <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-purple); letter-spacing: 0.05em; margin-bottom: 0.4rem;">
+            <i class="fa-solid fa-book-bookmark"></i> Trabalhos Relacionados
+          </h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">${p.relatedWorks}</p>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-cyan); letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+            <i class="fa-solid fa-flask"></i> Pipeline de 4 Experimentos
+          </h4>
+          <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.82rem;">
+            <div style="background: var(--chip-bg); padding: 0.6rem 0.8rem; border-radius: 6px; border-left: 3px solid ${p.experiments.exp1 !== 'PENDENTE' ? 'var(--ifsc-green)' : 'var(--border-color)'};">
+              <strong>Exp 1:</strong> ${p.experiments.exp1}
+            </div>
+            <div style="background: var(--chip-bg); padding: 0.6rem 0.8rem; border-radius: 6px; border-left: 3px solid ${p.experiments.exp2 !== 'PENDENTE' ? 'var(--ifsc-green)' : 'var(--border-color)'};">
+              <strong>Exp 2:</strong> ${p.experiments.exp2}
+            </div>
+            <div style="background: var(--chip-bg); padding: 0.6rem 0.8rem; border-radius: 6px; border-left: 3px solid ${p.experiments.exp3 !== 'PENDENTE' ? 'var(--ifsc-green)' : 'var(--border-color)'};">
+              <strong>Exp 3:</strong> ${p.experiments.exp3}
+            </div>
+            <div style="background: var(--chip-bg); padding: 0.6rem 0.8rem; border-radius: 6px; border-left: 3px solid ${p.experiments.exp4 !== 'PENDENTE' ? 'var(--ifsc-green)' : 'var(--border-color)'};">
+              <strong>Exp 4:</strong> ${p.experiments.exp4}
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
+          <div style="background: var(--chip-bg); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <h4 style="font-size: 0.78rem; color: var(--ifsc-green); margin-bottom: 0.3rem;"><i class="fa-solid fa-arrow-trend-up"></i> Avanços</h4>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">${p.advances}</p>
+          </div>
+          <div style="background: var(--chip-bg); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <h4 style="font-size: 0.78rem; color: var(--accent-amber); margin-bottom: 0.3rem;"><i class="fa-solid fa-forward-step"></i> Próximos Passos</h4>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">${p.nextSteps}</p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          ${p.github ? `<a href="${p.github}" target="_blank" class="btn-action"><i class="fa-brands fa-github"></i> Repositório GitHub</a>` : ''}
+          ${p.overleaf ? `<a href="${p.overleaf}" target="_blank" class="btn-action" style="background: var(--accent-purple); color: white;"><i class="fa-solid fa-file-code"></i> Abrir Artigo Overleaf</a>` : ''}
+          ${p.canva ? `<a href="${p.canva}" target="_blank" class="btn-action"><i class="fa-solid fa-diagram-project"></i> Diagrama Arquitetura</a>` : ''}
+          ${p.pitch ? `<a href="${p.pitch}" target="_blank" class="btn-action"><i class="fa-solid fa-video"></i> Pitch em Vídeo</a>` : ''}
+        </div>
+      `;
+
+      modal.classList.add("open");
+    }
+
+    function closeModal(e) {
+      if (!e || e.target.id === "projectModal" || e.target.closest(".modal-close")) {
+        document.getElementById("projectModal").classList.remove("open");
+      }
+    }
+
+    // 6. Controles de Abas e Filtros
+    function switchTab(tabId) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+
+      const target = document.getElementById("tab-" + tabId);
+      if (target) target.classList.add("active");
+
+      const btn = Array.from(document.querySelectorAll(".tab-btn")).find(b => b.getAttribute("onclick").includes(tabId));
+      if (btn) btn.classList.add("active");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function setFilter(filter, el) {
+      currentFilter = filter;
+      document.querySelectorAll(".filter-pills .pill").forEach(p => p.classList.remove("active"));
+      el.classList.add("active");
+      renderProjects();
+    }
+
+    function filterProjects() {
+      renderProjects();
+    }
+
+    // 7. Sincronização ao Vivo com a Planilha Google Sheets (CSV)
+    async function liveSyncFromSheet() {
+      const icon = document.getElementById("sync-icon");
+      if (icon) icon.classList.add("fa-spin");
+
+      try {
+        const resp = await fetch(SHEET_CSV_URL + "&_t=" + Date.now());
+        if (!resp.ok) throw new Error("Erro HTTP " + resp.status);
+        const text = await resp.text();
+        parseCsvAndUpdate(text);
+      } catch (err) {
+        console.warn("Sincronização via fetch falhou (CORS ou offline). Mantendo dados embutidos:", err);
+      } finally {
+        if (icon) icon.classList.remove("fa-spin");
+      }
+    }
+
+    function parseCsvAndUpdate(csvText) {
+      const lines = csvText.split(/\r\n|\n/);
+      let headerIdx = -1;
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].toUpperCase().startsWith("ID,")) {
+          headerIdx = i;
+          break;
+        }
+      }
+
+      if (headerIdx === -1) return;
+
+      const dataLines = lines.slice(headerIdx + 1);
+      dataLines.forEach(line => {
+        if (!line.trim()) return;
+        const row = parseCsvRow(line);
+        if (!row || !row[0] || isNaN(row[0])) return;
+
+        const id = parseInt(row[0]);
+        const p = projectsData.find(item => item.id === id);
+        if (p) {
+          if (row[1]) { p.title = row[1].trim(); p.rawTitle = row[1].trim(); }
+          if (row[2]) p.team = row[2].trim();
+          if (row[3]) p.objective = row[3].trim();
+          if (row[4]) p.github = row[4].trim();
+          if (row[5]) p.overleaf = row[5].trim();
+          if (row[6]) p.canva = row[6].trim();
+          if (row[7]) p.pitch = row[7].trim();
+          if (row[8]) p.relatedWorks = row[8].trim();
+          if (row[9]) p.experiments.exp1 = row[9].trim();
+          if (row[11]) p.experiments.exp2 = row[11].trim();
+          if (row[13]) p.experiments.exp3 = row[13].trim();
+          if (row[15]) p.experiments.exp4 = row[15].trim();
+        }
+      });
+
+      renderProjects();
+    }
+
+    function parseCsvRow(text) {
+      const result = [];
+      let cur = "";
+      let inQuotes = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (c === '"') {
+          inQuotes = !inQuotes;
+        } else if (c === ',' && !inQuotes) {
+          result.push(cur);
+          cur = "";
+        } else {
+          cur += c;
+        }
+      }
+      result.push(cur);
+      return result;
+    }
+
+    // 8. Tema Claro / Escuro Persistente
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute("data-theme") || "dark";
+      const next = current === "dark" ? "light" : "dark";
+      html.setAttribute("data-theme", next);
+      localStorage.setItem("pi1_theme", next);
+      updateThemeIcon(next);
+    }
+
+    function updateThemeIcon(theme) {
+      const icon = document.getElementById("theme-icon");
+      if (icon) {
+        icon.className = theme === "dark" ? "fa-solid fa-moon" : "fa-solid fa-sun";
+      }
+    }
+
+    // Inicialização
+    document.addEventListener("DOMContentLoaded", () => {
+      const savedTheme = localStorage.getItem("pi1_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+      updateThemeIcon(savedTheme);
+
+      renderProjects();
+      liveSyncFromSheet();
+    });
+  </script>
+</body>
+</html>
