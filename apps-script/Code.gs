@@ -126,9 +126,9 @@ function doPost(e) {
 
     if (!acao) throw new Error('Ação não informada.');
 
-    // 1. Identificar usuário via Google OAuth
+    // 1. Identificar usuário via Google OAuth (Obrigatório para todas as escritas)
     var usuario = autenticar_(idToken);
-    if (!usuario) throw new Error('Login inválido ou expirado.');
+    if (!usuario) throw new Error('Autenticação obrigatória. Faça login com sua conta Google/IFSC.');
 
     // 2. Roteamento de ações
     if (acao === 'whoami') {
@@ -140,7 +140,7 @@ function doPost(e) {
     if (acao === 'registrar') {
       return json_(registrarAvanco_(usuario, body));
     }
-    if (acao === 'devolutiva') {
+    if (acao === 'salvarDevolutiva' || acao === 'devolutiva') {
       return json_(salvarDevolutiva_(usuario, body));
     }
     if (acao === 'atualizarFicha') {
@@ -152,6 +152,12 @@ function doPost(e) {
     if (acao === 'decidirAcesso') {
       return json_(decidirAcesso_(usuario, body.email, body.decisao, body.projetos));
     }
+    if (acao === 'salvarMembro') {
+      return json_(salvarMembro_(usuario, body));
+    }
+    if (acao === 'ocultar') {
+      return json_(ocultarRegistro_(usuario, body.registroId, body.oculto));
+    }
 
     throw new Error('Ação desconhecida: ' + acao);
   } catch (err) {
@@ -161,14 +167,42 @@ function doPost(e) {
 
 // ============================ AÇÕES DE NEGÓCIO ============================
 
+function solicitarAcesso_(usuario, projeto, nome) {
+  if (usuario.papel === 'docente') return { ok: true, mensagem: 'Você já é docente com acesso total.' };
+  var projNum = Number(projeto);
+  if (isNaN(projNum) || projNum < 1) throw new Error('Projeto inválido.');
+
+  var ssControle = getControle_();
+  var membrosAba = ssControle.getSheetByName('membros');
+  var dados = membrosAba.getDataRange().getValues();
+  var agora = new Date().toISOString();
+  var nomeFinal = seguro_(nome || usuario.nome, 100);
+
+  for (var i = 1; i < dados.length; i++) {
+    if (String(dados[i][0]).toLowerCase().trim() === usuario.email) {
+      if (dados[i][4] === 'ativo') {
+        throw new Error('Você já possui acesso ativo ao(s) projeto(s) #' + dados[i][2]);
+      }
+      membrosAba.getRange(i + 1, 2).setValue(nomeFinal);
+      membrosAba.getRange(i + 1, 3).setValue(String(projNum));
+      membrosAba.getRange(i + 1, 5).setValue('pendente');
+      membrosAba.getRange(i + 1, 6).setValue(agora);
+      return { ok: true, status: 'pendente' };
+    }
+  }
+
+  membrosAba.appendRow([usuario.email, nomeFinal, String(projNum), 'aluno', 'pendente', agora, '']);
+  return { ok: true, status: 'pendente' };
+}
+
 function registrarAvanco_(usuario, body) {
-  var projeto = Number(body.projeto);
+  var projeto = Number(body.projeto || body.projetoId);
   if (!podeEscreverProjeto_(usuario, projeto)) {
-    throw new Error('Você não tem permissão para registrar avanços neste projeto.');
+    throw new Error('Você não tem permissão para registrar dados neste projeto. Aguarde aprovação docente.');
   }
 
   var texto = seguro_(body.texto, CONFIG.MAX_TEXTO);
-  if (!texto) throw new Error('Descreva o avanço ou atividade realizada.');
+  if (!texto || texto.length < 10) throw new Error('Descreva o avanço ou atividade com pelo menos 10 caracteres.');
 
   var tipo = TIPOS.indexOf(body.tipo) >= 0 ? body.tipo : 'avanco';
   var evidencia = urlValida_(body.evidencia);
@@ -188,10 +222,10 @@ function registrarAvanco_(usuario, body) {
   ]);
 
   // Espelhar na planilha pública de projetos
-  espelharNaPlanilha_(projeto);
+  espelharNaPlanilha_(projeto, proxPassos, dificuldades);
 
-  // Enviar notificação por e-mail aos docentes se for dificuldade relevante
-  if (CONFIG.NOTIFICAR_EMAIL && (tipo === 'dificuldade' || dificuldades)) {
+  // Enviar notificação por e-mail aos docentes
+  if (CONFIG.NOTIFICAR_EMAIL) {
     enviarEmailNotificacaoDocente_(usuario, projeto, texto, dificuldades);
   }
 
@@ -202,7 +236,7 @@ function salvarDevolutiva_(usuario, body) {
   if (usuario.papel !== 'docente') throw new Error('Apenas docentes podem registrar devolutivas.');
 
   var regId = String(body.registroId || '').trim();
-  var textoDevolutiva = seguro_(body.devolutiva, CONFIG.MAX_TEXTO);
+  var textoDevolutiva = seguro_(body.devolutiva || body.texto, CONFIG.MAX_TEXTO);
   if (!regId) throw new Error('Registro não informado.');
 
   var ssControle = getControle_();
@@ -236,16 +270,165 @@ function salvarDevolutiva_(usuario, body) {
   return { ok: true, registroId: regId };
 }
 
+function atualizarFicha_(usuario, body) {
+  var projId = Number(body.projeto || body.projetoId);
+  if (!podeEscreverProjeto_(usuario, projId)) {
+    throw new Error('Você não tem permissão para editar os dados deste projeto.');
+  }
+
+  var permitidos = usuario.papel === 'docente' ? CAMPOS_DOCENTE : CAMPOS_ALUNO;
+  var campos = body.campos || {};
+  var ssPub = SpreadsheetApp.openById(CONFIG.SHEET_ID);
+  var abaPub = ssPub.getSheetByName(CONFIG.ABA_PROJETOS) || ssPub.getSheets()[0];
+  var dados = abaPub.getDataRange().getValues();
+
+  var linha = 0;
+  for (var r = 0; r < dados.length; r++) {
+    if (Number(dados[r][0]) === projId) {
+      linha = r + 1;
+      break;
+    }
+  }
+  if (!linha) throw new Error('Projeto não encontrado na planilha.');
+
+  var alteracoes = [];
+  var agora = new Date().toISOString();
+  var ssControle = getControle_();
+  var altAba = ssControle.getSheetByName('alteracoes');
+
+  Object.keys(campos).forEach(function (campo) {
+    if (permitidos.indexOf(campo) >= 0 && COL[campo]) {
+      var valorAntigo = String(dados[linha - 1][COL[campo] - 1] || '');
+      var novoValor = seguro_(campos[campo], CONFIG.MAX_CAMPO);
+      if (CAMPOS_URL.indexOf(campo) >= 0 && novoValor) {
+        novoValor = urlValida_(novoValor);
+      }
+      if (valorAntigo !== novoValor) {
+        abaPub.getRange(linha, COL[campo]).setValue(novoValor);
+        altAba.appendRow([agora, projId, usuario.email, usuario.nome, campo, valorAntigo, novoValor]);
+        alteracoes.push(campo);
+      }
+    }
+  });
+
+  return { ok: true, alterados: alteracoes };
+}
+
+function dadosPainelDocente_(usuario) {
+  if (usuario.papel !== 'docente') throw new Error('Acesso restrito a docentes.');
+  var ss = getControle_();
+  var membrosAba = ss.getSheetByName('membros');
+  var membrosDados = membrosAba ? membrosAba.getDataRange().getValues() : [];
+  var membros = [];
+  for (var i = 1; i < membrosDados.length; i++) {
+    membros.push({
+      email: membrosDados[i][0],
+      nome: membrosDados[i][1],
+      projetos: String(membrosDados[i][2]),
+      papel: membrosDados[i][3],
+      status: membrosDados[i][4],
+      solicitadoEm: membrosDados[i][5],
+      decididoPor: membrosDados[i][6]
+    });
+  }
+
+  var altAba = ss.getSheetByName('alteracoes');
+  var altDados = altAba ? altAba.getDataRange().getValues() : [];
+  var alteracoes = [];
+  for (var j = Math.max(1, altDados.length - 30); j < altDados.length; j++) {
+    alteracoes.push({
+      data: altDados[j][0],
+      projeto: altDados[j][1],
+      autor: altDados[j][3],
+      campo: altDados[j][4],
+      de: altDados[j][5],
+      para: altDados[j][6]
+    });
+  }
+
+  return {
+    ok: true,
+    membros: membros,
+    alteracoes: alteracoes.reverse(),
+    planilhaControleUrl: ss.getUrl()
+  };
+}
+
+function decidirAcesso_(usuario, email, decisao, projetos) {
+  if (usuario.papel !== 'docente') throw new Error('Acesso restrito a docentes.');
+  var ss = getControle_();
+  var membrosAba = ss.getSheetByName('membros');
+  var dados = membrosAba.getDataRange().getValues();
+  var emailAlvo = String(email || '').toLowerCase().trim();
+
+  for (var i = 1; i < dados.length; i++) {
+    if (String(dados[i][0]).toLowerCase().trim() === emailAlvo) {
+      membrosAba.getRange(i + 1, 5).setValue(decisao === 'aprovar' ? 'ativo' : 'recusado');
+      if (projetos) membrosAba.getRange(i + 1, 3).setValue(String(projetos));
+      membrosAba.getRange(i + 1, 7).setValue(usuario.email);
+      return dadosPainelDocente_(usuario);
+    }
+  }
+  throw new Error('Membro não encontrado.');
+}
+
+function salvarMembro_(usuario, body) {
+  if (usuario.papel !== 'docente') throw new Error('Acesso restrito a docentes.');
+  var email = String(body.email || '').toLowerCase().trim();
+  if (!email || email.indexOf('@') < 0) throw new Error('E-mail inválido.');
+
+  var nome = seguro_(body.nome, 100);
+  var projetos = String(body.projetos || '').trim();
+  var papel = body.papel === 'docente' ? 'docente' : 'aluno';
+  var status = body.status === 'ativo' ? 'ativo' : (body.status === 'recusado' ? 'recusado' : 'pendente');
+
+  var ss = getControle_();
+  var membrosAba = ss.getSheetByName('membros');
+  var dados = membrosAba.getDataRange().getValues();
+  var agora = new Date().toISOString();
+
+  for (var i = 1; i < dados.length; i++) {
+    if (String(dados[i][0]).toLowerCase().trim() === email) {
+      if (nome) membrosAba.getRange(i + 1, 2).setValue(nome);
+      membrosAba.getRange(i + 1, 3).setValue(projetos || '*');
+      membrosAba.getRange(i + 1, 4).setValue(papel);
+      membrosAba.getRange(i + 1, 5).setValue(status);
+      membrosAba.getRange(i + 1, 7).setValue(usuario.email);
+      return dadosPainelDocente_(usuario);
+    }
+  }
+
+  membrosAba.appendRow([email, nome, projetos || (papel === 'docente' ? '*' : '1'), papel, status, agora, usuario.email]);
+  return dadosPainelDocente_(usuario);
+}
+
+function ocultarRegistro_(usuario, registroId, oculto) {
+  if (usuario.papel !== 'docente') throw new Error('Acesso restrito a docentes.');
+  var ss = getControle_();
+  var regAba = ss.getSheetByName('registros');
+  var dados = regAba.getDataRange().getValues();
+
+  for (var i = 1; i < dados.length; i++) {
+    if (String(dados[i][0]) === String(registroId)) {
+      regAba.getRange(i + 1, 12).setValue(oculto ? 'sim' : '');
+      var projId = Number(dados[i][2]);
+      espelharNaPlanilha_(projId);
+      return { ok: true, registroId: registroId };
+    }
+  }
+  throw new Error('Registro não encontrado.');
+}
+
 // ============================ NOTIFICAÇÕES POR E-MAIL ============================
 
 function enviarEmailNotificacaoDocente_(usuario, projeto, texto, dificuldades) {
   try {
-    var assunto = '[PI-1] Nova Dificuldade / Avanço Reportado — Projeto #' + projeto;
+    var assunto = '[PI-1] Registro de Avanço / Bloqueio — Projeto #' + projeto;
     var corpo = 'Olá, Professor,\n\n' +
-      'Um novo registro com dificuldades/avanços foi enviado pelo estudante ' + usuario.nome + ' (' + usuario.email + ') no Projeto #' + projeto + ':\n\n' +
+      'Um novo registro foi enviado pelo estudante ' + usuario.nome + ' (' + usuario.email + ') no Projeto #' + projeto + ':\n\n' +
       '• Avanço/Relato: ' + texto + '\n' +
-      (dificuldades ? ('• Dificuldades: ' + dificuldades + '\n') : '') +
-      '\nPara responder ou orientar a equipe, acesse o Dashboard:\n' +
+      (dificuldades ? ('• Dificuldades/Bloqueios: ' + dificuldades + '\n') : '') +
+      '\nPara responder com uma devolutiva à equipe, acesse o Dashboard:\n' +
       'https://chameoandre.github.io/UC-Projeto-Integrador-1-TEC-INF/2026-2/\n\n' +
       'Atenciosamente,\nSistema de Acompanhamento PI-1';
 
@@ -352,7 +535,7 @@ function formatarAutor_(usuario) {
   return partes[0] + ' ' + partes[partes.length - 1][0] + '.';
 }
 
-function espelharNaPlanilha_(projId) {
+function espelharNaPlanilha_(projId, proximos, dificuldades) {
   var ssPub = SpreadsheetApp.openById(CONFIG.SHEET_ID);
   var abaPub = ssPub.getSheetByName(CONFIG.ABA_PROJETOS) || ssPub.getSheets()[0];
   var dados = abaPub.getDataRange().getValues();
@@ -373,6 +556,12 @@ function espelharNaPlanilha_(projId) {
     if (Number(dados[r][0]) === projId) {
       if (ultimosAvancos.length) {
         abaPub.getRange(r + 1, COL.advances).setValue(ultimosAvancos.join('\n\n'));
+      }
+      if (proximos) {
+        abaPub.getRange(r + 1, COL.nextSteps).setValue(seguro_(proximos));
+      }
+      if (dificuldades) {
+        abaPub.getRange(r + 1, COL.difficulties).setValue(seguro_(dificuldades));
       }
       break;
     }
