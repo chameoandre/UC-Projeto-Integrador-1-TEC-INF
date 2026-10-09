@@ -1,0 +1,265 @@
+/* ==========================================================================
+   PI-1 LIVE CSS — Estilos da camada dinâmica (Auth, Registros, Devolutivas, Timeline)
+   ========================================================================== */
+
+/* Cabeçalho Auth */
+.pi1-auth-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pi1-user-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 9999px;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.05));
+}
+
+.pi1-user-role {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pi1-user-role.docente {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.pi1-user-role.aluno {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.pi1-btn-logout {
+  background: transparent;
+  border: 1px solid var(--border-color, #cbd5e1);
+  color: var(--text-muted, #64748b);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pi1-btn-logout:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #fca5a5;
+}
+
+/* Botões de Ação no Card */
+.pi1-card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border-color, #e2e8f0);
+}
+
+.pi1-btn-action {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pi1-btn-avanco {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.pi1-btn-avanco:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+.pi1-btn-editar {
+  background: var(--bg-card, #ffffff);
+  color: var(--text-color, #1e293b);
+  border: 1px solid var(--border-color, #cbd5e1);
+}
+
+.pi1-btn-editar:hover {
+  background: var(--bg-hover, #f8fafc);
+  border-color: var(--primary, #2563eb);
+  color: var(--primary, #2563eb);
+}
+
+/* Timeline e Devolutivas */
+.pi1-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pi1-timeline-item {
+  position: relative;
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--primary, #3b82f6);
+}
+
+.pi1-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -0.4rem;
+  top: 0.2rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--primary, #3b82f6);
+  border: 2px solid var(--bg-card, #ffffff);
+}
+
+.pi1-timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-muted, #64748b);
+  margin-bottom: 0.35rem;
+}
+
+.pi1-timeline-author {
+  font-weight: 600;
+  color: var(--text-color, #1e293b);
+}
+
+.pi1-timeline-body {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-color, #334155);
+  background: var(--bg-card, #ffffff);
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pi1-difficulty-tag {
+  display: inline-block;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 0.35rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.pi1-devolutiva-box {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-left: 4px solid #16a34a;
+  border-radius: 6px;
+  padding: 0.65rem 0.85rem;
+  margin-top: 0.65rem;
+  font-size: 0.84rem;
+  color: #14532d;
+}
+
+.pi1-devolutiva-box header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #15803d;
+  margin-bottom: 0.25rem;
+}
+
+.pi1-btn-devolutiva {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pi1-btn-devolutiva:hover {
+  background: #dbeafe;
+}
+
+/* Modal Form Styles */
+.pi1-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.pi1-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pi1-form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-color, #1e293b);
+}
+
+.pi1-form-group input,
+.pi1-form-group textarea,
+.pi1-form-group select {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #cbd5e1);
+  background: var(--bg-card, #ffffff);
+  color: var(--text-color, #1e293b);
+  font-size: 0.9rem;
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.pi1-form-group input:focus,
+.pi1-form-group textarea:focus,
+.pi1-form-group select:focus {
+  outline: none;
+  border-color: var(--primary, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.pi1-form-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted, #64748b);
+}
+
+.pi1-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+}

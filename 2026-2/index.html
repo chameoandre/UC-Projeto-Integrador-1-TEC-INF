@@ -14,6 +14,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <!-- PI-1 Live Dynamic Styles -->
+  <link rel="stylesheet" href="pi1-live.css">
+
   <style>
     /* ==========================================================================
        THEME VARIABLES: DARK & LIGHT MODE (IFSC BRANDING)
@@ -803,11 +806,12 @@
     </div>
 
     <div class="header-actions">
+      <div id="pi1-auth"></div>
       <button class="btn-action" onclick="liveSyncFromSheet()" title="Sincronizar dados com a Planilha Oficial">
-        <i class="fa-solid fa-arrows-rotate" id="sync-icon"></i> Sincronizar ao Vivo
+        <i class="fa-solid fa-arrows-rotate" id="sync-icon"></i> Sincronizar
       </button>
       <a href="https://docs.google.com/spreadsheets/d/15PBDpzugjiZJsEJEcbT6CHrNGcXB_OPKdZkfsHQf9RU/edit?gid=891834841" target="_blank" class="btn-action">
-        <i class="fa-solid fa-table"></i> Planilha Google
+        <i class="fa-solid fa-table"></i> Planilha
       </a>
       <button class="btn-action" onclick="toggleTheme()" title="Alternar Modo Escuro / Claro">
         <i class="fa-solid fa-moon" id="theme-icon"></i>
@@ -1622,9 +1626,14 @@
 
               <div class="project-footer">
                 <span style="color: var(--text-muted); font-size: 0.75rem;"><i class="fa-solid fa-flask"></i> Exp: ${p.experiments.exp1 !== 'PENDENTE' ? 'Cadastrado' : 'Pendente'}</span>
-                <button class="btn-detail" onclick="openModal(${p.id})">
-                  <i class="fa-solid fa-circle-info"></i> Detalhes
-                </button>
+                <div style="display: flex; gap: 0.35rem;">
+                  <button class="btn-detail" onclick="if(window.PI1) PI1.abrirModalAvanco(${p.id}); else openModal(${p.id});" style="color:var(--ifsc-green-light);border-color:rgba(34,197,94,0.3);" title="Registrar avanço ou reportar bloqueio">
+                    <i class="fa-solid fa-plus"></i> Avanço
+                  </button>
+                  <button class="btn-detail" onclick="openModal(${p.id})">
+                    <i class="fa-solid fa-circle-info"></i> Detalhes
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1748,16 +1757,62 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem;">
           <div style="background: var(--chip-bg); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <h4 style="font-size: 0.78rem; color: var(--ifsc-green); margin-bottom: 0.3rem;"><i class="fa-solid fa-arrow-trend-up"></i> Avanços</h4>
+            <h4 style="font-size: 0.78rem; color: var(--ifsc-green); margin-bottom: 0.3rem;"><i class="fa-solid fa-arrow-trend-up"></i> Avanços Registrados</h4>
             <p style="font-size: 0.82rem; color: var(--text-muted);">${p.advances}</p>
           </div>
           <div style="background: var(--chip-bg); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-            <h4 style="font-size: 0.78rem; color: var(--accent-amber); margin-bottom: 0.3rem;"><i class="fa-solid fa-forward-step"></i> Próximos Passos</h4>
-            <p style="font-size: 0.82rem; color: var(--text-muted);">${p.nextSteps}</p>
+            <h4 style="font-size: 0.78rem; color: var(--ifsc-red); margin-bottom: 0.3rem;"><i class="fa-solid fa-triangle-exclamation"></i> Dificuldades / Bloqueios</h4>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">${p.difficulties || 'Nenhuma dificuldade reportada no momento.'}</p>
           </div>
         </div>
 
+        <!-- Linha do Tempo Dinâmica & Devolutivas Docentes -->
+        <div id="pi1-modal-timeline-container" style="margin-bottom: 1.25rem;">
+          ${(function() {
+            var regs = (window.PI1 && window.PI1.state && window.PI1.state.registros) ? window.PI1.state.registros.filter(function(r) { return Number(r.projeto) === p.id; }) : [];
+            if (!regs.length) return '';
+            var isDocente = window.PI1 && window.PI1.state.usuario && window.PI1.state.usuario.papel === 'docente';
+            return `
+              <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-cyan); letter-spacing: 0.05em; margin-bottom: 0.5rem;">
+                <i class="fa-solid fa-clock-rotate-left"></i> Histórico de Registros & Devolutivas
+              </h4>
+              <div class="pi1-timeline">
+                ${regs.map(function(r) {
+                  return `
+                    <div class="pi1-timeline-item">
+                      <div class="pi1-timeline-header">
+                        <span class="pi1-timeline-author">${r.autor}</span>
+                        <span>${String(r.data).slice(0, 16).replace('T', ' ')}</span>
+                      </div>
+                      <div class="pi1-timeline-body">
+                        <div>${r.texto}</div>
+                        ${r.dificuldades ? `<div class="pi1-difficulty-tag"><strong>Dificuldade:</strong> ${r.dificuldades}</div>` : ''}
+                        ${r.devolutiva ? `
+                          <div class="pi1-devolutiva-box">
+                            <header>
+                              <span><i class="fa-solid fa-chalkboard-user"></i> Devolutiva do Orientador (${r.devolutivaAutor || 'Docente'})</span>
+                              <span>${String(r.devolutivaData || '').slice(0, 10)}</span>
+                            </header>
+                            <p style="margin:0;">${r.devolutiva}</p>
+                          </div>
+                        ` : (isDocente ? `
+                          <button class="pi1-btn-devolutiva" onclick="PI1.abrirModalDevolutiva('${r.id}', ${p.id}, '${r.dificuldades || r.texto}')">
+                            <i class="fa-solid fa-reply"></i> Dar Devolutiva
+                          </button>
+                        ` : '')}
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            `;
+          })()}
+        </div>
+
         <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+          <button class="btn-action" onclick="if(window.PI1) PI1.abrirModalAvanco(${p.id});" style="background:var(--ifsc-green);color:white;">
+            <i class="fa-solid fa-plus"></i> Novo Avanço / Dificuldade
+          </button>
           ${p.github ? `<a href="${p.github}" target="_blank" class="btn-action"><i class="fa-brands fa-github"></i> Repositório GitHub</a>` : ''}
           ${p.overleaf ? `<a href="${p.overleaf}" target="_blank" class="btn-action" style="background: var(--accent-purple); color: white;"><i class="fa-solid fa-file-code"></i> Abrir Artigo Overleaf</a>` : ''}
           ${p.canva ? `<a href="${p.canva}" target="_blank" class="btn-action"><i class="fa-solid fa-diagram-project"></i> Diagrama Arquitetura</a>` : ''}
@@ -1902,5 +1957,10 @@
       liveSyncFromSheet();
     });
   </script>
+
+  <!-- Google Identity Services, Configuração e Camada Dinâmica -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="pi1-config.js"></script>
+  <script src="pi1-live.js"></script>
 </body>
 </html>
