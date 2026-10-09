@@ -739,7 +739,7 @@
 
           <!-- Degrau 4 -->
           <g filter="url(#shadow)">
-            <rect x="685" y="160" width="190" height="135" rx="12" fill="#121c16" stroke="rgba(16,185,129,0.5)" stroke-width="1.5" />
+            <rect x="685" y="160" width="190" height="135" rx="12" fill="#121c16" stroke="rgba(168,85,247,0.5)" stroke-width="1.5" />
             <rect x="685" y="160" width="190" height="34" rx="12" fill="url(#grad-esp4)" />
             <text x="780" y="183" font-family="'Outfit', sans-serif" font-size="13" font-weight="800" fill="#ffffff" text-anchor="middle">4. VALIDAÇÃO 🧪</text>
             <text x="780" y="215" font-family="'Inter', sans-serif" font-size="11" font-weight="700" fill="#a7f3d0" text-anchor="middle">Testar & Avaliar</text>
@@ -753,42 +753,95 @@
         </figcaption>
       </figure>
 
-      <!-- Diagrama Visual dos Degraus -->
-      <div class="stairs-diagram">
-        <div class="stairs-header">
-          <i class="fa-solid fa-stairs"></i>
-          <span>Os 4 Degraus Práticos para Alcançar o Objetivo Geral</span>
+      <!-- ==================== GUIA DE ELABORAÇÃO DOS OBJETIVOS ESPECÍFICOS ==================== -->
+      <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px dashed var(--border-color);">
+        <h4 style="font-size: 1.1rem; color: var(--accent-amber); margin-bottom: 0.4rem;">
+          <i class="fa-solid fa-list-ol"></i> Como Elaborar os Objetivos Específicos (Passo a Passo)
+        </h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">
+          Enquanto o Objetivo Geral diz <strong>aonde queremos chegar</strong>, os Objetivos Específicos detalham <strong>o que precisa ser feito na prática</strong> para que o software exista. Cada objetivo específico deve ser uma entrega técnica mensurável.
+        </p>
+
+        <h5 style="font-size: 0.92rem; color: var(--accent-cyan);"><i class="fa-solid fa-key"></i> Fórmula Prática do Objetivo Específico:</h5>
+        <div class="formula-box" style="border-left-color: var(--accent-amber); color: var(--accent-amber);">
+          [VERBO OPERACIONAL NO INFINITIVO] + [OBJETO / ENTREGÁVEL TÉCNICO] + [MÉTODO / FERRAMENTA OU PROPÓSITO]
         </div>
-        <div class="stairs-flow">
-          <div class="stair-item">
-            <div class="stair-icon"><i class="fa-solid fa-clipboard-list"></i></div>
-            <div class="stair-text">
-              <strong>Degrau 1: Mapeamento & Requisitos</strong>
-              <span>Identificar necessidades dos usuários e regras de negócio da aplicação.</span>
-            </div>
+
+        <!-- Banco de Verbos por Etapa -->
+        <h5 style="font-size: 0.92rem; color: var(--text-main); margin-top: 1.25rem; margin-bottom: 0.6rem;">
+          <i class="fa-solid fa-book-bookmark"></i> Banco de Verbos Recomendados (Por Etapa da Engenharia de Software):
+        </h5>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem;">
+          <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
+            <strong style="color: #60a5fa; font-size: 0.82rem; display: block; margin-bottom: 0.3rem;"><i class="fa-solid fa-clipboard-list"></i> 1. Requisitos & Diagnóstico</strong>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Mapear, Identificar, Levantar, Investigar, Entrevistar, Analisar.</span>
           </div>
-          <div class="stair-item">
-            <div class="stair-icon" style="color: var(--accent-purple); background: rgba(168, 85, 247, 0.15);"><i class="fa-solid fa-diagram-project"></i></div>
-            <div class="stair-text">
-              <strong>Degrau 2: Modelagem & Design</strong>
-              <span>Criar a arquitetura visual no draw.io e os wireframes das interfaces.</span>
-            </div>
+
+          <div style="background: rgba(168, 85, 247, 0.08); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
+            <strong style="color: #c084fc; font-size: 0.82rem; display: block; margin-bottom: 0.3rem;"><i class="fa-solid fa-diagram-project"></i> 2. Modelagem & Design</strong>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Projetar, Modelar, Prototipar, Estruturar, Desenhar, Elaborar.</span>
           </div>
-          <div class="stair-item">
-            <div class="stair-icon" style="color: var(--accent-amber); background: rgba(245, 158, 11, 0.15);"><i class="fa-solid fa-code"></i></div>
-            <div class="stair-text">
-              <strong>Degrau 3: Implementação & Código</strong>
-              <span>Desenvolver a solução no GitHub utilizando padrões web modernos.</span>
-            </div>
+
+          <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
+            <strong style="color: #fbbf24; font-size: 0.82rem; display: block; margin-bottom: 0.3rem;"><i class="fa-solid fa-code"></i> 3. Implementação</strong>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Desenvolver, Implementar, Codificar, Integrar, Construir, Versionar.</span>
           </div>
-          <div class="stair-item">
-            <div class="stair-icon" style="color: var(--ifsc-green-light); background: rgba(34, 197, 94, 0.15);"><i class="fa-solid fa-vial-circle-check"></i></div>
-            <div class="stair-text">
-              <strong>Degrau 4: Testes & Validação</strong>
-              <span>Aplicar testes de usabilidade e coletar feedback para refinamento.</span>
-            </div>
+
+          <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-sm); padding: 0.85rem;">
+            <strong style="color: #34d399; font-size: 0.82rem; display: block; margin-bottom: 0.3rem;"><i class="fa-solid fa-vial-circle-check"></i> 4. Validação & Testes</strong>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">Validar, Avaliar, Testar, Mensurar, Aplicar, Coletar feedback.</span>
           </div>
         </div>
+
+        <!-- Exemplo Completo dos 4 Objetivos Específicos -->
+        <h5 style="font-size: 0.92rem; color: var(--ifsc-green-light); margin-top: 1rem; margin-bottom: 0.5rem;">
+          <i class="fa-solid fa-check-double"></i> Exemplo Completo dos 4 Objetivos Específicos (Projeto SELI):
+        </h5>
+
+        <div style="background: var(--chip-bg); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1rem 1.25rem;">
+          <ul class="checklist-list" style="margin: 0;">
+            <li>
+              <i class="fa-solid fa-arrow-right" style="color: #60a5fa;"></i>
+              <div>
+                <strong>Objetivo Específico 1 (Requisitos):</strong><br/>
+                <em>"<strong>Mapear</strong> as principais dificuldades no aprendizado inicial de LIBRAS mediante questionário aplicado a estudantes e docentes do ensino fundamental."</em>
+              </div>
+            </li>
+            <li style="margin-top: 0.6rem;">
+              <i class="fa-solid fa-arrow-right" style="color: #c084fc;"></i>
+              <div>
+                <strong>Objetivo Específico 2 (Modelagem):</strong><br/>
+                <em>"<strong>Modelar</strong> a arquitetura do sistema no draw.io e <strong>prototipar</strong> os wireframes das interfaces responsivas de prática e quiz."</em>
+              </div>
+            </li>
+            <li style="margin-top: 0.6rem;">
+              <i class="fa-solid fa-arrow-right" style="color: #fbbf24;"></i>
+              <div>
+                <strong>Objetivo Específico 3 (Código):</strong><br/>
+                <em>"<strong>Desenvolver</strong> a aplicação web utilizando HTML5, CSS3, JavaScript e versionamento Git/GitHub com deploy no GitHub Pages."</em>
+              </div>
+            </li>
+            <li style="margin-top: 0.6rem;">
+              <i class="fa-solid fa-arrow-right" style="color: #34d399;"></i>
+              <div>
+                <strong>Objetivo Específico 4 (Validação):</strong><br/>
+                <em>"<strong>Validar</strong> a usabilidade e a interatividade da plataforma através de testes de usabilidade com a turma, coletando métricas de retenção e facilidade de uso."</em>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- O que evitar -->
+        <div style="margin-top: 1rem; background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-sm); padding: 0.85rem 1rem; font-size: 0.82rem;">
+          <strong style="color: var(--ifsc-red);"><i class="fa-solid fa-triangle-exclamation"></i> O que NÃO colocar como Objetivo Específico:</strong>
+          <ul style="margin-left: 1.25rem; margin-top: 0.35rem; color: var(--text-muted);">
+            <li><strong>Evite atividades passivas de estudo pessoal:</strong> <em>"Estudar JavaScript"</em>, <em>"Aprender LaTeX"</em> ou <em>"Ler 5 artigos"</em> (isso são tarefas de rotina do estudante, não objetivos técnicos do software).</li>
+            <li><strong>Evite rotinas administrativas:</strong> <em>"Criar grupo no WhatsApp"</em> ou <em>"Fazer reuniões semanais"</em>.</li>
+            <li><strong>Garanta que seja mensurável:</strong> Cada objetivo deve gerar um entregável concreto (um diagrama, um código no GitHub, um artigo no Overleaf, um relatório de teste).</li>
+          </ul>
+        </div>
+
       </div>
     </section>
 

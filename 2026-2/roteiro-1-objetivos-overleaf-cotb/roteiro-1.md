@@ -28,12 +28,28 @@ Todo projeto de software em informática resolve um problema real. A escrita dos
   $$\text{[Verbo de Ação]} + \text{[O que será criado]} + \text{[Público-Alvo / Contexto]} + \text{[Propósito / Benefício]}$$
 * **Exemplo:** *"Desenvolver uma plataforma web interativa para apoio à aprendizagem de LIBRAS voltada a estudantes do ensino fundamental, visando facilitar a inclusão escolar e a comunicação acessível."*
 
-#### B. Objetivos Específicos (Os 4 Degraus de Execução)
-Crie 3 a 4 passos práticos cobrindo:
-1. **Mapeamento & Requisitos:** Identificar necessidades dos usuários e regras de negócio;
-2. **Modelagem & Design:** Criar diagramas de arquitetura no draw.io e wireframes de telas;
-3. **Implementação:** Codificar o frontend/backend com versionamento Git/GitHub;
-4. **Validação & Testes:** Aplicar testes de usabilidade com os usuários.
+#### B. Objetivos Específicos (Os 4 Degraus de Execução Técnica)
+Enquanto o Objetivo Geral diz **aonde queremos chegar**, os Objetivos Específicos detalham **o que precisa ser feito na prática** para que o software exista.
+
+* **Fórmula do Objetivo Específico:**
+  $$\text{[Verbo Operacional no Infinitivo]} + \text{[Objeto / Entregável Técnico]} + \text{[Método / Ferramenta ou Propósito]}$$
+
+* **Banco de Verbos Recomendados (Por Etapa da Engenharia de Software):**
+  1. **Requisitos & Diagnóstico:** *Mapear, Identificar, Levantar, Investigar, Entrevistar, Analisar*.
+  2. **Modelagem & Design:** *Projetar, Modelar, Prototipar, Estruturar, Desenhar, Elaborar*.
+  3. **Implementação & Código:** *Desenvolver, Implementar, Codificar, Integrar, Construir, Versionar*.
+  4. **Validação & Testes:** *Validar, Avaliar, Testar, Mensurar, Aplicar, Coletar feedback*.
+
+* **Exemplo Completo dos 4 Objetivos Específicos (Caso do Projeto SELI):**
+  1. *"**Mapear** as principais dificuldades no aprendizado inicial de LIBRAS mediante questionário aplicado a estudantes e docentes do ensino fundamental;"*
+  2. *"**Modelar** a arquitetura do sistema no draw.io e **prototipar** os wireframes das interfaces responsivas de prática e quiz;"*
+  3. *"**Desenvolver** a aplicação web utilizando HTML5, CSS3, JavaScript e versionamento Git/GitHub com deploy no GitHub Pages;"*
+  4. *"**Validar** a usabilidade e a interatividade da plataforma através de testes de usabilidade com a turma, coletando métricas de retenção e facilidade de uso."*
+
+* **⚠️ O que NÃO colocar nos Objetivos Específicos:**
+  - ❌ *Evite estudo passivo:* "Estudar JavaScript", "Aprender LaTeX" ou "Ler artigos" (são tarefas de rotina, não entregas de software).
+  - ❌ *Evite tarefas administrativas:* "Criar grupo no WhatsApp" ou "Fazer reuniões".
+  - ✔️ *Garanta entregas tangíveis:* Diagramas draw.io, repositório GitHub, artigo Overleaf e resultados de testes.
 
 ---
 
