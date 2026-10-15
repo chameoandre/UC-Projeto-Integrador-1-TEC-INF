@@ -1035,6 +1035,7 @@
               <th>Diagrama</th>
               <th>Pitch</th>
               <th>Exp 1-4</th>
+              <th>Objetivos (Roteiro 1)</th>
               <th>Status Geral</th>
             </tr>
           </thead>
@@ -1620,11 +1621,29 @@
         const hasCanva = !!p.canva;
         const hasPitch = !!p.pitch;
 
+        const isDocente = window.PI1 && window.PI1.state && window.PI1.state.usuario && window.PI1.state.usuario.papel === 'docente';
+        const avalObj = (window.PI1 && window.PI1.state && window.PI1.state.avaliacoes)
+          ? window.PI1.state.avaliacoes.find(a => Number(a.projeto) === p.id && a.tipo === 'objetivos')
+          : null;
+        let objBadge = '';
+        if (avalObj) {
+          const isAprov = avalObj.status === 'aprovado';
+          const isAjustar = avalObj.status === 'ajustar';
+          objBadge = `
+            <span class="proj-badge" style="background:${isAprov ? 'rgba(34,197,94,0.15)' : (isAjustar ? 'rgba(234,179,8,0.15)' : 'rgba(100,116,139,0.15)')};color:${isAprov ? 'var(--ifsc-green-light)' : (isAjustar ? '#facc15' : 'var(--text-dim)')};border:1px solid ${isAprov ? 'rgba(34,197,94,0.3)' : (isAjustar ? 'rgba(234,179,8,0.3)' : 'var(--border-color)')};font-size:0.7rem;cursor:pointer;" onclick="if(window.PI1) PI1.abrirModalAvaliarObjetivos(${p.id});" title="${avalObj.parecer || 'Avaliação Roteiro 1'}">
+              <i class="fa-solid ${isAprov ? 'fa-circle-check' : 'fa-triangle-exclamation'}"></i> Obj: ${avalObj.nota ? avalObj.nota : (isAprov ? 'Aprovado' : 'Ajustar')}
+            </span>
+          `;
+        }
+
         return `
           <div class="project-card">
             <div>
               <div class="project-card-header">
-                <span class="proj-badge">#${p.id}</span>
+                <div style="display:flex;gap:0.35rem;align-items:center;">
+                  <span class="proj-badge">#${p.id}</span>
+                  ${objBadge}
+                </div>
                 <span style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-users"></i> ${p.team.split(',').length} integrantes</span>
               </div>
               <h3 class="project-title">${p.title}</h3>
@@ -1651,6 +1670,11 @@
               <div class="project-footer">
                 <span style="color: var(--text-muted); font-size: 0.75rem;"><i class="fa-solid fa-flask"></i> Exp: ${p.experiments.exp1 !== 'PENDENTE' ? 'Cadastrado' : 'Pendente'}</span>
                 <div style="display: flex; gap: 0.35rem;">
+                  ${isDocente ? `
+                    <button class="btn-detail" onclick="if(window.PI1) PI1.abrirModalAvaliarObjetivos(${p.id});" style="color:#f59e0b;border-color:rgba(245,158,11,0.3);" title="Avaliar Objetivos do Projeto (Roteiro 1)">
+                      <i class="fa-solid fa-clipboard-check"></i> Avaliar
+                    </button>
+                  ` : ''}
                   <button class="btn-detail" onclick="if(window.PI1) PI1.abrirModalEditarFicha(${p.id}); else openModal(${p.id});" style="color:var(--accent-cyan);border-color:rgba(6,182,212,0.3);" title="Editar objetivos, Overleaf e links do projeto">
                     <i class="fa-solid fa-pen-to-square"></i> Ficha
                   </button>
@@ -1712,6 +1736,18 @@
         const pitchTag = p.pitch ? '<span class="status-tag tag-ok"><i class="fa-solid fa-check"></i> OK</span>' : '<span class="status-tag tag-pendente">Pendente</span>';
         const expTag = p.experiments.exp1 !== 'PENDENTE' ? '<span class="status-tag tag-ok"><i class="fa-solid fa-check"></i> OK</span>' : '<span class="status-tag tag-pendente">Pendente</span>';
 
+        const avalObj = (window.PI1 && window.PI1.state && window.PI1.state.avaliacoes)
+          ? window.PI1.state.avaliacoes.find(a => Number(a.projeto) === p.id && a.tipo === 'objetivos')
+          : null;
+        let objTag = '<span class="status-tag tag-pendente" style="cursor:pointer;" onclick="if(window.PI1) PI1.abrirModalAvaliarObjetivos(' + p.id + ');">Pendente</span>';
+        if (avalObj) {
+          if (avalObj.status === 'aprovado') {
+            objTag = `<span class="status-tag tag-ok" style="cursor:pointer;" onclick="if(window.PI1) PI1.abrirModalAvaliarObjetivos(${p.id});" title="${avalObj.parecer || ''}"><i class="fa-solid fa-check"></i> ${avalObj.nota ? avalObj.nota + ' - ' : ''}Aprovado</span>`;
+          } else if (avalObj.status === 'ajustar') {
+            objTag = `<span class="status-tag" style="background:rgba(234,179,8,0.15);color:#eab308;border:1px solid rgba(234,179,8,0.3);cursor:pointer;" onclick="if(window.PI1) PI1.abrirModalAvaliarObjetivos(${p.id});" title="${avalObj.parecer || ''}"><i class="fa-solid fa-triangle-exclamation"></i> ${avalObj.nota ? avalObj.nota + ' - ' : ''}Ajustar</span>`;
+          }
+        }
+
         const isFullyDone = p.github && p.overleaf && p.experiments.exp1 !== 'PENDENTE';
         const statusGeral = isFullyDone 
           ? '<span class="status-tag tag-ok">Regular</span>' 
@@ -1727,6 +1763,7 @@
             <td>${diaTag}</td>
             <td>${pitchTag}</td>
             <td>${expTag}</td>
+            <td>${objTag}</td>
             <td>${statusGeral}</td>
           </tr>
         `;
@@ -1762,6 +1799,83 @@
           <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-cyan); letter-spacing: 0.05em; margin-bottom: 0.35rem;">Objetivo do Projeto</h4>
           <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">${p.objective}</p>
         </div>
+
+        <!-- Painel de Avaliação de Objetivos (Roteiro 1) -->
+        ${(function() {
+          var aval = (window.PI1 && window.PI1.state && window.PI1.state.avaliacoes)
+            ? window.PI1.state.avaliacoes.find(function(a) { return Number(a.projeto) === p.id && a.tipo === 'objetivos'; })
+            : null;
+          var isDocente = window.PI1 && window.PI1.state && window.PI1.state.usuario && window.PI1.state.usuario.papel === 'docente';
+
+          if (!aval && !isDocente) return '';
+
+          var c = aval && aval.criterios ? aval.criterios : {};
+          var isAprov = aval && aval.status === 'aprovado';
+          var isAjustar = aval && aval.status === 'ajustar';
+
+          return `
+            <div class="pi1-eval-summary-card">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;flex-wrap:wrap;gap:0.5rem;">
+                <div style="display:flex;align-items:center;gap:0.5rem;">
+                  <span class="proj-badge" style="background:${isAprov ? 'rgba(34,197,94,0.15)' : (isAjustar ? 'rgba(234,179,8,0.15)' : 'rgba(100,116,139,0.15)')};color:${isAprov ? 'var(--ifsc-green-light)' : (isAjustar ? '#facc15' : 'var(--text-dim)')};border:1px solid ${isAprov ? 'rgba(34,197,94,0.3)' : (isAjustar ? 'rgba(234,179,8,0.3)' : 'var(--border-color)')};">
+                    <i class="fa-solid fa-clipboard-check"></i> AUDITORIA DE OBJETIVOS — ROTEIRO 1
+                  </span>
+                  ${aval && aval.nota ? `<span style="font-weight:700;font-size:0.92rem;color:var(--text-main);">Nota: ${aval.nota}/10,0</span>` : ''}
+                </div>
+                ${isDocente ? `
+                  <button class="btn-detail" onclick="PI1.abrirModalAvaliarObjetivos(${p.id});" style="font-size:0.75rem;padding:0.25rem 0.6rem;color:#f59e0b;border-color:rgba(245,158,11,0.3);">
+                    <i class="fa-solid fa-pen-to-square"></i> ${aval ? 'Atualizar Avaliação' : 'Avaliar Objetivos'}
+                  </button>
+                ` : ''}
+              </div>
+
+              ${aval ? `
+                <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:0.5rem;font-size:0.78rem;margin-bottom:0.75rem;">
+                  <div style="background:var(--bg-card);padding:0.5rem 0.7rem;border-radius:6px;border:1px solid var(--border-color);">
+                    <strong>Obj. Geral:</strong> 
+                    <span style="color:${c.geral_status === 'conforme' ? 'var(--ifsc-green-light)' : (c.geral_status === 'ajustar' ? '#facc15' : '#ef4444')};">
+                      ${c.geral_status === 'conforme' ? '✔️ Conforme' : (c.geral_status === 'ajustar' ? '⚠️ Ajustar' : '❌ Ausente')}
+                    </span>
+                  </div>
+                  <div style="background:var(--bg-card);padding:0.5rem 0.7rem;border-radius:6px;border:1px solid var(--border-color);">
+                    <strong>Degrau 1 (Requisitos):</strong> 
+                    <span style="color:${c.esp1_status === 'conforme' ? 'var(--ifsc-green-light)' : (c.esp1_status === 'ajustar' ? '#facc15' : '#ef4444')};">
+                      ${c.esp1_status === 'conforme' ? '✔️ Conforme' : (c.esp1_status === 'ajustar' ? '⚠️ Ajustar' : '❌ Ausente')}
+                    </span>
+                  </div>
+                  <div style="background:var(--bg-card);padding:0.5rem 0.7rem;border-radius:6px;border:1px solid var(--border-color);">
+                    <strong>Degrau 2 (Modelagem):</strong> 
+                    <span style="color:${c.esp2_status === 'conforme' ? 'var(--ifsc-green-light)' : (c.esp2_status === 'ajustar' ? '#facc15' : '#ef4444')};">
+                      ${c.esp2_status === 'conforme' ? '✔️ Conforme' : (c.esp2_status === 'ajustar' ? '⚠️ Ajustar' : '❌ Ausente')}
+                    </span>
+                  </div>
+                  <div style="background:var(--bg-card);padding:0.5rem 0.7rem;border-radius:6px;border:1px solid var(--border-color);">
+                    <strong>Degrau 3 (Código/Git):</strong> 
+                    <span style="color:${c.esp3_status === 'conforme' ? 'var(--ifsc-green-light)' : (c.esp3_status === 'ajustar' ? '#facc15' : '#ef4444')};">
+                      ${c.esp3_status === 'conforme' ? '✔️ Conforme' : (c.esp3_status === 'ajustar' ? '⚠️ Ajustar' : '❌ Ausente')}
+                    </span>
+                  </div>
+                  <div style="background:var(--bg-card);padding:0.5rem 0.7rem;border-radius:6px;border:1px solid var(--border-color);">
+                    <strong>Degrau 4 (Validação):</strong> 
+                    <span style="color:${c.esp4_status === 'conforme' ? 'var(--ifsc-green-light)' : (c.esp4_status === 'ajustar' ? '#facc15' : '#ef4444')};">
+                      ${c.esp4_status === 'conforme' ? '✔️ Conforme' : (c.esp4_status === 'ajustar' ? '⚠️ Ajustar' : '❌ Ausente')}
+                    </span>
+                  </div>
+                </div>
+                ${aval.parecer ? `
+                  <div style="background:var(--bg-card);padding:0.6rem 0.8rem;border-radius:6px;border-left:3px solid var(--accent-cyan);font-size:0.83rem;color:var(--text-muted);">
+                    <strong style="color:var(--accent-cyan);"><i class="fa-solid fa-comment-dots"></i> Devolutiva do Orientador (${aval.avaliador || 'Docente'}):</strong>
+                    <div style="margin-top:0.25rem;">${aval.parecer}</div>
+                  </div>
+                ` : ''}
+              ` : `
+                <div style="font-size:0.82rem;color:var(--text-dim);">
+                  Objetivos ainda não avaliados formalmente. Clique no botão acima para aplicar a rubrica do Roteiro 1.
+                </div>
+              `}
+            </div>
+          `;
+        })()}
 
         <div style="margin-bottom: 1.25rem; background: var(--chip-bg); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
           <h4 style="font-size: 0.8rem; text-transform: uppercase; color: var(--accent-purple); letter-spacing: 0.05em; margin-bottom: 0.4rem;">

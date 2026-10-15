@@ -52,7 +52,8 @@ var CAB_MEMBROS = ['email', 'nome', 'projetos', 'papel', 'status', 'solicitado_e
 var CAB_REGISTROS = ['id', 'data', 'projeto', 'email', 'autor', 'tipo', 'texto', 'evidencia', 'experimento',
   'proximos_passos', 'dificuldades', 'oculto', 'devolutiva', 'devolutiva_autor', 'devolutiva_data'];
 var CAB_ALTERACOES = ['data', 'projeto', 'email', 'autor', 'campo', 'valor_anterior', 'valor_novo'];
-var CAB_DEMANDAS = ['id', 'data', 'projeto', 'titulo', 'descricao', 'prazo', 'criado_por', 'status', 'concluida_em', 'evidencia', 'concluida_por'];
+var CAB_DEMANDAS = ['id', 'data', 'projeto', 'titulo', 'descricao', 'prazo', 'criado_por', 'status', 'concluida_em', 'evidencia', 'concluida_por', 'pontos', 'criterios'];
+var CAB_AVALIACOES = ['id', 'atualizado_em', 'projeto', 'tipo', 'nota', 'status', 'criterios', 'parecer', 'avaliador'];
 
 // Cache em memória durante a execução
 var MEMO = { controleId: null, usuario: {} };
@@ -75,6 +76,7 @@ function instalar() {
   garantirAba_(ss, 'registros', CAB_REGISTROS);
   garantirAba_(ss, 'alteracoes', CAB_ALTERACOES);
   garantirAba_(ss, 'demandas', CAB_DEMANDAS);
+  garantirAba_(ss, 'avaliacoes', CAB_AVALIACOES);
   var padrao = ss.getSheetByName('Sheet1') || ss.getSheetByName('Página1') || ss.getSheetByName('Planilha1');
   if (padrao && ss.getSheets().length > 1) ss.deleteSheet(padrao);
 
@@ -110,12 +112,14 @@ function doGet(e) {
     var dados = lerProjetos_();
     var registros = lerRegistrosPublicos_();
     var demandas = lerDemandasPublicas_();
+    var avaliacoes = lerAvaliacoesPublicas_();
     return json_({
       ok: true,
       atualizadoEm: dados.atualizadoEm,
       projetos: dados.projetos,
       registros: registros,
-      demandas: demandas
+      demandas: demandas,
+      avaliacoes: avaliacoes
     });
   } catch (err) {
     return json_({ ok: false, erro: String(err.message || err) });
@@ -170,6 +174,9 @@ function doPost(e) {
     }
     if (acao === 'removerDemanda') {
       return json_(removerDemanda_(usuario, body.demandaId));
+    }
+    if (acao === 'salvarAvaliacao' || acao === 'avaliarObjetivos') {
+      return json_(salvarAvaliacao_(usuario, body));
     }
 
     throw new Error('Ação desconhecida: ' + acao);
@@ -297,6 +304,8 @@ function criarDemanda_(usuario, body) {
   var titulo = seguro_(body.titulo, 150);
   var descricao = seguro_(body.descricao, CONFIG.MAX_TEXTO);
   var prazo = seguro_(body.prazo, 30); // ex: '2026-10-25'
+  var pontos = seguro_(body.pontos, 30); // ex: '10,0' ou 'Peso 2'
+  var criterios = seguro_(body.criterios, CONFIG.MAX_TEXTO);
 
   if (!titulo) throw new Error('Informe o título da demanda.');
 
@@ -306,7 +315,7 @@ function criarDemanda_(usuario, body) {
 
   var ss = getControle_();
   var aba = garantirAba_(ss, 'demandas', CAB_DEMANDAS);
-  aba.appendRow([id, agora, projeto, titulo, descricao, prazo, autor, 'pendente', '', '', '']);
+  aba.appendRow([id, agora, projeto, titulo, descricao, prazo, autor, 'pendente', '', '', '', pontos, criterios]);
 
   // Disparar e-mails para os estudantes
   if (CONFIG.NOTIFICAR_EMAIL) {
@@ -401,10 +410,83 @@ function lerDemandasPublicas_() {
       status: String(dados[i][7] || 'pendente'),
       concluidaEm: String(dados[i][8] || ''),
       evidencia: String(dados[i][9] || ''),
-      concluidaPor: String(dados[i][10] || '')
+      concluidaPor: String(dados[i][10] || ''),
+      pontos: String(dados[i][11] || ''),
+      criterios: String(dados[i][12] || '')
     });
   }
   return list.reverse();
+}
+
+// ============================ AVALIAÇÕES & RUBRICAS (ROTEIRO 1) ============================
+
+function salvarAvaliacao_(usuario, body) {
+  if (usuario.papel !== 'docente') throw new Error('Apenas docentes podem lançar avaliações.');
+
+  var projId = Number(body.projeto || body.projetoId);
+  if (!projId || isNaN(projId)) throw new Error('Projeto inválido.');
+
+  var tipo = seguro_(body.tipo || 'objetivos', 50);
+  var nota = seguro_(String(body.nota != null ? body.nota : ''), 10);
+  var status = seguro_(body.status || 'pendente', 30); // 'aprovado', 'ajustar', 'pendente'
+  var criterios = typeof body.criterios === 'object' ? JSON.stringify(body.criterios) : String(body.criterios || '{}');
+  var parecer = seguro_(body.parecer, CONFIG.MAX_TEXTO);
+  var avaliador = formatarAutor_(usuario);
+  var agora = new Date().toISOString();
+  var id = 'AV-' + projId + '-' + tipo.toUpperCase();
+
+  var ss = getControle_();
+  var aba = garantirAba_(ss, 'avaliacoes', CAB_AVALIACOES);
+  var dados = aba.getDataRange().getValues();
+  var linhaEncontrada = -1;
+
+  for (var i = 1; i < dados.length; i++) {
+    if (String(dados[i][0]) === id || (Number(dados[i][2]) === projId && String(dados[i][3]) === tipo)) {
+      linhaEncontrada = i + 1;
+      break;
+    }
+  }
+
+  var linha = [id, agora, projId, tipo, nota, status, criterios, parecer, avaliador];
+
+  if (linhaEncontrada > 1) {
+    aba.getRange(linhaEncontrada, 1, 1, CAB_AVALIACOES.length).setValues([linha]);
+  } else {
+    aba.appendRow(linha);
+  }
+
+  return { ok: true, id: id, projeto: projId, tipo: tipo, nota: nota, status: status };
+}
+
+function lerAvaliacoesPublicas_() {
+  var ss = getControle_();
+  var aba = ss.getSheetByName('avaliacoes');
+  if (!aba || aba.getLastRow() < 2) return [];
+
+  var dados = aba.getDataRange().getValues();
+  var list = [];
+  for (var i = 1; i < dados.length; i++) {
+    var rawCriterios = String(dados[i][6] || '{}');
+    var criteriosObj = {};
+    try {
+      criteriosObj = JSON.parse(rawCriterios);
+    } catch (e) {
+      criteriosObj = {};
+    }
+
+    list.push({
+      id: String(dados[i][0]),
+      atualizadoEm: String(dados[i][1]),
+      projeto: Number(dados[i][2]),
+      tipo: String(dados[i][3]),
+      nota: String(dados[i][4]),
+      status: String(dados[i][5]),
+      criterios: criteriosObj,
+      parecer: String(dados[i][7] || ''),
+      avaliador: String(dados[i][8] || '')
+    });
+  }
+  return list;
 }
 
 function atualizarFicha_(usuario, body) {

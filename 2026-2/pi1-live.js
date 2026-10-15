@@ -12,6 +12,7 @@
     idToken: localStorage.getItem('pi1_google_token') || '',
     registros: [],
     demandas: [],
+    avaliacoes: [],
     carregando: false
   };
 
@@ -195,6 +196,7 @@
           }
           if (data.registros) state.registros = data.registros;
           if (data.demandas) state.demandas = data.demandas;
+          if (data.avaliacoes) state.avaliacoes = data.avaliacoes;
         }
       } catch (e) {
         console.warn('Falha ao carregar pela API Apps Script, tentando fallback CSV:', e);
@@ -467,12 +469,22 @@
           <label>Título da Demanda / Meta *</label>
           <input type="text" id="pi1-dem-titulo" required placeholder="Ex: Entrega do Diagrama de Arquitetura e Estrutura no GitHub" />
         </div>
-        <div class="pi1-form-group">
-          <label>Data Limite / Prazo Sugerido</label>
-          <input type="date" id="pi1-dem-prazo" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;">
+          <div class="pi1-form-group">
+            <label>Data Limite / Prazo Sugerido</label>
+            <input type="date" id="pi1-dem-prazo" />
+          </div>
+          <div class="pi1-form-group">
+            <label>Pontos / Peso Avaliativo</label>
+            <input type="text" id="pi1-dem-pontos" placeholder="Ex: 10,0 pts ou Peso 2" />
+          </div>
         </div>
         <div class="pi1-form-group">
-          <label>Orientações e Critérios de Aceite</label>
+          <label>Critérios de Aceite & Rubrica Avaliada</label>
+          <textarea id="pi1-dem-criterios" rows="2" placeholder="Ex: 1. Verbo no infinitivo; 2. Entrega no Overleaf; 3. Sem estudos passivos..."></textarea>
+        </div>
+        <div class="pi1-form-group">
+          <label>Orientações Gerais</label>
           <textarea id="pi1-dem-desc" rows="3" placeholder="Descreva os requisitos para conclusão desta meta..."></textarea>
           <span class="pi1-form-hint">Os estudantes destinatários receberão uma notificação imediata por e-mail.</span>
         </div>
@@ -495,6 +507,8 @@
         projeto: document.getElementById('pi1-dem-projeto').value,
         titulo: document.getElementById('pi1-dem-titulo').value.trim(),
         prazo: document.getElementById('pi1-dem-prazo').value,
+        pontos: (document.getElementById('pi1-dem-pontos') ? document.getElementById('pi1-dem-pontos').value.trim() : ''),
+        criterios: (document.getElementById('pi1-dem-criterios') ? document.getElementById('pi1-dem-criterios').value.trim() : ''),
         descricao: document.getElementById('pi1-dem-desc').value.trim()
       };
 
@@ -594,15 +608,23 @@
             <div class="pi1-demanda-card ${isDone ? 'concluida' : ''}">
               <div>
                 <div class="pi1-demanda-header">
-                  <span class="${isBroadcast ? 'pi1-badge-broadcast' : 'pi1-badge-projeto'}">
-                    ${isBroadcast ? '<i class="fa-solid fa-bullhorn"></i> Geral (Turma)' : 'Projeto #' + d.projeto}
-                  </span>
+                  <div style="display:flex;gap:0.35rem;align-items:center;flex-wrap:wrap;">
+                    <span class="${isBroadcast ? 'pi1-badge-broadcast' : 'pi1-badge-projeto'}">
+                      ${isBroadcast ? '<i class="fa-solid fa-bullhorn"></i> Geral (Turma)' : 'Projeto #' + d.projeto}
+                    </span>
+                    ${d.pontos ? `<span class="proj-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;font-size:0.68rem;border:1px solid rgba(245,158,11,0.3);"><i class="fa-solid fa-star"></i> ${escapeHtml(d.pontos)}</span>` : ''}
+                  </div>
                   <span class="status-tag ${isDone ? 'tag-ok' : 'tag-pendente'}">
                     ${isDone ? '<i class="fa-solid fa-check"></i> Concluída' : '<i class="fa-solid fa-clock"></i> Pendente'}
                   </span>
                 </div>
                 <h4 class="pi1-demanda-title">${escapeHtml(d.titulo)}</h4>
                 <p class="pi1-demanda-desc">${escapeHtml(d.descricao || 'Sem descrição adicional.')}</p>
+                ${d.criterios ? `
+                  <div style="background:var(--chip-bg);border:1px solid var(--border-color);border-radius:6px;padding:0.45rem 0.65rem;margin-bottom:0.75rem;font-size:0.78rem;color:var(--text-muted);">
+                    <strong style="color:var(--accent-blue);"><i class="fa-solid fa-list-check"></i> Critérios / Rubrica:</strong> ${escapeHtml(d.criterios)}
+                  </div>
+                ` : ''}
               </div>
 
               <div>
@@ -999,6 +1021,251 @@
     modal.classList.add('open');
   }
 
+  // ============================ AVALIAÇÃO DE OBJETIVOS & RUBRICAS ============================
+
+  function abrirModalAvaliarObjetivos(projId) {
+    if (!state.usuario || state.usuario.papel !== 'docente') {
+      alert('Apenas docentes podem realizar avaliações formais dos projetos.');
+      return;
+    }
+
+    var proj = (window.projectsData || []).find(function (p) { return p.id === Number(projId); });
+    if (!proj) {
+      alert('Projeto #' + projId + ' não encontrado.');
+      return;
+    }
+
+    var modal = document.getElementById('projectModal');
+    var modalContent = document.getElementById('modalContent');
+    if (!modal || !modalContent) return;
+
+    // Busca avaliação existente de objetivos deste projeto
+    var aval = (state.avaliacoes || []).find(function (a) {
+      return Number(a.projeto) === Number(projId) && a.tipo === 'objetivos';
+    });
+
+    var crit = (aval && aval.criterios) ? aval.criterios : {};
+    var notaAtual = aval ? (aval.nota || '') : '';
+    var statusAtual = aval ? (aval.status || 'aprovado') : 'aprovado';
+    var parecerAtual = aval ? (aval.parecer || '') : '';
+
+    var textoObjetivo = proj.objective || 'Nenhum objetivo registrado até o momento.';
+
+    modalContent.innerHTML = `
+      <div style="margin-bottom:1.25rem;">
+        <span class="proj-badge">RUBRICA ROTEIRO 1 — AVALIAÇÃO DE OBJETIVOS</span>
+        <h2 style="font-size:1.35rem;font-weight:700;margin-top:0.4rem;color:var(--text-main);">
+          #${proj.id} ${escapeHtml(proj.title)}
+        </h2>
+        <div style="color:var(--accent-cyan);font-size:0.85rem;"><i class="fa-solid fa-users"></i> ${escapeHtml(proj.team)}</div>
+      </div>
+
+      <!-- Texto cadastrado pelos estudantes -->
+      <div class="pi1-obj-preview-box">
+        <div class="pi1-obj-preview-title">
+          <i class="fa-solid fa-file-lines"></i> Redação Atual dos Objetivos (Cadastrada pela Equipe)
+        </div>
+        <div class="pi1-obj-preview-text">${escapeHtml(textoObjetivo)}</div>
+      </div>
+
+      <form id="pi1-form-avaliar-objetivos" class="pi1-modal-form">
+        <!-- BLOCO 1: OBJETIVO GERAL -->
+        <div class="pi1-rubrica-section">
+          <div class="pi1-rubrica-header">
+            <h3><i class="fa-solid fa-bullseye" style="color:var(--accent-cyan);"></i> 1. Objetivo Geral (A Grande Meta)</h3>
+            <select id="pi1-eval-geral-status" class="pi1-status-select" style="font-weight:700;">
+              <option value="conforme" ${crit.geral_status === 'conforme' ? 'selected' : ''}>✔️ Conforme / Aprovado</option>
+              <option value="ajustar" ${crit.geral_status === 'ajustar' ? 'selected' : ''}>⚠️ Requer Ajustes</option>
+              <option value="ausente" ${crit.geral_status === 'ausente' ? 'selected' : ''}>❌ Não Elaborado / Ausente</option>
+            </select>
+          </div>
+          <p style="font-size:0.78rem;color:var(--text-dim);margin-bottom:0.75rem;">
+            Fórmula Roteiro 1: <code>[Verbo de Ação] + [O que será criado] + [Público/Contexto] + [Propósito/Benefício]</code>
+          </p>
+          <div class="pi1-checklist-grid">
+            <label class="pi1-check-item">
+              <input type="checkbox" id="crit-geral-verbo" ${crit.geral_verbo ? 'checked' : ''} />
+              <span><strong>Verbo no Infinitivo:</strong> Inicia com verbo de ação técnica (Desenvolver, Criar, Implementar...)</span>
+            </label>
+            <label class="pi1-check-item">
+              <input type="checkbox" id="crit-geral-produto" ${crit.geral_produto ? 'checked' : ''} />
+              <span><strong>Entregável:</strong> Define claramente o produto de software tangível</span>
+            </label>
+            <label class="pi1-check-item">
+              <input type="checkbox" id="crit-geral-publico" ${crit.geral_publico ? 'checked' : ''} />
+              <span><strong>Público/Contexto:</strong> Delimita para quem e em qual ambiente se aplica</span>
+            </label>
+            <label class="pi1-check-item">
+              <input type="checkbox" id="crit-geral-proposito" ${crit.geral_proposito ? 'checked' : ''} />
+              <span><strong>Propósito & Impacto:</strong> Deixa claro qual problema real ou necessidade resolve</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- BLOCO 2: OBJETIVOS ESPECÍFICOS (OS 4 DEGRAUS METODOLÓGICOS) -->
+        <div class="pi1-rubrica-section">
+          <div class="pi1-rubrica-header">
+            <h3><i class="fa-solid fa-stairs" style="color:var(--ifsc-green);"></i> 2. Objetivos Específicos (4 Degraus Metodológicos)</h3>
+            <span style="font-size:0.75rem;color:var(--text-dim);">Avalie um a um conforme o Roteiro 1</span>
+          </div>
+          <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);padding:0.5rem 0.75rem;border-radius:6px;font-size:0.75rem;color:var(--ifsc-red);margin-bottom:0.85rem;">
+            <i class="fa-solid fa-triangle-exclamation"></i> <strong>Regra Anti-Estudo Passivo:</strong> Vetar tarefas rotineiras ("estudar JS", "ler artigos") ou administrativas ("criar grupo"). Devem ser entregas técnicas tangíveis!
+          </div>
+
+          <div class="pi1-degraus-container">
+            <!-- Degrau 1 -->
+            <div class="pi1-degrau-row">
+              <div class="pi1-degrau-top">
+                <div class="pi1-degrau-tag">
+                  <span class="proj-badge" style="font-size:0.65rem;padding:0.15rem 0.4rem;">DEGRAU 1</span>
+                  <span>Requisitos & Diagnóstico</span>
+                </div>
+                <select id="crit-esp1-status" class="pi1-status-select">
+                  <option value="conforme" ${crit.esp1_status === 'conforme' ? 'selected' : ''}>✔️ Conforme</option>
+                  <option value="ajustar" ${crit.esp1_status === 'ajustar' ? 'selected' : ''}>⚠️ Requer Ajustes</option>
+                  <option value="ausente" ${crit.esp1_status === 'ausente' ? 'selected' : ''}>❌ Ausente</option>
+                </select>
+              </div>
+              <div class="pi1-degrau-desc">Verbos: <em>Mapear, Identificar, Levantar, Investigar necessidades e problemas dos usuários.</em></div>
+              <input type="text" id="crit-esp1-obs" placeholder="Observação/apontamento específico (opcional)" value="${escapeHtml(crit.esp1_obs || '')}" style="font-size:0.8rem;padding:0.35rem 0.6rem;" />
+            </div>
+
+            <!-- Degrau 2 -->
+            <div class="pi1-degrau-row">
+              <div class="pi1-degrau-top">
+                <div class="pi1-degrau-tag">
+                  <span class="proj-badge" style="font-size:0.65rem;padding:0.15rem 0.4rem;">DEGRAU 2</span>
+                  <span>Modelagem & Design (draw.io / Wireframes)</span>
+                </div>
+                <select id="crit-esp2-status" class="pi1-status-select">
+                  <option value="conforme" ${crit.esp2_status === 'conforme' ? 'selected' : ''}>✔️ Conforme</option>
+                  <option value="ajustar" ${crit.esp2_status === 'ajustar' ? 'selected' : ''}>⚠️ Requer Ajustes</option>
+                  <option value="ausente" ${crit.esp2_status === 'ausente' ? 'selected' : ''}>❌ Ausente</option>
+                </select>
+              </div>
+              <div class="pi1-degrau-desc">Verbos: <em>Modelar arquitetura no draw.io, Prototipar wireframes de interface e fluxos.</em></div>
+              <input type="text" id="crit-esp2-obs" placeholder="Observação/apontamento específico (opcional)" value="${escapeHtml(crit.esp2_obs || '')}" style="font-size:0.8rem;padding:0.35rem 0.6rem;" />
+            </div>
+
+            <!-- Degrau 3 -->
+            <div class="pi1-degrau-row">
+              <div class="pi1-degrau-top">
+                <div class="pi1-degrau-tag">
+                  <span class="proj-badge" style="font-size:0.65rem;padding:0.15rem 0.4rem;">DEGRAU 3</span>
+                  <span>Implementação & Código (GitHub / Web)</span>
+                </div>
+                <select id="crit-esp3-status" class="pi1-status-select">
+                  <option value="conforme" ${crit.esp3_status === 'conforme' ? 'selected' : ''}>✔️ Conforme</option>
+                  <option value="ajustar" ${crit.esp3_status === 'ajustar' ? 'selected' : ''}>⚠️ Requer Ajustes</option>
+                  <option value="ausente" ${crit.esp3_status === 'ausente' ? 'selected' : ''}>❌ Ausente</option>
+                </select>
+              </div>
+              <div class="pi1-degrau-desc">Verbos: <em>Desenvolver aplicação web (HTML/CSS/JS), Versionar no Git/GitHub, Deploy Pages.</em></div>
+              <input type="text" id="crit-esp3-obs" placeholder="Observação/apontamento específico (opcional)" value="${escapeHtml(crit.esp3_obs || '')}" style="font-size:0.8rem;padding:0.35rem 0.6rem;" />
+            </div>
+
+            <!-- Degrau 4 -->
+            <div class="pi1-degrau-row">
+              <div class="pi1-degrau-top">
+                <div class="pi1-degrau-tag">
+                  <span class="proj-badge" style="font-size:0.65rem;padding:0.15rem 0.4rem;">DEGRAU 4</span>
+                  <span>Validação & Testes com Usuários</span>
+                </div>
+                <select id="crit-esp4-status" class="pi1-status-select">
+                  <option value="conforme" ${crit.esp4_status === 'conforme' ? 'selected' : ''}>✔️ Conforme</option>
+                  <option value="ajustar" ${crit.esp4_status === 'ajustar' ? 'selected' : ''}>⚠️ Requer Ajustes</option>
+                  <option value="ausente" ${crit.esp4_status === 'ausente' ? 'selected' : ''}>❌ Ausente</option>
+                </select>
+              </div>
+              <div class="pi1-degrau-desc">Verbos: <em>Validar usabilidade com usuários/turma, Testar interatividade, Coletar métricas.</em></div>
+              <input type="text" id="crit-esp4-obs" placeholder="Observação/apontamento específico (opcional)" value="${escapeHtml(crit.esp4_obs || '')}" style="font-size:0.8rem;padding:0.35rem 0.6rem;" />
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOCO 3: NOTA CONSOLIDADA & PARECER ORIENTADOR -->
+        <div class="pi1-rubrica-section" style="background:var(--chip-bg);">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.85rem;">
+            <div class="pi1-form-group">
+              <label>Nota Avaliativa (0,0 a 10,0) *</label>
+              <input type="text" id="pi1-eval-nota" required placeholder="Ex: 9.5" value="${escapeHtml(notaAtual)}" style="font-size:1.05rem;font-weight:700;" />
+            </div>
+            <div class="pi1-form-group">
+              <label>Parecer Geral de Conformidade *</label>
+              <select id="pi1-eval-status" required style="font-weight:700;">
+                <option value="aprovado" ${statusAtual === 'aprovado' ? 'selected' : ''}>🟢 Aprovado (Objetivos Conformados)</option>
+                <option value="ajustar" ${statusAtual === 'ajustar' ? 'selected' : ''}>🟡 Requer Ajustes (Revisar Redação)</option>
+                <option value="pendente" ${statusAtual === 'pendente' ? 'selected' : ''}>⚪ Em Elaboração / Pendente</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="pi1-form-group">
+            <label>Devolutiva Pedagógica & Parecer Docente (Visível aos Estudantes)</label>
+            <textarea id="pi1-eval-parecer" rows="3" placeholder="Aponte o que o grupo acertou e exatamente o que precisa ser ajustado nos objetivos antes do próximo checkpoint...">${escapeHtml(parecerAtual)}</textarea>
+            <span class="pi1-form-hint">O grupo receberá este parecer de forma transparente no card do projeto.</span>
+          </div>
+        </div>
+
+        <div class="pi1-modal-footer">
+          <button type="button" class="btn-detail" onclick="closeModal()">Cancelar</button>
+          <button type="submit" class="btn-action" style="background:var(--ifsc-green);color:#fff;" id="pi1-btn-submit-eval">
+            <i class="fa-solid fa-floppy-disk"></i> Salvar Avaliação dos Objetivos
+          </button>
+        </div>
+      </form>
+    `;
+
+    document.getElementById('pi1-form-avaliar-objetivos').onsubmit = async function (e) {
+      e.preventDefault();
+      var btn = document.getElementById('pi1-btn-submit-eval');
+      btn.disabled = true;
+      btn.innerText = 'Salvando avaliação...';
+
+      var criteriosObj = {
+        geral_status: document.getElementById('pi1-eval-geral-status').value,
+        geral_verbo: document.getElementById('crit-geral-verbo').checked,
+        geral_produto: document.getElementById('crit-geral-produto').checked,
+        geral_publico: document.getElementById('crit-geral-publico').checked,
+        geral_proposito: document.getElementById('crit-geral-proposito').checked,
+        esp1_status: document.getElementById('crit-esp1-status').value,
+        esp1_obs: document.getElementById('crit-esp1-obs').value.trim(),
+        esp2_status: document.getElementById('crit-esp2-status').value,
+        esp2_obs: document.getElementById('crit-esp2-obs').value.trim(),
+        esp3_status: document.getElementById('crit-esp3-status').value,
+        esp3_obs: document.getElementById('crit-esp3-obs').value.trim(),
+        esp4_status: document.getElementById('crit-esp4-status').value,
+        esp4_obs: document.getElementById('crit-esp4-obs').value.trim()
+      };
+
+      var payload = {
+        projeto: projId,
+        tipo: 'objetivos',
+        nota: document.getElementById('pi1-eval-nota').value.trim(),
+        status: document.getElementById('pi1-eval-status').value,
+        criterios: criteriosObj,
+        parecer: document.getElementById('pi1-eval-parecer').value.trim()
+      };
+
+      var res = await apiCall('salvarAvaliacao', payload);
+      if (res.ok) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('Avaliação dos objetivos salva com sucesso!');
+        } else {
+          alert('Avaliação dos objetivos salva com sucesso!');
+        }
+        if (typeof window.closeModal === 'function') window.closeModal();
+        sincronizarRegistros();
+      } else {
+        alert('Erro ao salvar avaliação: ' + (res.erro || 'Falha na requisição'));
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Salvar Avaliação dos Objetivos';
+      }
+    };
+
+    modal.classList.add('open');
+  }
+
   // ============================ HOOKS DE INTERFACE ============================
 
   window.PI1 = {
@@ -1013,6 +1280,7 @@
     abrirPainelDocente: abrirPainelDocente,
     decidirAcesso: decidirAcesso,
     abrirModalDevolutiva: abrirModalDevolutiva,
+    abrirModalAvaliarObjetivos: abrirModalAvaliarObjetivos,
     sincronizar: sincronizarRegistros,
     podeEditarProjeto: podeEditarProjeto
   };
