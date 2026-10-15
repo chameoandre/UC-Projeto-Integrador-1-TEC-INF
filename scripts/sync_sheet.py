@@ -120,16 +120,17 @@ def update_html(projects):
     with open(TARGET_HTML, "r", encoding="utf-8") as f:
         content = f.read()
         
-    json_str = json.dumps(projects, ensure_ascii=False, indent=2)
+    json_str = json.dumps(projects, ensure_ascii=False, indent=2).replace("</", "<\\/")
     
-    pattern = r"const projectsData = \[[\s\S]*?\];"
-    replacement = f"const projectsData = {json_str};"
+    pattern = r"const projectsData = \[[\s\S]*?\n    \];"
+    if not re.search(pattern, content):
+        pattern = r"const projectsData = \[[\s\S]*?\];"
     
     if not re.search(pattern, content):
         print("Aviso: const projectsData não encontrado para substituição regex.")
         return False
         
-    new_content = re.sub(pattern, replacement, content, count=1)
+    new_content = re.sub(pattern, lambda _: f"const projectsData = {json_str};", content, count=1)
     
     with open(TARGET_HTML, "w", encoding="utf-8") as f:
         f.write(new_content)

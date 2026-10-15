@@ -168,6 +168,15 @@
 
   var SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/15PBDpzugjiZJsEJEcbT6CHrNGcXB_OPKdZkfsHQf9RU/export?format=csv&gid=891834841';
 
+  function aplicarProjetos(novos) {
+    if (!novos || !novos.length) return;
+    window.projectsData = novos;
+    if (typeof projectsData !== 'undefined' && Array.isArray(projectsData)) {
+      projectsData.length = 0;
+      novos.forEach(function (p) { projectsData.push(p); });
+    }
+  }
+
   async function sincronizarRegistros(manual) {
     var syncIcon = document.getElementById('sync-icon');
     if (syncIcon) syncIcon.classList.add('fa-spin');
@@ -181,7 +190,7 @@
         var data = await resp.json();
         if (data.ok) {
           if (data.projetos && data.projetos.length > 0) {
-            window.projectsData = data.projetos;
+            aplicarProjetos(data.projetos);
             atualizou = true;
           }
           if (data.registros) state.registros = data.registros;
@@ -199,7 +208,7 @@
         var csvTxt = await respCsv.text();
         var projsCsv = parsearCsvProjetos(csvTxt);
         if (projsCsv && projsCsv.length > 0) {
-          window.projectsData = projsCsv;
+          aplicarProjetos(projsCsv);
           atualizou = true;
         }
       } catch (errCsv) {
