@@ -19,6 +19,7 @@
   // ============================ AUTENTICAÇÃO OAUTH ============================
 
   function inicializarAuth() {
+    renderNotasTab();
     var authContainer = document.getElementById('pi1-auth');
     if (!authContainer) return;
 
@@ -69,6 +70,7 @@
     renderizarBotaoLogin();
     if (typeof window.renderProjects === 'function') window.renderProjects();
     renderDemandasTab();
+    renderNotasTab();
     if (typeof window.showToast === 'function') window.showToast('Sessão encerrada.');
   }
 
@@ -140,10 +142,17 @@
           <button class="btn-action" id="pi1-btn-painel-docente" style="background:var(--accent-purple);color:#fff;font-size:0.78rem;padding:0.35rem 0.65rem;" title="Gerenciar membros e solicitações">
             <i class="fa-solid fa-users-gear"></i> Painel Docente
           </button>
+          <button class="btn-action" id="pi1-btn-notas-top" style="background:var(--accent-amber);color:#fff;font-size:0.78rem;padding:0.35rem 0.65rem;" title="Painel Central de Notas & Avaliações">
+            <i class="fa-solid fa-clipboard-list"></i> Notas & Avaliações
+          </button>
           <button class="btn-action" id="pi1-btn-criar-demanda-top" style="background:var(--accent-blue);color:#fff;font-size:0.78rem;padding:0.35rem 0.65rem;" title="Criar nova demanda docente">
             <i class="fa-solid fa-bullhorn"></i> Nova Demanda
           </button>
-        ` : ''}
+        ` : `
+          <button class="btn-action" id="pi1-btn-notas-top" style="background:rgba(245,158,11,0.15);color:var(--accent-amber);border:1px solid rgba(245,158,11,0.3);font-size:0.78rem;padding:0.35rem 0.65rem;" title="Ver Minhas Notas & Avaliações">
+            <i class="fa-solid fa-clipboard-list"></i> Minhas Notas
+          </button>
+        `}
         <div class="pi1-user-badge">
           <span>${escapeHtml(state.usuario.nome)}</span>
           <span class="pi1-user-role ${papelClass}">${papelTxt}</span>
@@ -158,11 +167,20 @@
     var btnPainel = document.getElementById('pi1-btn-painel-docente');
     if (btnPainel) btnPainel.addEventListener('click', abrirPainelDocente);
 
+    var btnNotasTop = document.getElementById('pi1-btn-notas-top');
+    if (btnNotasTop) {
+      btnNotasTop.addEventListener('click', function () {
+        if (typeof window.switchTab === 'function') window.switchTab('notas');
+        else renderNotasTab();
+      });
+    }
+
     var btnDemandaTop = document.getElementById('pi1-btn-criar-demanda-top');
     if (btnDemandaTop) btnDemandaTop.addEventListener('click', function () { abrirModalCriarDemanda('*'); });
 
     if (typeof window.renderProjects === 'function') window.renderProjects();
     renderDemandasTab();
+    renderNotasTab();
   }
 
   // ============================ REGISTROS, DEMANDAS E PROJETOS AO VIVO ============================
@@ -222,6 +240,7 @@
       window.renderProjects();
     }
     renderDemandasTab();
+    renderNotasTab();
 
     if (syncIcon) {
       setTimeout(function () {
@@ -655,6 +674,330 @@
     `;
   }
 
+  function renderNotasTab() {
+    var container = document.getElementById('tab-notas');
+    if (!container) return;
+
+    var projetos = (typeof window.projectsData !== 'undefined' && Array.isArray(window.projectsData) && window.projectsData.length > 0)
+      ? window.projectsData
+      : ((typeof projectsData !== 'undefined' && Array.isArray(projectsData)) ? projectsData : []);
+
+    var avaliacoes = state.avaliacoes || [];
+    var isDocente = state.usuario && state.usuario.papel === 'docente';
+    var meuProjetoId = (state.usuario && state.usuario.projetos) ? Number(state.usuario.projetos) : null;
+
+    // Calcular estatísticas e KPIs
+    var totalProjetos = projetos.length;
+    var avaliadosCount = 0;
+    var aprovadosCount = 0;
+    var ajustarCount = 0;
+    var somaNotas = 0;
+    var countNotasValidas = 0;
+
+    var projsComAval = projetos.map(function (p) {
+      var aval = avaliacoes.find(function (a) {
+        return Number(a.projeto) === Number(p.id) && a.tipo === 'objetivos';
+      });
+      var status = aval ? aval.status : 'pendente';
+      var nota = aval && aval.nota !== undefined && aval.nota !== '' ? parseFloat(String(aval.nota).replace(',', '.')) : null;
+
+      if (aval) {
+        avaliadosCount++;
+        if (status === 'aprovado') aprovadosCount++;
+        else if (status === 'ajustar') ajustarCount++;
+        if (!isNaN(nota) && nota !== null) {
+          somaNotas += nota;
+          countNotasValidas++;
+        }
+      }
+
+      return {
+        projeto: p,
+        avaliacao: aval,
+        status: status,
+        nota: nota
+      };
+    });
+
+    var mediaNotas = countNotasValidas > 0 ? (somaNotas / countNotasValidas).toFixed(1) : '—';
+    var pendentesCount = totalProjetos - avaliadosCount;
+
+    // Se o usuário logado for estudante de um projeto, encontrar sua avaliação
+    var avaliacaoMeuProjeto = meuProjetoId ? projsComAval.find(function (item) { return Number(item.projeto.id) === meuProjetoId; }) : null;
+
+    container.innerHTML = `
+      <div class="pi1-notas-container">
+        
+        <!-- CABEÇALHO DO PAINEL -->
+        <div class="pi1-notas-header">
+          <div>
+            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;">
+              <span class="proj-badge" style="background:rgba(245,158,11,0.15);color:#f59e0b;font-weight:700;">
+                <i class="fa-solid fa-clipboard-list"></i> PAINEL CENTRAL DE AVALIAÇÕES & NOTAS
+              </span>
+              <span style="font-size:0.75rem;color:var(--text-dim);">Turma INF-2025</span>
+            </div>
+            <h2 style="font-size:1.35rem;font-weight:700;color:var(--text-main);margin:0;">
+              Acompanhamento de Rubricas Pedagógicas & Roteiro 1
+            </h2>
+            <p style="font-size:0.85rem;color:var(--text-muted);margin:0.25rem 0 0 0;">
+              Conformidade do Objetivo Geral (4 critérios) e dos 4 Degraus Específicos (Exploração, Modelagem, Implementação e Validação).
+            </p>
+          </div>
+
+          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+            ${isDocente ? `
+              <button class="btn-action" onclick="PI1.sincronizar(true)" style="background:var(--accent-blue);color:#fff;font-size:0.8rem;padding:0.45rem 0.85rem;" title="Atualizar dados da planilha">
+                <i class="fa-solid fa-arrows-rotate"></i> Sincronizar
+              </button>
+            ` : `
+              <button class="btn-action" onclick="PI1.sincronizar(true)" style="background:var(--chip-bg);color:var(--text-main);border:1px solid var(--border-color);font-size:0.8rem;padding:0.45rem 0.85rem;">
+                <i class="fa-solid fa-arrows-rotate"></i> Atualizar
+              </button>
+            `}
+          </div>
+        </div>
+
+        <!-- DESTAQUE PARA ESTUDANTE LOGADO -->
+        ${(avaliacaoMeuProjeto && !isDocente) ? `
+          <div class="pi1-aluno-destaque">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+              <div>
+                <span class="proj-badge" style="background:rgba(37,99,235,0.15);color:var(--accent-blue);font-weight:700;">
+                  <i class="fa-solid fa-star"></i> SUA EQUIPE — PROJETO #${avaliacaoMeuProjeto.projeto.id}
+                </span>
+                <h3 style="font-size:1.2rem;font-weight:700;color:var(--text-main);margin:0.35rem 0 0.15rem 0;">
+                  ${escapeHtml(avaliacaoMeuProjeto.projeto.nome)}
+                </h3>
+                <span style="font-size:0.8rem;color:var(--text-muted);"><i class="fa-solid fa-users"></i> ${escapeHtml(avaliacaoMeuProjeto.projeto.integrantes)}</span>
+              </div>
+              <div style="display:flex;gap:0.75rem;align-items:center;">
+                <div style="text-align:right;">
+                  <div style="font-size:0.75rem;color:var(--text-dim);font-weight:600;text-transform:uppercase;">Nota Roteiro 1</div>
+                  <div class="pi1-nota-val ${avaliacaoMeuProjeto.nota !== null ? (avaliacaoMeuProjeto.nota >= 7 ? 'excelente' : 'ajuste') : ''}" style="font-size:1.4rem;">
+                    ${avaliacaoMeuProjeto.nota !== null ? avaliacaoMeuProjeto.nota.toFixed(1) : 'Em avaliação'}
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:0.75rem;color:var(--text-dim);font-weight:600;text-transform:uppercase;">Parecer Geral</div>
+                  <span class="status-tag ${avaliacaoMeuProjeto.status === 'aprovado' ? 'tag-ok' : (avaliacaoMeuProjeto.status === 'ajustar' ? 'tag-ajuste' : 'tag-pendente')}" style="padding:0.4rem 0.75rem;font-size:0.82rem;">
+                    ${avaliacaoMeuProjeto.status === 'aprovado' ? '🟢 Conforme' : (avaliacaoMeuProjeto.status === 'ajustar' ? '🟡 Requer Ajustes' : '⚪ Em Elaboração')}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            ${avaliacaoMeuProjeto.avaliacao && avaliacaoMeuProjeto.avaliacao.parecer ? `
+              <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:8px;padding:0.85rem 1.15rem;margin-bottom:0.75rem;">
+                <strong style="font-size:0.85rem;color:var(--accent-blue);display:flex;align-items:center;gap:0.35rem;margin-bottom:0.35rem;">
+                  <i class="fa-solid fa-comment-dots"></i> Devolutiva do Professor Orientador:
+                </strong>
+                <p style="font-size:0.88rem;color:var(--text-main);margin:0;line-height:1.5;">${escapeHtml(avaliacaoMeuProjeto.avaliacao.parecer)}</p>
+              </div>
+            ` : ''}
+
+            <!-- 4 Degraus Específicos do Aluno -->
+            ${(avaliacaoMeuProjeto.avaliacao && avaliacaoMeuProjeto.avaliacao.criterios) ? `
+              <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));gap:0.6rem;margin-top:0.75rem;">
+                <div style="background:var(--bg-card);padding:0.6rem 0.8rem;border-radius:6px;border:1px solid var(--border-color);font-size:0.78rem;">
+                  <strong>D1 (Exploração):</strong> <span class="pi1-deg-badge ${avaliacaoMeuProjeto.avaliacao.criterios.esp1_status || 'ausente'}">${(avaliacaoMeuProjeto.avaliacao.criterios.esp1_status === 'conforme' ? '✔️ Conforme' : (avaliacaoMeuProjeto.avaliacao.criterios.esp1_status === 'ajustar' ? '⚠️ Ajustar' : '❌ Ausente'))}</span>
+                  ${avaliacaoMeuProjeto.avaliacao.criterios.esp1_obs ? `<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.25rem;">${escapeHtml(avaliacaoMeuProjeto.avaliacao.criterios.esp1_obs)}</div>` : ''}
+                </div>
+                <div style="background:var(--bg-card);padding:0.6rem 0.8rem;border-radius:6px;border:1px solid var(--border-color);font-size:0.78rem;">
+                  <strong>D2 (Modelagem):</strong> <span class="pi1-deg-badge ${avaliacaoMeuProjeto.avaliacao.criterios.esp2_status || 'ausente'}">${(avaliacaoMeuProjeto.avaliacao.criterios.esp2_status === 'conforme' ? '✔️ Conforme' : (avaliacaoMeuProjeto.avaliacao.criterios.esp2_status === 'ajustar' ? '⚠️ Ajustar' : '❌ Ausente'))}</span>
+                  ${avaliacaoMeuProjeto.avaliacao.criterios.esp2_obs ? `<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.25rem;">${escapeHtml(avaliacaoMeuProjeto.avaliacao.criterios.esp2_obs)}</div>` : ''}
+                </div>
+                <div style="background:var(--bg-card);padding:0.6rem 0.8rem;border-radius:6px;border:1px solid var(--border-color);font-size:0.78rem;">
+                  <strong>D3 (Implementação):</strong> <span class="pi1-deg-badge ${avaliacaoMeuProjeto.avaliacao.criterios.esp3_status || 'ausente'}">${(avaliacaoMeuProjeto.avaliacao.criterios.esp3_status === 'conforme' ? '✔️ Conforme' : (avaliacaoMeuProjeto.avaliacao.criterios.esp3_status === 'ajustar' ? '⚠️ Ajustar' : '❌ Ausente'))}</span>
+                  ${avaliacaoMeuProjeto.avaliacao.criterios.esp3_obs ? `<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.25rem;">${escapeHtml(avaliacaoMeuProjeto.avaliacao.criterios.esp3_obs)}</div>` : ''}
+                </div>
+                <div style="background:var(--bg-card);padding:0.6rem 0.8rem;border-radius:6px;border:1px solid var(--border-color);font-size:0.78rem;">
+                  <strong>D4 (Validação):</strong> <span class="pi1-deg-badge ${avaliacaoMeuProjeto.avaliacao.criterios.esp4_status || 'ausente'}">${(avaliacaoMeuProjeto.avaliacao.criterios.esp4_status === 'conforme' ? '✔️ Conforme' : (avaliacaoMeuProjeto.avaliacao.criterios.esp4_status === 'ajustar' ? '⚠️ Ajustar' : '❌ Ausente'))}</span>
+                  ${avaliacaoMeuProjeto.avaliacao.criterios.esp4_obs ? `<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.25rem;">${escapeHtml(avaliacaoMeuProjeto.avaliacao.criterios.esp4_obs)}</div>` : ''}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+
+        <!-- QUADRO DE KPIS CONSOLIDADOS -->
+        <div class="pi1-notas-kpi-grid">
+          <div class="pi1-kpi-card">
+            <span class="pi1-kpi-val">${totalProjetos}</span>
+            <span class="pi1-kpi-lbl">Equipes na Turma</span>
+          </div>
+          <div class="pi1-kpi-card">
+            <span class="pi1-kpi-val" style="color:var(--ifsc-green);">${aprovadosCount}</span>
+            <span class="pi1-kpi-lbl">Objetivos Aprovados</span>
+          </div>
+          <div class="pi1-kpi-card">
+            <span class="pi1-kpi-val" style="color:#f59e0b;">${ajustarCount}</span>
+            <span class="pi1-kpi-lbl">Requerem Ajustes</span>
+          </div>
+          <div class="pi1-kpi-card">
+            <span class="pi1-kpi-val" style="color:var(--text-dim);">${pendentesCount}</span>
+            <span class="pi1-kpi-lbl">Em Elaboração / Sem Nota</span>
+          </div>
+          <div class="pi1-kpi-card">
+            <span class="pi1-kpi-val" style="color:var(--accent-blue);">${mediaNotas}</span>
+            <span class="pi1-kpi-lbl">Média da Turma</span>
+          </div>
+        </div>
+
+        <!-- BARRA DE FILTROS E BUSCA -->
+        <div class="pi1-notas-toolbar">
+          <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+            <input type="text" id="pi1-notas-search" class="pi1-search-input" placeholder="🔍 Buscar por projeto ou integrante..." oninput="PI1.filtrarTabelaNotas()" />
+            <button class="btn-detail active-filter" id="pi1-filter-btn-todos" onclick="PI1.filtrarNotasPorStatus('todos')" style="font-size:0.75rem;padding:0.35rem 0.65rem;">Todos (${totalProjetos})</button>
+            <button class="btn-detail" id="pi1-filter-btn-aprovado" onclick="PI1.filtrarNotasPorStatus('aprovado')" style="font-size:0.75rem;padding:0.35rem 0.65rem;color:var(--ifsc-green);">🟢 Conformes (${aprovadosCount})</button>
+            <button class="btn-detail" id="pi1-filter-btn-ajustar" onclick="PI1.filtrarNotasPorStatus('ajustar')" style="font-size:0.75rem;padding:0.35rem 0.65rem;color:#d97706;">🟡 Ajustar (${ajustarCount})</button>
+            <button class="btn-detail" id="pi1-filter-btn-pendente" onclick="PI1.filtrarNotasPorStatus('pendente')" style="font-size:0.75rem;padding:0.35rem 0.65rem;color:var(--text-dim);">⚪ Pendentes (${pendentesCount})</button>
+          </div>
+          ${isDocente ? `
+            <div style="font-size:0.8rem;color:var(--accent-purple);font-weight:600;">
+              <i class="fa-solid fa-user-shield"></i> Modo Docente Ativo — Edição de Notas Habilitada
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- TABELA CONSOLIDADA DAS 11 EQUIPES -->
+        <div class="pi1-notas-table-wrapper">
+          <table class="pi1-notas-table" id="pi1-tabela-notas">
+            <thead>
+              <tr>
+                <th style="width:45px;">#</th>
+                <th style="min-width:200px;">Projeto & Equipe</th>
+                <th style="min-width:140px;">Objetivo Geral</th>
+                <th style="min-width:240px;">4 Degraus Específicos</th>
+                <th style="min-width:110px;">Status</th>
+                <th style="width:90px;text-align:center;">Nota</th>
+                <th style="min-width:200px;">Parecer Orientador</th>
+                <th style="min-width:110px;text-align:right;">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${projsComAval.map(function (item) {
+                var p = item.projeto;
+                var a = item.avaliacao;
+                var crit = a && a.criterios ? a.criterios : {};
+                var statusClass = item.status === 'aprovado' ? 'tag-ok' : (item.status === 'ajustar' ? 'tag-ajuste' : 'tag-pendente');
+                var statusLabel = item.status === 'aprovado' ? '🟢 Conforme' : (item.status === 'ajustar' ? '🟡 Ajustar' : '⚪ Pendente');
+                var notaTxt = item.nota !== null ? item.nota.toFixed(1) : '—';
+                var notaClass = item.nota !== null ? (item.nota >= 7.0 ? 'excelente' : 'ajuste') : '';
+
+                return `
+                  <tr class="pi1-nota-row" data-id="${p.id}" data-status="${item.status}" data-nome="${escapeHtml(p.nome).toLowerCase()}" data-integrantes="${escapeHtml(p.integrantes).toLowerCase()}">
+                    <td>
+                      <span class="proj-badge" style="font-weight:700;">#${p.id}</span>
+                    </td>
+                    <td>
+                      <strong style="color:var(--text-main);font-size:0.9rem;">${escapeHtml(p.nome)}</strong>
+                      <div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.15rem;">
+                        <i class="fa-solid fa-users"></i> ${escapeHtml(p.integrantes)}
+                      </div>
+                    </td>
+                    <td>
+                      ${crit.geral_status ? `
+                        <span class="status-tag ${crit.geral_status === 'conforme' ? 'tag-ok' : 'tag-ajuste'}" style="font-size:0.72rem;">
+                          ${crit.geral_status === 'conforme' ? '✔️ Conforme' : '⚠️ Revisar'}
+                        </span>
+                        <div style="font-size:0.68rem;color:var(--text-dim);margin-top:0.25rem;">
+                          ${crit.geral_verbo ? '✓ Verbo ' : ''}${crit.geral_produto ? '✓ Produto ' : ''}${crit.geral_publico ? '✓ Público ' : ''}${crit.geral_proposito ? '✓ Propósito' : ''}
+                        </div>
+                      ` : '<span style="font-size:0.75rem;color:var(--text-dim);">Não avaliado</span>'}
+                    </td>
+                    <td>
+                      <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+                        <span class="pi1-deg-badge ${crit.esp1_status || 'ausente'}" title="D1: Exploração e Referenciais (${crit.esp1_obs || 'Sem obs'})">
+                          D1: ${crit.esp1_status === 'conforme' ? '✔️' : (crit.esp1_status === 'ajustar' ? '⚠️' : '❌')}
+                        </span>
+                        <span class="pi1-deg-badge ${crit.esp2_status || 'ausente'}" title="D2: Modelagem, WBS e Wireframe (${crit.esp2_obs || 'Sem obs'})">
+                          D2: ${crit.esp2_status === 'conforme' ? '✔️' : (crit.esp2_status === 'ajustar' ? '⚠️' : '❌')}
+                        </span>
+                        <span class="pi1-deg-badge ${crit.esp3_status || 'ausente'}" title="D3: Implementação Web e GitHub (${crit.esp3_obs || 'Sem obs'})">
+                          D3: ${crit.esp3_status === 'conforme' ? '✔️' : (crit.esp3_status === 'ajustar' ? '⚠️' : '❌')}
+                        </span>
+                        <span class="pi1-deg-badge ${crit.esp4_status || 'ausente'}" title="D4: Validação e Testes (${crit.esp4_obs || 'Sem obs'})">
+                          D4: ${crit.esp4_status === 'conforme' ? '✔️' : (crit.esp4_status === 'ajustar' ? '⚠️' : '❌')}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="status-tag ${statusClass}" style="font-size:0.72rem;">
+                        ${statusLabel}
+                      </span>
+                    </td>
+                    <td style="text-align:center;">
+                      <span class="pi1-nota-val ${notaClass}">
+                        ${notaTxt}
+                      </span>
+                    </td>
+                    <td>
+                      <div style="font-size:0.78rem;color:var(--text-muted);max-width:280px;line-height:1.35;" title="${escapeHtml(a && a.parecer ? a.parecer : '')}">
+                        ${a && a.parecer ? escapeHtml(a.parecer.length > 80 ? a.parecer.substring(0, 80) + '...' : a.parecer) : '<span style="color:var(--text-dim);">Nenhum parecer emitido</span>'}
+                      </div>
+                    </td>
+                    <td style="text-align:right;">
+                      <div style="display:flex;gap:0.35rem;justify-content:flex-end;">
+                        ${isDocente ? `
+                          <button class="btn-action" onclick="PI1.abrirModalAvaliarObjetivos(${p.id})" style="background:var(--accent-amber);color:#fff;font-size:0.72rem;padding:0.3rem 0.55rem;" title="Avaliar ou editar nota do Projeto #${p.id}">
+                            <i class="fa-solid fa-pen-to-square"></i> Avaliar
+                          </button>
+                        ` : ''}
+                        <button class="btn-detail" onclick="openModal(${p.id})" style="font-size:0.72rem;padding:0.3rem 0.55rem;" title="Abrir ficha do Projeto #${p.id}">
+                          <i class="fa-solid fa-eye"></i> Ficha
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                `;
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    `;
+  }
+
+  function filtrarTabelaNotas() {
+    var search = (document.getElementById('pi1-notas-search') ? document.getElementById('pi1-notas-search').value : '').toLowerCase().trim();
+    var rows = document.querySelectorAll('.pi1-nota-row');
+    rows.forEach(function (row) {
+      var nome = row.getAttribute('data-nome') || '';
+      var intg = row.getAttribute('data-integrantes') || '';
+      var id = row.getAttribute('data-id') || '';
+      var match = !search || nome.includes(search) || intg.includes(search) || id === search;
+      var curHidden = row.getAttribute('data-status-hidden') === 'true';
+      if (!match || curHidden) {
+        row.style.display = 'none';
+      } else {
+        row.style.display = '';
+      }
+    });
+  }
+
+  function filtrarNotasPorStatus(status) {
+    ['todos', 'aprovado', 'ajustar', 'pendente'].forEach(function (s) {
+      var btn = document.getElementById('pi1-filter-btn-' + s);
+      if (btn) {
+        if (s === status) btn.classList.add('active-filter');
+        else btn.classList.remove('active-filter');
+      }
+    });
+
+    var rows = document.querySelectorAll('.pi1-nota-row');
+    rows.forEach(function (row) {
+      var rowStatus = row.getAttribute('data-status');
+      if (status === 'todos' || rowStatus === status) {
+        row.removeAttribute('data-status-hidden');
+      } else {
+        row.setAttribute('data-status-hidden', 'true');
+      }
+    });
+    filtrarTabelaNotas();
+  }
+
   function abrirModalSolicitarAcesso(projId) {
     var modal = document.getElementById('projectModal');
     var modalContent = document.getElementById('modalContent');
@@ -723,10 +1066,20 @@
     var pendentes = membros.filter(function (m) { return m.status === 'pendente'; });
 
     modalContent.innerHTML = `
-      <div style="margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color);">
+      <div style="margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color);">
         <span class="proj-badge">GESTÃO DOCENTE</span>
         <h2 style="font-size:1.4rem;font-weight:700;margin-top:0.4rem;color:var(--text-main);">Painel de Acessos e Integrantes</h2>
         <p style="color:var(--text-muted);font-size:0.85rem;">Gerencie as autorizações de edição dos estudantes por projeto.</p>
+      </div>
+
+      <div style="background:var(--chip-bg);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:0.75rem 1rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
+        <div>
+          <strong style="color:var(--text-main);font-size:0.9rem;"><i class="fa-solid fa-clipboard-list" style="color:var(--accent-amber);"></i> Painel Central de Notas & Avaliações</strong>
+          <p style="font-size:0.78rem;color:var(--text-muted);margin:0.15rem 0 0 0;">Controle das notas dos 11 projetos e rubricas dos objetivos.</p>
+        </div>
+        <button class="btn-action" style="background:var(--accent-amber);color:#fff;font-size:0.78rem;padding:0.35rem 0.75rem;" onclick="closeModal(); switchTab('notas');">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar Notas
+        </button>
       </div>
 
       <div style="margin-bottom:1.5rem;">
@@ -1276,6 +1629,9 @@
     concluirDemanda: concluirDemanda,
     removerDemanda: removerDemanda,
     renderDemandasTab: renderDemandasTab,
+    renderNotasTab: renderNotasTab,
+    filtrarTabelaNotas: filtrarTabelaNotas,
+    filtrarNotasPorStatus: filtrarNotasPorStatus,
     abrirModalSolicitarAcesso: abrirModalSolicitarAcesso,
     abrirPainelDocente: abrirPainelDocente,
     decidirAcesso: decidirAcesso,

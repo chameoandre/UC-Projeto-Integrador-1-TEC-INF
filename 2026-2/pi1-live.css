@@ -462,3 +462,181 @@
   padding: 1rem 1.15rem;
   margin-bottom: 1.25rem;
 }
+
+/* ============================ ABA DE NOTAS E AVALIAÇÕES ============================ */
+.pi1-notas-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.pi1-notas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+}
+
+.pi1-notas-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.pi1-kpi-card {
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pi1-kpi-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text-main, #1e293b);
+  line-height: 1.2;
+}
+
+.pi1-kpi-lbl {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim, #64748b);
+  font-weight: 600;
+}
+
+.pi1-notas-table-wrapper {
+  background: var(--bg-card, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.pi1-notas-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  text-align: left;
+}
+
+.pi1-notas-table th {
+  background: var(--chip-bg, #f8fafc);
+  color: var(--text-dim, #64748b);
+  font-weight: 600;
+  padding: 0.85rem 1rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pi1-notas-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  color: var(--text-main, #1e293b);
+  vertical-align: middle;
+}
+
+.pi1-notas-table tr:hover td {
+  background: var(--chip-bg, #f8fafc);
+}
+
+.pi1-deg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.pi1-deg-badge.conforme {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--ifsc-green, #16a34a);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.pi1-deg-badge.ajustar {
+  background: rgba(245, 158, 11, 0.12);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.pi1-deg-badge.ausente {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--ifsc-red, #dc2626);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.pi1-nota-val {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 8px;
+  background: var(--chip-bg, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+}
+
+.pi1-nota-val.excelente {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--ifsc-green, #16a34a);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.pi1-nota-val.bom {
+  background: rgba(59, 130, 246, 0.15);
+  color: var(--accent-blue, #2563eb);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.pi1-nota-val.ajuste {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.pi1-aluno-destaque {
+  background: linear-gradient(135deg, rgba(37,99,235,0.06), rgba(16,185,129,0.06));
+  border: 1.5px solid var(--accent-blue, #2563eb);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+}
+
+.pi1-notas-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--chip-bg, #f8fafc);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 10px;
+}
+
+.pi1-search-input {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  background: var(--bg-card, #ffffff);
+  color: var(--text-main, #1e293b);
+  min-width: 240px;
+}
+

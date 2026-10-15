@@ -19,3 +19,9 @@
 
 5. **LaTeX Compilation:**
    - Use `tectonic` for compiling `.tex` syllabus documents (`plano_de_ensino.tex`).
+
+6. **Permanência e Intocabilidade do Painel Central de Notas & Avaliações:**
+   - O **Painel Central de Notas & Avaliações** (aba `tab-notas`, botão de navegação `Notas & Avaliações` na `tabs-nav`, botão `#pi1-btn-notas-top` no cabeçalho e atalho dentro do `Painel Docente`) é uma funcionalidade nuclear e **permanente**.
+   - É terminantemente proibido remover, omitir ou desvincular o painel de notas em futuras refatorações de `2026-2/index.html`, `2026-2/pi1-live.js` ou scripts de automação.
+   - As chamadas `renderNotasTab()`, `filtrarTabelaNotas()` e a exportação em `window.PI1` devem ser preservadas em todos os ciclos de renderização e sincronização.
+
