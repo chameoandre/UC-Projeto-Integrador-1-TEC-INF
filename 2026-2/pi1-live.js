@@ -767,9 +767,9 @@
                   <i class="fa-solid fa-star"></i> SUA EQUIPE — PROJETO #${avaliacaoMeuProjeto.projeto.id}
                 </span>
                 <h3 style="font-size:1.2rem;font-weight:700;color:var(--text-main);margin:0.35rem 0 0.15rem 0;">
-                  ${escapeHtml(avaliacaoMeuProjeto.projeto.nome)}
+                  ${escapeHtml(avaliacaoMeuProjeto.projeto.title || avaliacaoMeuProjeto.projeto.rawTitle || avaliacaoMeuProjeto.projeto.nome || ('Projeto #' + avaliacaoMeuProjeto.projeto.id))}
                 </h3>
-                <span style="font-size:0.8rem;color:var(--text-muted);"><i class="fa-solid fa-users"></i> ${escapeHtml(avaliacaoMeuProjeto.projeto.integrantes)}</span>
+                <span style="font-size:0.8rem;color:var(--text-muted);"><i class="fa-solid fa-users"></i> ${escapeHtml(avaliacaoMeuProjeto.projeto.team || avaliacaoMeuProjeto.projeto.integrantes || 'Integrantes a definir')}</span>
               </div>
               <div style="display:flex;gap:0.75rem;align-items:center;">
                 <div style="text-align:right;">
@@ -879,6 +879,8 @@
               ${projsComAval.map(function (item) {
                 var p = item.projeto;
                 var a = item.avaliacao;
+                var nomeProj = p.title || p.rawTitle || p.nome || ('Projeto #' + p.id);
+                var integrantesProj = p.team || p.integrantes || 'Integrantes a definir';
                 var crit = a && a.criterios ? a.criterios : {};
                 var statusClass = item.status === 'aprovado' ? 'tag-ok' : (item.status === 'ajustar' ? 'tag-ajuste' : 'tag-pendente');
                 var statusLabel = item.status === 'aprovado' ? '🟢 Conforme' : (item.status === 'ajustar' ? '🟡 Ajustar' : '⚪ Pendente');
@@ -886,14 +888,14 @@
                 var notaClass = item.nota !== null ? (item.nota >= 7.0 ? 'excelente' : 'ajuste') : '';
 
                 return `
-                  <tr class="pi1-nota-row" data-id="${p.id}" data-status="${item.status}" data-nome="${escapeHtml(p.nome).toLowerCase()}" data-integrantes="${escapeHtml(p.integrantes).toLowerCase()}">
+                  <tr class="pi1-nota-row" data-id="${p.id}" data-status="${item.status}" data-nome="${escapeHtml(nomeProj).toLowerCase()}" data-integrantes="${escapeHtml(integrantesProj).toLowerCase()}">
                     <td>
                       <span class="proj-badge" style="font-weight:700;">#${p.id}</span>
                     </td>
                     <td>
-                      <strong style="color:var(--text-main);font-size:0.9rem;">${escapeHtml(p.nome)}</strong>
-                      <div style="font-size:0.75rem;color:var(--text-dim);margin-top:0.15rem;">
-                        <i class="fa-solid fa-users"></i> ${escapeHtml(p.integrantes)}
+                      <strong style="color:var(--text-main);font-size:0.92rem;display:block;margin-bottom:0.2rem;">${escapeHtml(nomeProj)}</strong>
+                      <div style="font-size:0.75rem;color:var(--text-dim);line-height:1.3;">
+                        <i class="fa-solid fa-users" style="color:var(--accent-blue);"></i> ${escapeHtml(integrantesProj)}
                       </div>
                     </td>
                     <td>
