@@ -16,6 +16,128 @@
     carregando: false
   };
 
+  // ============================ PARSER E COMPOSITOR DE OBJETIVOS ============================
+
+  /**
+   * Decompõe o texto da coluna 'objective' da planilha em Objetivo Geral e 4 Degraus Específicos.
+   * Suporta formatos estruturados, listas numeradas e formato livre legado.
+   */
+  function decomporObjetivos(texto) {
+    var padraoVazio = {
+      geral: '',
+      especificos: ['', '', '', ''],
+      raw: texto || '',
+      isPadrao: true
+    };
+
+    if (!texto || typeof texto !== 'string') return padraoVazio;
+    var raw = texto.trim();
+    if (!raw || raw === 'Objetivo em consolidação junto aos docentes orientadores.') {
+      return padraoVazio;
+    }
+
+    var geral = '';
+    var esp = ['', '', '', ''];
+
+    // 1. Procura seções explícitas "Geral:" ou "[Objetivo Geral]" e "Específicos:" ou "[Objetivos Específicos]"
+    var regexSecoes = /(?:^|\n)\s*(?:\[?\s*Objetivo\s+Geral\s*\]?|Geral)\s*[:\-\—]\s*([\s\S]*?)(?=(?:\n\s*(?:\[?\s*Objetivos?\s+Espec[ií]ficos?\s*\]?|Espec[ií]ficos?)\s*[:\-\—])|$)/i;
+    var matchGeral = raw.match(regexSecoes);
+
+    var regexEspBloco = /(?:^|\n)\s*(?:\[?\s*Objetivos?\s+Espec[ií]ficos?\s*\]?|Espec[ií]ficos?)\s*[:\-\—]\s*([\s\S]*)$/i;
+    var matchEsp = raw.match(regexEspBloco);
+
+    if (matchGeral && matchGeral[1] && matchEsp && matchEsp[1]) {
+      geral = matchGeral[1].trim();
+      extrairItensEspecificos(matchEsp[1].trim(), esp);
+    } else if (matchEsp && matchEsp[1]) {
+      var idx = raw.search(/(?:^|\n)\s*(?:\[?\s*Objetivos?\s+Espec[ií]ficos?\s*\]?|Espec[ií]ficos?)\s*[:\-\—]/i);
+      geral = raw.substring(0, idx).replace(/^(?:\[?\s*Objetivo\s+Geral\s*\]?|Geral)\s*[:\-\—]\s*/i, '').trim();
+      extrairItensEspecificos(matchEsp[1].trim(), esp);
+    } else {
+      // 2. Procura lista numerada 1., 2., 3., 4. no texto
+      var idxNum = raw.search(/(?:^|\n)\s*(?:1[\.\)\:\-]|(?:Degrau|Objetivo\s*Espec[ií]fico)\s*1\b)/i);
+      if (idxNum !== -1) {
+        geral = raw.substring(0, idxNum).replace(/^(?:\[?\s*Objetivo\s+Geral\s*\]?|Geral)\s*[:\-\—]\s*/i, '').trim();
+        var resto = raw.substring(idxNum).trim();
+        extrairItensEspecificos(resto, esp);
+      } else {
+        // 3. Fallback: todo o texto é o objetivo geral
+        geral = raw.replace(/^(?:\[?\s*Objetivo\s+Geral\s*\]?|Geral)\s*[:\-\—]\s*/i, '').trim();
+      }
+    }
+
+    function extrairItensEspecificos(blocoTexto, outArr) {
+      if (!blocoTexto) return;
+
+      var regexItem = /(?:^|\n)\s*(?:[•\-*]\s*)?(?:(?:Degrau|Objetivo\s*Espec[ií]fico)\s*)?([1-4])\s*[\.\)\:\-]\s*(?:(?:Requisitos|Modelagem|C[oó]digo|Valida[cç][aã]o|Diagn[oó]stico|Implementa[cç][aã]o|Wireframes?|Testes?)[^:\n]*[:\-\—]\s*)?([\s\S]*?)(?=(?:\n\s*(?:[•\-*]\s*)?(?:(?:Degrau|Objetivo\s*Espec[ií]fico)\s*)?[1-4]\s*[\.\)\:\-])|$)/gi;
+
+      var encontrou = false;
+      var m;
+      while ((m = regexItem.exec(blocoTexto)) !== null) {
+        encontrou = true;
+        var num = parseInt(m[1], 10);
+        var itemConteudo = (m[2] || '').trim();
+        itemConteudo = itemConteudo.replace(/^(?:(?:Degrau|Objetivo\s*Espec[ií]fico)\s*[1-4][^:\n]*[:\-\—]\s*|\([^\)]+\)\s*[:\-\—]?\s*)/i, '').trim();
+        if (num >= 1 && num <= 4) {
+          outArr[num - 1] = itemConteudo;
+        }
+      }
+
+      if (!encontrou) {
+        var partes = blocoTexto.split(/\n\s*\n|\n(?=[•\-\*]\s*)/)
+          .map(function(p) { return p.replace(/^[•\-\*]\s*/, '').trim(); })
+          .filter(Boolean);
+
+        for (var i = 0; i < Math.min(partes.length, 4); i++) {
+          outArr[i] = partes[i].replace(/^[1-4][\.\)\:\-]\s*/, '').trim();
+        }
+      }
+    }
+
+    return {
+      geral: geral,
+      especificos: esp,
+      raw: raw,
+      isPadrao: false
+    };
+  }
+
+  /**
+   * Compõe o texto unificado para armazenamento na coluna 'objective' da planilha Google Sheets.
+   */
+  function comporObjetivos(geral, especificos) {
+    var nomesDegraus = [
+      'Degrau 1 (Requisitos & Diagnóstico)',
+      'Degrau 2 (Modelagem & Wireframe)',
+      'Degrau 3 (Implementação & Código)',
+      'Degrau 4 (Validação & Testes)'
+    ];
+
+    var partes = [];
+    var geralLimpo = (geral || '').trim();
+    if (geralLimpo) {
+      partes.push('Objetivo Geral:\n' + geralLimpo);
+    }
+
+    var espLimpos = (especificos || []).map(function(e) { return (e || '').trim(); });
+    var temEsp = espLimpos.some(function(e) { return e.length > 0; });
+
+    if (temEsp) {
+      var linhasEsp = ['Objetivos Específicos:'];
+      for (var i = 0; i < 4; i++) {
+        if (espLimpos[i]) {
+          linhasEsp.push((i + 1) + '. ' + nomesDegraus[i] + ': ' + espLimpos[i]);
+        }
+      }
+      partes.push(linhasEsp.join('\n'));
+    }
+
+    return partes.join('\n\n').trim();
+  }
+
+  window.decomporObjetivos = decomporObjetivos;
+  window.comporObjetivos = comporObjetivos;
+
   // ============================ AUTENTICAÇÃO OAUTH ============================
 
   function inicializarAuth() {
@@ -1250,6 +1372,7 @@
     if (!modal || !modalContent) return;
 
     var isDocente = state.usuario.papel === 'docente';
+    var objInfo = decomporObjetivos(proj.objective);
 
     modalContent.innerHTML = `
       <div style="margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border-color);">
@@ -1274,10 +1397,69 @@
           </div>
         `}
 
+        <!-- 1. OBJETIVO GERAL INDEPENDENTE -->
         <div class="pi1-form-group">
-          <label>Objetivo Geral e Específicos *</label>
-          <textarea id="pi1-ficha-objective" rows="3" required placeholder="Ex: Desenvolver uma plataforma web para... Objetivos específicos: 1) Mapear requisitos; 2) Modelar no draw.io; 3) Implementar...">${escapeHtml(proj.objective && proj.objective !== 'Objetivo em consolidação junto aos docentes orientadores.' ? proj.objective : '')}</textarea>
-          <span class="pi1-form-hint">Inicie com verbo no infinitivo seguindo o Roteiro 1.</span>
+          <label style="font-size:0.9rem;font-weight:700;color:var(--text-main);display:flex;align-items:center;gap:0.4rem;">
+            <i class="fa-solid fa-bullseye" style="color:var(--accent-cyan);"></i> Objetivo Geral (A Grande Meta do Software) *
+          </label>
+          <textarea id="pi1-ficha-obj-geral" rows="2" required placeholder="Ex: Desenvolver uma plataforma web para apoio à aprendizagem de LIBRAS voltada a estudantes do ensino fundamental, visando facilitar a inclusão e a comunicação acessível...">${escapeHtml(objInfo.geral || '')}</textarea>
+          <span class="pi1-form-hint">Fórmula Roteiro 1: <code>[Verbo no Infinitivo] + [Produto Tangível] + [Público/Contexto] + [Impacto/Benefício Real]</code>.</span>
+        </div>
+
+        <!-- 2. OBJETIVOS ESPECÍFICOS (4 CAIXAS DE TEXTO INDEPENDENTES) -->
+        <div class="pi1-form-degraus-box">
+          <div class="pi1-form-degraus-head">
+            <div>
+              <h4 style="margin:0;font-size:0.92rem;color:var(--ifsc-green-light);display:flex;align-items:center;gap:0.4rem;">
+                <i class="fa-solid fa-stairs"></i> Objetivos Específicos (Os 4 Degraus de Execução Técnica)
+              </h4>
+              <span class="pi1-form-hint" style="margin-top:0.2rem;display:block;">
+                Preencha cada degrau da execução prática do software separadamente. Evite tarefas de estudo passivo (ex: "estudar JS", "ler artigos"); cada caixa deve ser uma entrega técnica concreta!
+              </span>
+            </div>
+          </div>
+
+          <div class="pi1-degraus-inputs-grid">
+            <!-- Degrau 1 -->
+            <div class="pi1-degrau-input-item">
+              <label class="pi1-degrau-input-label d1">
+                <span class="d-num">1</span>
+                <span>Degrau 1 • Requisitos & Diagnóstico</span>
+              </label>
+              <textarea id="pi1-ficha-obj-esp1" rows="2" placeholder="Ex: Mapear as principais necessidades dos usuários interessados em aprender LIBRAS, considerando acessibilidade e facilidade de aprendizagem...">${escapeHtml(objInfo.especificos[0] || '')}</textarea>
+              <span class="pi1-form-hint">Verbos de ação: Mapear, Identificar, Levantar, Investigar necessidades reais.</span>
+            </div>
+
+            <!-- Degrau 2 -->
+            <div class="pi1-degrau-input-item">
+              <label class="pi1-degrau-input-label d2">
+                <span class="d-num">2</span>
+                <span>Degrau 2 • Modelagem & Design (draw.io / Wireframes)</span>
+              </label>
+              <textarea id="pi1-ficha-obj-esp2" rows="2" placeholder="Ex: Modelar a arquitetura da informação e diagramas de fluxo no draw.io e prototipar wireframes de navegação acessível...">${escapeHtml(objInfo.especificos[1] || '')}</textarea>
+              <span class="pi1-form-hint">Verbos de ação: Modelar arquitetura, Prototipar wireframes, Projetar fluxos.</span>
+            </div>
+
+            <!-- Degrau 3 -->
+            <div class="pi1-degrau-input-item">
+              <label class="pi1-degrau-input-label d3">
+                <span class="d-num">3</span>
+                <span>Degrau 3 • Implementação & Código (Git / GitHub / Web)</span>
+              </label>
+              <textarea id="pi1-ficha-obj-esp3" rows="2" placeholder="Ex: Desenvolver a aplicação web interativa em HTML5, CSS3 e JavaScript versionada no GitHub com deploy contínuo no GitHub Pages...">${escapeHtml(objInfo.especificos[2] || '')}</textarea>
+              <span class="pi1-form-hint">Verbos de ação: Desenvolver código, Codificar frontend/backend, Versionar no Git.</span>
+            </div>
+
+            <!-- Degrau 4 -->
+            <div class="pi1-degrau-input-item">
+              <label class="pi1-degrau-input-label d4">
+                <span class="d-num">4</span>
+                <span>Degrau 4 • Validação & Avaliação Experimental</span>
+              </label>
+              <textarea id="pi1-ficha-obj-esp4" rows="2" placeholder="Ex: Validar a usabilidade e a interatividade da plataforma através de testes com a turma, coletando métricas de retenção e facilidade de uso...">${escapeHtml(objInfo.especificos[3] || '')}</textarea>
+              <span class="pi1-form-hint">Verbos de ação: Validar com usuários, Testar usabilidade, Mensurar métricas empíricas.</span>
+            </div>
+          </div>
         </div>
 
         <div class="pi1-form-group">
@@ -1330,8 +1512,15 @@
       btn.disabled = true;
       btn.innerText = 'Salvando na planilha...';
 
+      var objGeralVal = document.getElementById('pi1-ficha-obj-geral').value.trim();
+      var esp1Val = document.getElementById('pi1-ficha-obj-esp1').value.trim();
+      var esp2Val = document.getElementById('pi1-ficha-obj-esp2').value.trim();
+      var esp3Val = document.getElementById('pi1-ficha-obj-esp3').value.trim();
+      var esp4Val = document.getElementById('pi1-ficha-obj-esp4').value.trim();
+      var objFinal = comporObjetivos(objGeralVal, [esp1Val, esp2Val, esp3Val, esp4Val]);
+
       var campos = {
-        objective: document.getElementById('pi1-ficha-objective').value.trim(),
+        objective: objFinal,
         relatorio: ovUrl,
         relatedWorks: document.getElementById('pi1-ficha-relatedWorks').value.trim(),
         github: document.getElementById('pi1-ficha-github').value.trim(),
@@ -1415,12 +1604,47 @@
         <div style="color:var(--accent-cyan);font-size:0.85rem;"><i class="fa-solid fa-users"></i> ${escapeHtml(proj.team)}</div>
       </div>
 
-      <!-- Texto cadastrado pelos estudantes -->
+      <!-- Texto cadastrado pelos estudantes com destaque separado -->
       <div class="pi1-obj-preview-box">
         <div class="pi1-obj-preview-title">
           <i class="fa-solid fa-file-lines"></i> Redação Atual dos Objetivos (Cadastrada pela Equipe)
         </div>
-        <div class="pi1-obj-preview-text">${escapeHtml(textoObjetivo)}</div>
+        ${(function () {
+          var decomposto = decomporObjetivos(textoObjetivo);
+          var esp = decomposto.especificos;
+          var temEsp = esp.some(Boolean);
+          if (!temEsp && (!decomposto.geral || decomposto.geral === 'Objetivo em consolidação junto aos docentes orientadores.')) {
+            return `<div class="pi1-obj-preview-text" style="color:var(--text-dim);font-style:italic;">Nenhum objetivo registrado até o momento pela equipe.</div>`;
+          }
+          return `
+            <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.35rem;">
+              <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:0.6rem 0.75rem;">
+                <div style="font-size:0.72rem;font-weight:700;color:var(--accent-cyan);text-transform:uppercase;margin-bottom:0.25rem;">
+                  <i class="fa-solid fa-bullseye"></i> Objetivo Geral
+                </div>
+                <div style="font-size:0.83rem;color:var(--text-main);line-height:1.45;">${escapeHtml(decomposto.geral || 'Não informado')}</div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:0.5rem;">
+                <div style="background:rgba(56,189,248,0.04);border:1px solid rgba(56,189,248,0.2);border-radius:6px;padding:0.5rem 0.65rem;">
+                  <strong style="font-size:0.7rem;color:#38bdf8;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 1 • Requisitos</strong>
+                  <div style="font-size:0.78rem;color:${esp[0] ? 'var(--text-main)' : 'var(--text-dim)'};font-style:${esp[0] ? 'normal' : 'italic'};line-height:1.35;">${escapeHtml(esp[0] || 'Pendente de preenchimento')}</div>
+                </div>
+                <div style="background:rgba(167,139,250,0.04);border:1px solid rgba(167,139,250,0.2);border-radius:6px;padding:0.5rem 0.65rem;">
+                  <strong style="font-size:0.7rem;color:#a78bfa;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 2 • Modelagem</strong>
+                  <div style="font-size:0.78rem;color:${esp[1] ? 'var(--text-main)' : 'var(--text-dim)'};font-style:${esp[1] ? 'normal' : 'italic'};line-height:1.35;">${escapeHtml(esp[1] || 'Pendente de preenchimento')}</div>
+                </div>
+                <div style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.2);border-radius:6px;padding:0.5rem 0.65rem;">
+                  <strong style="font-size:0.7rem;color:#4ade80;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 3 • Código/Git</strong>
+                  <div style="font-size:0.78rem;color:${esp[2] ? 'var(--text-main)' : 'var(--text-dim)'};font-style:${esp[2] ? 'normal' : 'italic'};line-height:1.35;">${escapeHtml(esp[2] || 'Pendente de preenchimento')}</div>
+                </div>
+                <div style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.2);border-radius:6px;padding:0.5rem 0.65rem;">
+                  <strong style="font-size:0.7rem;color:#fbbf24;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 4 • Validação</strong>
+                  <div style="font-size:0.78rem;color:${esp[3] ? 'var(--text-main)' : 'var(--text-dim)'};font-style:${esp[3] ? 'normal' : 'italic'};line-height:1.35;">${escapeHtml(esp[3] || 'Pendente de preenchimento')}</div>
+                </div>
+              </div>
+            </div>
+          `;
+        })()}
       </div>
 
       <form id="pi1-form-avaliar-objetivos" class="pi1-modal-form">
@@ -1639,6 +1863,8 @@
     decidirAcesso: decidirAcesso,
     abrirModalDevolutiva: abrirModalDevolutiva,
     abrirModalAvaliarObjetivos: abrirModalAvaliarObjetivos,
+    decomporObjetivos: decomporObjetivos,
+    comporObjetivos: comporObjetivos,
     sincronizar: sincronizarRegistros,
     podeEditarProjeto: podeEditarProjeto
   };

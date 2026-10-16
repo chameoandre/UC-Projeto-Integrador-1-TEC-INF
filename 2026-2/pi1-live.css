@@ -640,3 +640,90 @@
   min-width: 240px;
 }
 
+/* ==========================================================================
+   ESTILOS DOS 4 DEGRAUS ESPECÍFICOS NO FORMULÁRIO DE FICHA & MODAIS
+   ========================================================================== */
+
+.pi1-form-degraus-box {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.15rem;
+}
+
+.pi1-form-degraus-head {
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pi1-degraus-inputs-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pi1-degrau-input-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color, #334155);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  transition: border-color 0.2s ease;
+}
+
+.pi1-degrau-input-item:focus-within {
+  border-color: var(--accent-cyan, #06b6d4);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pi1-degrau-input-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.pi1-degrau-input-label.d1 { color: #38bdf8; }
+.pi1-degrau-input-label.d2 { color: #a78bfa; }
+.pi1-degrau-input-label.d3 { color: #4ade80; }
+.pi1-degrau-input-label.d4 { color: #fbbf24; }
+
+.pi1-degrau-input-label .d-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.72rem;
+  font-family: 'Fira Code', monospace;
+  font-weight: 800;
+}
+
+.pi1-degrau-input-item textarea {
+  width: 100%;
+  background: var(--bg-card, #0f172a);
+  border: 1px solid var(--border-color, #334155);
+  color: var(--text-main, #f8fafc);
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem;
+  font-size: 0.82rem;
+  font-family: inherit;
+  resize: vertical;
+  line-height: 1.4;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pi1-degrau-input-item textarea:focus {
+  outline: none;
+  border-color: var(--accent-cyan, #06b6d4);
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+}
+
+
