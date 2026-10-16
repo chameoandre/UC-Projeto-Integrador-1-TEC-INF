@@ -641,89 +641,130 @@
 }
 
 /* ==========================================================================
-   ESTILOS DOS 4 DEGRAUS ESPECÍFICOS NO FORMULÁRIO DE FICHA & MODAIS
+   ESTILOS DOS 4 DEGRAUS ESPECÍFICOS NO FORMULÁRIO DE FICHA & MODAIS (FUNDO BRANCO & ALTO CONTRASTE)
    ========================================================================== */
 
 .pi1-form-degraus-box {
-  background: rgba(15, 23, 42, 0.45);
-  border: 1px solid rgba(34, 197, 94, 0.25);
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
-  padding: 1rem;
+  padding: 1.1rem;
   margin-bottom: 1.15rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .pi1-form-degraus-box {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .pi1-form-degraus-head {
   margin-bottom: 0.85rem;
-  padding-bottom: 0.55rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+[data-theme="dark"] .pi1-form-degraus-head {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .pi1-degraus-inputs-grid {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .pi1-degrau-input-item {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--border-color, #334155);
+  gap: 0.4rem;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
-  padding: 0.7rem 0.85rem;
-  transition: border-color 0.2s ease;
+  padding: 0.75rem 0.9rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pi1-degrau-input-item:nth-child(1) { border-left: 4px solid #0284c7; }
+.pi1-degrau-input-item:nth-child(2) { border-left: 4px solid #7c3aed; }
+.pi1-degrau-input-item:nth-child(3) { border-left: 4px solid #16a34a; }
+.pi1-degrau-input-item:nth-child(4) { border-left: 4px solid #d97706; }
+
+[data-theme="dark"] .pi1-degrau-input-item {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .pi1-degrau-input-item:focus-within {
-  border-color: var(--accent-cyan, #06b6d4);
-  background: rgba(255, 255, 255, 0.03);
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
 
 .pi1-degrau-input-label {
-  font-size: 0.82rem;
-  font-weight: 700;
+  font-size: 0.83rem;
+  font-weight: 800;
   display: flex;
   align-items: center;
   gap: 0.45rem;
 }
 
-.pi1-degrau-input-label.d1 { color: #38bdf8; }
-.pi1-degrau-input-label.d2 { color: #a78bfa; }
-.pi1-degrau-input-label.d3 { color: #4ade80; }
-.pi1-degrau-input-label.d4 { color: #fbbf24; }
+.pi1-degrau-input-label.d1 { color: #0369a1; }
+.pi1-degrau-input-label.d2 { color: #6d28d9; }
+.pi1-degrau-input-label.d3 { color: #15803d; }
+.pi1-degrau-input-label.d4 { color: #b45309; }
+
+[data-theme="dark"] .pi1-degrau-input-label.d1 { color: #38bdf8; }
+[data-theme="dark"] .pi1-degrau-input-label.d2 { color: #a78bfa; }
+[data-theme="dark"] .pi1-degrau-input-label.d3 { color: #4ade80; }
+[data-theme="dark"] .pi1-degrau-input-label.d4 { color: #fbbf24; }
 
 .pi1-degrau-input-label .d-num {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.3rem;
-  height: 1.3rem;
+  width: 1.35rem;
+  height: 1.35rem;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
+  background: #f1f5f9;
+  color: #0f172a;
   font-size: 0.72rem;
   font-family: 'Fira Code', monospace;
   font-weight: 800;
+  border: 1px solid #cbd5e1;
+}
+
+[data-theme="dark"] .pi1-degrau-input-label .d-num {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  border-color: transparent;
 }
 
 .pi1-degrau-input-item textarea {
   width: 100%;
-  background: var(--bg-card, #0f172a);
-  border: 1px solid var(--border-color, #334155);
-  color: var(--text-main, #f8fafc);
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
   border-radius: 6px;
-  padding: 0.5rem 0.65rem;
-  font-size: 0.82rem;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.84rem;
   font-family: inherit;
   resize: vertical;
-  line-height: 1.4;
+  line-height: 1.45;
+  font-weight: 450;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+[data-theme="dark"] .pi1-degrau-input-item textarea {
+  background: var(--bg-card, #0f172a);
+  border-color: var(--border-color, #334155);
+  color: var(--text-main, #f8fafc);
 }
 
 .pi1-degrau-input-item textarea:focus {
   outline: none;
-  border-color: var(--accent-cyan, #06b6d4);
-  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+  border-color: #0284c7;
+  box-shadow: 0 0 0 2px rgba(2, 132, 199, 0.2);
 }
 
 

@@ -1618,28 +1618,28 @@
           }
           return `
             <div style="display:flex;flex-direction:column;gap:0.6rem;margin-top:0.35rem;">
-              <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:0.6rem 0.75rem;">
-                <div style="font-size:0.72rem;font-weight:700;color:var(--accent-cyan);text-transform:uppercase;margin-bottom:0.25rem;">
+              <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid #0891b2;border-radius:6px;padding:0.65rem 0.85rem;box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+                <div style="font-size:0.75rem;font-weight:800;color:#0369a1;text-transform:uppercase;margin-bottom:0.25rem;">
                   <i class="fa-solid fa-bullseye"></i> Objetivo Geral
                 </div>
-                <div style="font-size:0.83rem;color:var(--text-main);line-height:1.45;">${escapeHtml(decomposto.geral || 'Não informado')}</div>
+                <div style="font-size:0.85rem;color:#0f172a;line-height:1.5;font-weight:450;">${escapeHtml(decomposto.geral || 'Não informado')}</div>
               </div>
               <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:0.5rem;">
-                <div style="background:rgba(56,189,248,0.04);border:1px solid rgba(56,189,248,0.2);border-radius:6px;padding:0.5rem 0.65rem;">
-                  <strong style="font-size:0.7rem;color:#38bdf8;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 1 • Requisitos</strong>
-                  <div style="font-size:0.78rem;color:${esp[0] ? 'var(--text-main)' : 'var(--text-dim)'};font-style:${esp[0] ? 'normal' : 'italic'};line-height:1.35;">${escapeHtml(esp[0] || 'Pendente de preenchimento')}</div>
+                <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid #0284c7;border-radius:6px;padding:0.55rem 0.7rem;box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+                  <strong style="font-size:0.71rem;font-weight:800;color:#0369a1;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 1 • Requisitos</strong>
+                  <div style="font-size:0.8rem;color:${esp[0] ? '#0f172a' : '#64748b'};font-style:${esp[0] ? 'normal' : 'italic'};line-height:1.4;font-weight:${esp[0] ? '450' : '400'};">${escapeHtml(esp[0] || 'Pendente de preenchimento')}</div>
                 </div>
-                <div style="background:rgba(167,139,250,0.04);border:1px solid rgba(167,139,250,0.2);border-radius:6px;padding:0.5rem 0.65rem;">
-                  <strong style="font-size:0.7rem;color:#a78bfa;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 2 • Modelagem</strong>
-                  <div style="font-size:0.78rem;color:${esp[1] ? 'var(--text-main)' : 'var(--text-dim)'};font-style:${esp[1] ? 'normal' : 'italic'};line-height:1.35;">${escapeHtml(esp[1] || 'Pendente de preenchimento')}</div>
+                <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid #7c3aed;border-radius:6px;padding:0.55rem 0.7rem;box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+                  <strong style="font-size:0.71rem;font-weight:800;color:#6d28d9;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 2 • Modelagem</strong>
+                  <div style="font-size:0.8rem;color:${esp[1] ? '#0f172a' : '#64748b'};font-style:${esp[1] ? 'normal' : 'italic'};line-height:1.4;font-weight:${esp[1] ? '450' : '400'};">${escapeHtml(esp[1] || 'Pendente de preenchimento')}</div>
                 </div>
-                <div style="background:rgba(74,222,128,0.04);border:1px solid rgba(74,222,128,0.2);border-radius:6px;padding:0.5rem 0.65rem;">
-                  <strong style="font-size:0.7rem;color:#4ade80;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 3 • Código/Git</strong>
-                  <div style="font-size:0.78rem;color:${esp[2] ? 'var(--text-main)' : 'var(--text-dim)'};font-style:${esp[2] ? 'normal' : 'italic'};line-height:1.35;">${escapeHtml(esp[2] || 'Pendente de preenchimento')}</div>
+                <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid #16a34a;border-radius:6px;padding:0.55rem 0.7rem;box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+                  <strong style="font-size:0.71rem;font-weight:800;color:#15803d;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 3 • Código/Git</strong>
+                  <div style="font-size:0.8rem;color:${esp[2] ? '#0f172a' : '#64748b'};font-style:${esp[2] ? 'normal' : 'italic'};line-height:1.4;font-weight:${esp[2] ? '450' : '400'};">${escapeHtml(esp[2] || 'Pendente de preenchimento')}</div>
                 </div>
-                <div style="background:rgba(251,191,36,0.04);border:1px solid rgba(251,191,36,0.2);border-radius:6px;padding:0.5rem 0.65rem;">
-                  <strong style="font-size:0.7rem;color:#fbbf24;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 4 • Validação</strong>
-                  <div style="font-size:0.78rem;color:${esp[3] ? 'var(--text-main)' : 'var(--text-dim)'};font-style:${esp[3] ? 'normal' : 'italic'};line-height:1.35;">${escapeHtml(esp[3] || 'Pendente de preenchimento')}</div>
+                <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid #d97706;border-radius:6px;padding:0.55rem 0.7rem;box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+                  <strong style="font-size:0.71rem;font-weight:800;color:#b45309;text-transform:uppercase;display:block;margin-bottom:0.2rem;">Degrau 4 • Validação</strong>
+                  <div style="font-size:0.8rem;color:${esp[3] ? '#0f172a' : '#64748b'};font-style:${esp[3] ? 'normal' : 'italic'};line-height:1.4;font-weight:${esp[3] ? '450' : '400'};">${escapeHtml(esp[3] || 'Pendente de preenchimento')}</div>
                 </div>
               </div>
             </div>
