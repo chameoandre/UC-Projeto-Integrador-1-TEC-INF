@@ -311,6 +311,15 @@
 
   function aplicarProjetos(novos) {
     if (!novos || !novos.length) return;
+    // Guardrail de integridade: rejeitar dados do PI-II se vierem por cache antigo do navegador ou URL indevida
+    var contemPI2 = novos.some(function (p) {
+      var t = (p.title || '') + ' ' + (p.rawTitle || '') + ' ' + (p.team || '');
+      return t.indexOf('SMC') >= 0 || t.indexOf('JifTV') >= 0 || t.indexOf('RasPorta') >= 0 || t.indexOf('Joel Jorge') >= 0;
+    });
+    if (contemPI2) {
+      console.warn('[PI1] Atenção: Dados recebidos contêm projetos do PI-II (cache antigo ou endpoint trocado). Rejeitando substituição de projetos do PI-I.');
+      return;
+    }
     window.projectsData = novos;
     if (typeof projectsData !== 'undefined' && Array.isArray(projectsData)) {
       projectsData.length = 0;
@@ -324,10 +333,12 @@
 
     var atualizou = false;
 
-    // 1. Tenta carregar via Apps Script API (dados mais recentes + registros + demandas)
+    // 1. Tenta carregar via Apps Script API (dados mais recentes + registros + demandas) com cache-busting anti-stale
     if (cfg.apiUrl) {
       try {
-        var resp = await fetch(cfg.apiUrl);
+        var sep = cfg.apiUrl.indexOf('?') >= 0 ? '&' : '?';
+        var apiUrlBuster = cfg.apiUrl + sep + '_t=' + Date.now();
+        var resp = await fetch(apiUrlBuster, { cache: 'no-store' });
         var data = await resp.json();
         if (data.ok) {
           if (data.projetos && data.projetos.length > 0) {
@@ -346,7 +357,7 @@
     // 2. Fallback ou sincronização direta do CSV da planilha pública
     if (!atualizou) {
       try {
-        var respCsv = await fetch(SHEET_CSV_URL + '&_t=' + Date.now());
+        var respCsv = await fetch(SHEET_CSV_URL + '&_t=' + Date.now(), { cache: 'no-store' });
         var csvTxt = await respCsv.text();
         var projsCsv = parsearCsvProjetos(csvTxt);
         if (projsCsv && projsCsv.length > 0) {

@@ -2453,7 +2453,7 @@
       if (icon) icon.classList.add("fa-spin");
 
       try {
-        const resp = await fetch(SHEET_CSV_URL + "&_t=" + Date.now());
+        const resp = await fetch(SHEET_CSV_URL + "&_t=" + Date.now(), { cache: "no-store" });
         if (!resp.ok) throw new Error("Erro HTTP " + resp.status);
         const text = await resp.text();
         parseCsvAndUpdate(text);
@@ -2486,7 +2486,9 @@
         const id = parseInt(row[0]);
         const p = projectsData.find(item => item.id === id);
         if (p) {
-          if (row[1]) { p.title = row[1].trim(); p.rawTitle = row[1].trim(); }
+          const t = (row[1] || "").trim();
+          if (t.includes("SMC") || t.includes("JifTV") || t.includes("RasPorta") || t.includes("Joel Jorge")) return;
+          if (row[1]) { p.title = t; p.rawTitle = t; }
           if (row[2]) p.team = row[2].trim();
           if (row[3]) p.objective = row[3].trim();
           if (row[4]) p.github = row[4].trim();
@@ -2553,7 +2555,7 @@
 
   <!-- Google Identity Services, Configuração e Camada Dinâmica -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="pi1-config.js"></script>
-  <script src="pi1-live.js"></script>
+  <script src="pi1-config.js?v=2.2"></script>
+  <script src="pi1-live.js?v=2.2"></script>
 </body>
 </html>
