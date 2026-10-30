@@ -325,6 +325,8 @@
       projectsData.length = 0;
       novos.forEach(function (p) { projectsData.push(p); });
     }
+    var badge = document.getElementById('tab-badge-projetos');
+    if (badge) badge.textContent = novos.length;
   }
 
   async function sincronizarRegistros(manual) {

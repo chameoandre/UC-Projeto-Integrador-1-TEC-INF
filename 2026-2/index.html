@@ -355,30 +355,35 @@
       margin: 0;
     }
 
-    /* Tabs Bar */
+    
+    /* =========================================================================
+       TABS NAV COMPACTA & RESPONSIVA (SEM ROLAGEM LATERAL EXCESSIVA)
+       ========================================================================= */
     .tabs-nav {
       display: flex;
-      gap: 0.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
-      padding: 0.4rem;
+      padding: 0.5rem 0.75rem;
       border-radius: var(--radius-md);
-      margin-bottom: 2rem;
-      overflow-x: auto;
+      margin-bottom: 1.75rem;
       box-shadow: var(--shadow-glass);
+      transition: var(--transition);
     }
 
     .tab-btn {
-      background: transparent;
-      border: none;
+      background: var(--chip-bg);
+      border: 1px solid var(--border-color);
       color: var(--text-muted);
-      padding: 0.65rem 1.25rem;
+      padding: 0.45rem 0.9rem;
       border-radius: var(--radius-sm);
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       font-weight: 600;
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       cursor: pointer;
       transition: var(--transition);
       white-space: nowrap;
@@ -386,14 +391,471 @@
 
     .tab-btn:hover {
       color: var(--text-main);
-      background: var(--chip-bg);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--border-glow);
+    }
+
+    [data-theme="light"] .tab-btn:hover {
+      background: rgba(0, 0, 0, 0.06);
     }
 
     .tab-btn.active {
       background: var(--ifsc-green);
       color: white;
+      border-color: var(--ifsc-green);
       box-shadow: 0 4px 12px var(--ifsc-green-glow);
     }
+
+    .tab-btn .badge-count {
+      background: rgba(255, 255, 255, 0.22);
+      color: white;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.12rem 0.42rem;
+      border-radius: 9999px;
+      margin-left: 0.2rem;
+    }
+
+    .tab-btn:not(.active) .badge-count {
+      background: rgba(34, 197, 94, 0.18);
+      color: var(--ifsc-green-light);
+    }
+
+    @media (max-width: 768px) {
+      .tabs-nav {
+        padding: 0.4rem;
+        gap: 0.35rem;
+      }
+      .tab-btn {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.78rem;
+        flex: 1 1 auto;
+        justify-content: center;
+      }
+    }
+
+    /* =========================================================================
+       SEÇÃO: OS 4 PILARES & CARDS ESTILO PI-2 (COM FIGURAS E DESTAQUE)
+       ========================================================================= */
+    .pilares-dashboard-section {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-glass);
+      transition: var(--transition);
+    }
+
+    .pilares-dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .pilares-section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pilares-section-subtitle {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin: 0.2rem 0 0 0;
+    }
+
+    .btn-toggle-pilares {
+      background: var(--chip-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 0.8rem;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-toggle-pilares:hover {
+      color: var(--text-main);
+      border-color: var(--border-glow);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    [data-theme="light"] .btn-toggle-pilares:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .pilares-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      transition: all 0.3s ease;
+    }
+
+    .pilares-cards-grid.collapsed {
+      display: none;
+    }
+
+    /* CARD INDIVIDUAL DO PILAR / ROTEIRO */
+    .roteiro-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.15rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, transform 0.2s ease;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .roteiro-card:hover {
+      border-color: rgba(34, 197, 94, 0.45);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="dark"] .roteiro-card:hover {
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    /* CARD EM DESTAQUE (SPRINT / FOCO ATUAL DA TURMA) */
+    .roteiro-highlight {
+      border: 2px solid var(--ifsc-green) !important;
+      background: linear-gradient(170deg, var(--bg-card) 0%, rgba(34, 197, 94, 0.07) 100%) !important;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.22), 0 14px 32px rgba(34, 197, 94, 0.15) !important;
+      transform: translateY(-2px);
+    }
+
+    .roteiro-highlight::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--ifsc-green), var(--accent-cyan));
+      z-index: 3;
+    }
+
+    /* MÍDIA / FIGURA DO CARD */
+    .roteiro-card-media {
+      position: relative;
+      width: 100%;
+      height: 155px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 0.95rem;
+      background: rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border-color);
+    }
+
+    .roteiro-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .roteiro-card:hover .roteiro-card-img {
+      transform: scale(1.03);
+    }
+
+    .destaque-ribbon-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: linear-gradient(135deg, var(--ifsc-green), #15803d);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.22rem 0.6rem;
+      border-radius: 9999px;
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.4);
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      animation: pulseAlert 2.5s infinite;
+    }
+
+    @keyframes pulseAlert {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.9; transform: scale(1.02); }
+    }
+
+    /* METADADOS DO CARD */
+    .roteiro-top-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .roteiro-id-badge {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .badge-p1 { background: rgba(34, 197, 94, 0.15); color: var(--ifsc-green-light); border: 1px solid rgba(34, 197, 94, 0.3); }
+    .badge-p2 { background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.3); }
+    .badge-p3 { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.3); }
+    .badge-p4 { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .status-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.18rem 0.5rem;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .status-wip {
+      background: rgba(34, 197, 94, 0.18);
+      color: var(--ifsc-green-light);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+    }
+
+    .status-pending {
+      background: rgba(100, 116, 139, 0.15);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+    }
+
+    .status-done {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--ifsc-green-light);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .roteiro-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+      line-height: 1.35;
+    }
+
+    .roteiro-card-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 0.75rem;
+    }
+
+    /* TURMA PROGRESS BOX (NO CARD DO PILAR 1) */
+    .turma-progress-box {
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 0.55rem 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    [data-theme="light"] .turma-progress-box {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    .turma-prog-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .turma-prog-val {
+      font-size: 0.76rem;
+      color: var(--text-main);
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 0.3rem;
+    }
+
+    [data-theme="light"] .progress-bar-track {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--ifsc-green), var(--accent-cyan));
+      border-radius: 9999px;
+      transition: width 0.6s ease;
+    }
+
+    /* QUICK PILLS & FOCUS BOX */
+    .card-quick-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .quick-meta-pill {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.18rem 0.5rem;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .quick-meta-pill.green { background: rgba(34, 197, 94, 0.12); color: var(--ifsc-green-light); border: 1px solid rgba(34, 197, 94, 0.25); }
+    .quick-meta-pill.blue { background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.25); }
+    .quick-meta-pill.purple { background: rgba(168, 85, 247, 0.12); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.25); }
+    .quick-meta-pill.violet { background: rgba(245, 158, 11, 0.12); color: var(--accent-amber); border: 1px solid rgba(245, 158, 11, 0.25); }
+
+    .roteiro-focus-box {
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid var(--ifsc-green);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 0.55rem 0.75rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.9rem;
+    }
+
+    [data-theme="light"] .roteiro-focus-box {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    /* AÇÕES DO CARD */
+    .roteiro-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      margin-top: auto;
+      padding-top: 0.5rem;
+    }
+
+    .btn-pilar-primary {
+      background: var(--ifsc-green);
+      color: white !important;
+      padding: 0.42rem 0.85rem;
+      font-size: 0.78rem;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .btn-pilar-primary:hover {
+      background: var(--ifsc-dark-green);
+      transform: translateY(-1px);
+    }
+
+    .btn-pilar-secondary {
+      background: var(--chip-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main) !important;
+      padding: 0.42rem 0.85rem;
+      font-size: 0.78rem;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .btn-pilar-secondary:hover {
+      border-color: var(--border-glow);
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-1px);
+    }
+
+    /* BADGE DE CONFORMIDADE NO CARD DO PROJETO */
+    .badge-r1-status {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .badge-r1-status.ok {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--ifsc-green-light);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .badge-r1-status.pendente {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .pilares-mini-tracker {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.65rem;
+      padding: 0.35rem 0.6rem;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      font-size: 0.72rem;
+    }
+
+    [data-theme="light"] .pilares-mini-tracker {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .tracker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .tracker-dot.ok { background: var(--ifsc-green); box-shadow: 0 0 6px rgba(34, 197, 94, 0.5); }
+    .tracker-dot.wait { background: #94a3b8; opacity: 0.45; }
 
     .tab-content {
       display: none;
@@ -1122,25 +1584,25 @@
       </div>
     </section>
 
-    <!-- Barra de Navegação em Abas -->
+    <!-- Barra de Navegação em Abas (Dividida em 2 Linhas) -->
     <nav class="tabs-nav">
       <button class="tab-btn active" onclick="switchTab('projetos')">
-        <i class="fa-solid fa-diagram-project"></i> Projetos dos Grupos (11)
-      </button>
-      <button class="tab-btn" onclick="switchTab('raiox')">
-        <i class="fa-solid fa-chart-pie"></i> Raio-X & Métricas
-      </button>
-      <button class="tab-btn" onclick="switchTab('auditoria')">
-        <i class="fa-solid fa-clipboard-check"></i> Matriz de Auditoria
-      </button>
-      <button class="tab-btn" onclick="switchTab('demandas')">
-        <i class="fa-solid fa-list-check"></i> Demandas & Checkpoints
-      </button>
-      <button class="tab-btn" onclick="switchTab('notas')">
-        <i class="fa-solid fa-clipboard-list"></i> Notas & Avaliações
+        <i class="fa-solid fa-diagram-project"></i> Projetos <span class="badge-count" id="tab-badge-projetos">11</span>
       </button>
       <button class="tab-btn" onclick="switchTab('roteiros')">
-        <i class="fa-solid fa-book-open"></i> Os 4 Pilares & Roteiros
+        <i class="fa-solid fa-book-open" style="color: var(--ifsc-green-light);"></i> 4 Pilares &amp; Roteiros
+      </button>
+      <button class="tab-btn" onclick="switchTab('raiox')">
+        <i class="fa-solid fa-chart-pie" style="color: var(--accent-cyan);"></i> Raio-X &amp; Métricas
+      </button>
+      <button class="tab-btn" onclick="switchTab('auditoria')">
+        <i class="fa-solid fa-clipboard-check" style="color: var(--accent-purple);"></i> Matriz de Auditoria
+      </button>
+      <button class="tab-btn" onclick="switchTab('demandas')">
+        <i class="fa-solid fa-list-check" style="color: var(--accent-blue);"></i> Demandas &amp; Checkpoints
+      </button>
+      <button class="tab-btn" onclick="switchTab('notas')">
+        <i class="fa-solid fa-graduation-cap" style="color: var(--accent-amber);"></i> Notas &amp; Avaliações
       </button>
       <button class="tab-btn" onclick="switchTab('plano')">
         <i class="fa-solid fa-file-lines"></i> Plano de Ensino
@@ -1151,6 +1613,172 @@
          ABA 1: PROJETOS DOS GRUPOS
          ========================================================================= -->
     <section id="tab-projetos" class="tab-content active">
+
+      <!-- SEÇÃO: FOCO ATUAL & OS 4 PILARES PEDAGÓGICOS (ESTILO PI-2 COM FIGURAS) -->
+      <div class="pilares-dashboard-section" id="secao-pilares-dashboard">
+        <div class="pilares-dashboard-header">
+          <div>
+            <h3 class="pilares-section-title">
+              <i class="fa-solid fa-shapes" style="color: var(--ifsc-green);"></i> Os 4 Pilares Pedagógicos &amp; Roteiros
+            </h3>
+            <p class="pilares-section-subtitle">Acompanhe a sprint ativa em sala de aula, ferramentas práticas e conformidade técnica dos grupos</p>
+          </div>
+          <button class="btn-toggle-pilares" onclick="togglePilaresPainel()" id="btn-toggle-pilares" title="Ocultar ou expandir os cards dos pilares">
+            <i class="fa-solid fa-chevron-up" id="icon-toggle-pilares"></i> <span id="label-toggle-pilares">Minimizar Pilares</span>
+          </button>
+        </div>
+
+        <div class="pilares-cards-grid" id="pilares-cards-container">
+          
+          <!-- CARD PILAR 1 (FOCO ATUAL DA TURMA) -->
+          <div class="roteiro-card roteiro-highlight" id="pilar-card-1">
+            <div class="roteiro-card-media">
+              <img src="figures/pilar1_gestao_metodo.svg" alt="Pilar 1 - Gestão & Método Científico" class="roteiro-card-img" loading="lazy">
+              <div class="destaque-ribbon-badge"><i class="fa-solid fa-play"></i> Foco Atual da Turma</div>
+            </div>
+            <div class="roteiro-top-meta">
+              <span class="roteiro-id-badge badge-p1"><i class="fa-solid fa-compass"></i> Pilar #01 • Roteiro 1</span>
+              <span class="status-badge status-wip"><i class="fa-solid fa-clock"></i> Em Andamento</span>
+            </div>
+            <h4 class="roteiro-title">Definição de Objetivos, Overleaf (COTB) e Trabalhos Relacionados</h4>
+            <p class="roteiro-card-desc">Redação estruturada do Objetivo Geral e dos 4 Degraus Específicos, setup do artigo no Overleaf (modelo SBC/COTB) e garimpagem nos anais do Computer on the Beach.</p>
+            
+            <!-- Barra de Progresso de Entregas da Turma -->
+            <div class="turma-progress-box">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
+                <span class="turma-prog-label"><i class="fa-solid fa-users-gear" style="color: var(--ifsc-green-light);"></i> Entregas da Turma:</span>
+                <span class="turma-prog-val" id="p1-progress-label"><strong>8 / 11</strong> Equipes (<span id="p1-progress-pct">73%</span>)</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="p1-progress-bar" style="width: 73%;"></div>
+              </div>
+            </div>
+
+            <div class="card-quick-meta">
+              <span class="quick-meta-pill green"><i class="fa-solid fa-bullseye"></i> Objetivos SMART</span>
+              <span class="quick-meta-pill green"><i class="fa-solid fa-file-code"></i> Overleaf COTB</span>
+              <span class="quick-meta-pill green"><i class="fa-solid fa-book-bookmark"></i> SOL SBC</span>
+            </div>
+
+            <div class="roteiro-focus-box">
+              <i class="fa-solid fa-lightbulb" style="color: var(--accent-amber);"></i>
+              <span><strong>Foco Prático:</strong> Redigir Objetivo Geral e 4 Específicos, link seguro <code>/read/</code> do Overleaf e 2 artigos fichados.</span>
+            </div>
+
+            <div class="roteiro-card-actions">
+              <a href="roteiro-1-objetivos-overleaf-cotb/index.html" class="btn-pilar-primary">
+                <i class="fa-solid fa-book-open-reader"></i> Acessar Roteiro 1
+              </a>
+              <a href="devolutiva-objetivos-cotb/index.html" class="btn-pilar-secondary">
+                <i class="fa-solid fa-chalkboard-user"></i> Slides Devolutiva
+              </a>
+              <a href="https://www.overleaf.com/latex/templates/sbc-conferences-articles-template/bzkpfsxspfhs" target="_blank" class="btn-pilar-secondary" title="Template Oficial SBC no Overleaf">
+                <i class="fa-solid fa-file-pen"></i> Overleaf SBC
+              </a>
+            </div>
+          </div>
+
+          <!-- CARD PILAR 2 -->
+          <div class="roteiro-card" id="pilar-card-2">
+            <div class="roteiro-card-media">
+              <img src="figures/pilar2_modelagem_drawio.svg" alt="Pilar 2 - Modelagem Visual draw.io" class="roteiro-card-img" loading="lazy">
+            </div>
+            <div class="roteiro-top-meta">
+              <span class="roteiro-id-badge badge-p2"><i class="fa-solid fa-diagram-project"></i> Pilar #02 • Roteiro 2</span>
+              <span class="status-badge status-pending"><i class="fa-solid fa-calendar-day"></i> Próxima Etapa</span>
+            </div>
+            <h4 class="roteiro-title">Modelagem no draw.io, WBS e Kanban</h4>
+            <p class="roteiro-card-desc">Construção da Estrutura Analítica do Projeto (EAP/WBS), fluxogramas de processos, wireframes de interface e diagramas de arquitetura vivos em <code>docs/</code>.</p>
+            
+            <div class="card-quick-meta">
+              <span class="quick-meta-pill blue"><i class="fa-solid fa-sitemap"></i> WBS / EAP</span>
+              <span class="quick-meta-pill blue"><i class="fa-solid fa-vector-square"></i> draw.io</span>
+              <span class="quick-meta-pill blue"><i class="fa-solid fa-list-check"></i> Kanban</span>
+            </div>
+
+            <div class="roteiro-focus-box">
+              <i class="fa-solid fa-layer-group" style="color: var(--accent-cyan);"></i>
+              <span><strong>Foco Prático:</strong> Prototipar wireframes, desenhar arquitetura em <code>.drawio.png</code> e organizar tarefas em Kanban.</span>
+            </div>
+
+            <div class="roteiro-card-actions">
+              <a href="https://app.diagrams.net" target="_blank" class="btn-pilar-primary">
+                <i class="fa-solid fa-pen-ruler"></i> Abrir draw.io
+              </a>
+              <a href="https://trello.com" target="_blank" class="btn-pilar-secondary">
+                <i class="fa-solid fa-list-check"></i> Trello Kanban
+              </a>
+            </div>
+          </div>
+
+          <!-- CARD PILAR 3 -->
+          <div class="roteiro-card" id="pilar-card-3">
+            <div class="roteiro-card-media">
+              <img src="figures/pilar3_git_github.svg" alt="Pilar 3 - Git & GitHub Pages" class="roteiro-card-img" loading="lazy">
+            </div>
+            <div class="roteiro-top-meta">
+              <span class="roteiro-id-badge badge-p3"><i class="fa-brands fa-github"></i> Pilar #03 • Roteiro 3</span>
+              <span class="status-badge status-pending"><i class="fa-solid fa-calendar-day"></i> Próxima Etapa</span>
+            </div>
+            <h4 class="roteiro-title">Versionamento Git &amp; Deploy no GitHub Pages</h4>
+            <p class="roteiro-card-desc">Controle de código com Git CLI, commits semânticos, branches por tarefa, repositório institucional padronizado e deploy contínuo via GitHub Pages.</p>
+            
+            <div class="card-quick-meta">
+              <span class="quick-meta-pill purple"><i class="fa-solid fa-code-commit"></i> Commits Semânticos</span>
+              <span class="quick-meta-pill purple"><i class="fa-solid fa-code-branch"></i> Branches</span>
+              <span class="quick-meta-pill purple"><i class="fa-solid fa-globe"></i> GitHub Pages</span>
+            </div>
+
+            <div class="roteiro-focus-box">
+              <i class="fa-solid fa-code-branch" style="color: var(--accent-purple);"></i>
+              <span><strong>Foco Prático:</strong> Repositório público com pastas <code>docs/</code> e <code>src/</code>, <code>README.md</code> com badges e site online.</span>
+            </div>
+
+            <div class="roteiro-card-actions">
+              <a href="https://github.com" target="_blank" class="btn-pilar-primary">
+                <i class="fa-brands fa-github"></i> Acessar GitHub
+              </a>
+              <a href="https://docs.github.com/pages" target="_blank" class="btn-pilar-secondary">
+                <i class="fa-solid fa-book"></i> GitHub Pages Docs
+              </a>
+            </div>
+          </div>
+
+          <!-- CARD PILAR 4 -->
+          <div class="roteiro-card" id="pilar-card-4">
+            <div class="roteiro-card-media">
+              <img src="figures/pilar4_paper_sbc.svg" alt="Pilar 4 - Paper SBC & Eventos" class="roteiro-card-img" loading="lazy">
+            </div>
+            <div class="roteiro-top-meta">
+              <span class="roteiro-id-badge badge-p4"><i class="fa-solid fa-file-lines"></i> Pilar #04 • Roteiro 4</span>
+              <span class="status-badge status-pending"><i class="fa-solid fa-calendar-day"></i> Próxima Etapa</span>
+            </div>
+            <h4 class="roteiro-title">Paper SBC, Checkpoints Experimentais &amp; Eventos</h4>
+            <p class="roteiro-card-desc">Redação científica estruturada no Overleaf, coleta empírica de métricas, revisão por pares entre turmas e preparação de submissão (SEPEI, SNCT, COTB).</p>
+            
+            <div class="card-quick-meta">
+              <span class="quick-meta-pill violet"><i class="fa-solid fa-scroll"></i> Template SBC</span>
+              <span class="quick-meta-pill violet"><i class="fa-solid fa-flask"></i> 3 Checkpoints</span>
+              <span class="quick-meta-pill violet"><i class="fa-solid fa-award"></i> Submissão COTB</span>
+            </div>
+
+            <div class="roteiro-focus-box">
+              <i class="fa-solid fa-file-pen" style="color: var(--accent-amber);"></i>
+              <span><strong>Foco Prático:</strong> Artigo científico completo no Overleaf com introdução, metodologia, resultados e referências BibTeX.</span>
+            </div>
+
+            <div class="roteiro-card-actions">
+              <a href="https://sol.sbc.org.br/index.php/cotb" target="_blank" class="btn-pilar-primary">
+                <i class="fa-solid fa-magnifying-glass"></i> Anais COTB (SOL)
+              </a>
+              <a href="https://www.overleaf.com/latex/templates/sbc-conferences-articles-template/bzkpfsxspfhs" target="_blank" class="btn-pilar-secondary">
+                <i class="fa-solid fa-file-lines"></i> Template SBC
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
       
       <!-- KPIs Resumidos -->
       <div class="kpi-grid">
@@ -1203,6 +1831,8 @@
         </div>
         <div class="filter-pills">
           <span class="pill active" onclick="setFilter('todos', this)">Todos (11)</span>
+          <span class="pill" onclick="setFilter('roteiro1-ok', this)" style="border-color: rgba(34, 197, 94, 0.4);"><i class="fa-solid fa-circle-check" style="color: var(--ifsc-green-light);"></i> Roteiro 1: Entregue (<span id="count-filtro-r1-ok">0</span>)</span>
+          <span class="pill" onclick="setFilter('roteiro1-pendente', this)" style="border-color: rgba(245, 158, 11, 0.4);"><i class="fa-solid fa-clock" style="color: var(--accent-amber);"></i> Roteiro 1: Pendente (<span id="count-filtro-r1-pend">0</span>)</span>
           <span class="pill" onclick="setFilter('com-github', this)">Com GitHub</span>
           <span class="pill" onclick="setFilter('com-overleaf', this)">Com Overleaf</span>
           <span class="pill" onclick="setFilter('pendentes', this)">Pendentes</span>
@@ -1299,69 +1929,179 @@
          ABA 4: OS 4 PILARES & ROTEIROS
          ========================================================================= -->
     <section id="tab-roteiros" class="tab-content">
-      <!-- Roteiro Ativo em Destaque -->
-      <div style="background: linear-gradient(135deg, rgba(22, 163, 74, 0.15) 0%, rgba(6, 182, 212, 0.1) 100%); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-        <div>
-          <span class="hero-tag" style="margin-bottom: 0.4rem;"><i class="fa-solid fa-play"></i> Roteiro Prático Ativo</span>
-          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text-main);">Roteiro 1 — Objetivos, Overleaf (COTB) e Trabalhos Relacionados</h3>
-          <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem;">Guia prático para formulação dos objetivos, criação do artigo no Overleaf e busca de 2 artigos no Computer on the Beach.</p>
-        </div>
-        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-          <a href="devolutiva-objetivos-cotb/index.html" class="btn-action" style="background: linear-gradient(135deg, #06b6d4, #3b82f6); color: white; padding: 0.6rem 1.2rem; font-size: 0.9rem;">
-            <i class="fa-solid fa-chalkboard-user"></i> Slides da Devolutiva (4 Degraus)
-          </a>
-          <a href="roteiro-1-objetivos-overleaf-cotb/index.html" class="btn-action" style="background: var(--ifsc-green); color: white; padding: 0.6rem 1.2rem; font-size: 0.9rem;">
-            <i class="fa-solid fa-book-open-reader"></i> Acessar Roteiro 1
-          </a>
-        </div>
+      <div class="hero-box" style="margin-bottom: 1.5rem;">
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.35rem; margin-bottom: 0.5rem;">
+          <i class="fa-solid fa-book-open" style="color: var(--ifsc-green-light);"></i> Os 4 Pilares Pedagógicos &amp; Caderno de Roteiros
+        </h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">
+          Trilha curricular completa da disciplina de Projeto Integrador 1 (Info 2025 • 2026-2). Conecte método científico, modelagem viva, repositório de código e redação do artigo SBC.
+        </p>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
-        
-        <div class="kpi-card" style="flex-direction: column; align-items: flex-start;">
-          <span class="proj-badge">PILAR 1</span>
-          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0.4rem 0;">Gestão de Projetos & Escopo</h3>
-          <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
-            Definição de problema, objetivos SMART, cronograma em Gantt e divisão de responsabilidades da equipe.
-          </p>
-          <a href="https://trello.com" target="_blank" class="btn-action">
-            <i class="fa-solid fa-list-check"></i> Ferramenta Kanban
-          </a>
+      <!-- SEÇÃO: FOCO ATUAL & OS 4 PILARES PEDAGÓGICOS (ESTILO PI-2 COM FIGURAS) -->
+      <div class="pilares-dashboard-section" id="secao-pilares-dashboard">
+        <div class="pilares-dashboard-header">
+          <div>
+            <h3 class="pilares-section-title">
+              <i class="fa-solid fa-shapes" style="color: var(--ifsc-green);"></i> Os 4 Pilares Pedagógicos &amp; Roteiros
+            </h3>
+            <p class="pilares-section-subtitle">Acompanhe a sprint ativa em sala de aula, ferramentas práticas e conformidade técnica dos grupos</p>
+          </div>
+          <button class="btn-toggle-pilares" onclick="togglePilaresPainel()" id="btn-toggle-pilares" title="Ocultar ou expandir os cards dos pilares">
+            <i class="fa-solid fa-chevron-up" id="icon-toggle-pilares"></i> <span id="label-toggle-pilares">Minimizar Pilares</span>
+          </button>
         </div>
 
-        <div class="kpi-card" style="flex-direction: column; align-items: flex-start;">
-          <span class="proj-badge">PILAR 2</span>
-          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0.4rem 0;">Modelagem no draw.io (Artefatos Vivos)</h3>
-          <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
-            Construção de fluxogramas e arquitetura em <code>.drawio.png</code> dentro da pasta <code>docs/</code> do repositório.
-          </p>
-          <a href="https://app.diagrams.net" target="_blank" class="btn-action">
-            <i class="fa-solid fa-diagram-project"></i> Abrir draw.io
-          </a>
-        </div>
+        <div class="pilares-cards-grid" id="pilares-cards-container">
+          
+          <!-- CARD PILAR 1 (FOCO ATUAL DA TURMA) -->
+          <div class="roteiro-card roteiro-highlight" id="pilar-card-1">
+            <div class="roteiro-card-media">
+              <img src="figures/pilar1_gestao_metodo.svg" alt="Pilar 1 - Gestão & Método Científico" class="roteiro-card-img" loading="lazy">
+              <div class="destaque-ribbon-badge"><i class="fa-solid fa-play"></i> Foco Atual da Turma</div>
+            </div>
+            <div class="roteiro-top-meta">
+              <span class="roteiro-id-badge badge-p1"><i class="fa-solid fa-compass"></i> Pilar #01 • Roteiro 1</span>
+              <span class="status-badge status-wip"><i class="fa-solid fa-clock"></i> Em Andamento</span>
+            </div>
+            <h4 class="roteiro-title">Definição de Objetivos, Overleaf (COTB) e Trabalhos Relacionados</h4>
+            <p class="roteiro-card-desc">Redação estruturada do Objetivo Geral e dos 4 Degraus Específicos, setup do artigo no Overleaf (modelo SBC/COTB) e garimpagem nos anais do Computer on the Beach.</p>
+            
+            <!-- Barra de Progresso de Entregas da Turma -->
+            <div class="turma-progress-box">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.2rem;">
+                <span class="turma-prog-label"><i class="fa-solid fa-users-gear" style="color: var(--ifsc-green-light);"></i> Entregas da Turma:</span>
+                <span class="turma-prog-val" id="p1-progress-label"><strong>8 / 11</strong> Equipes (<span id="p1-progress-pct">73%</span>)</span>
+              </div>
+              <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="p1-progress-bar" style="width: 73%;"></div>
+              </div>
+            </div>
 
-        <div class="kpi-card" style="flex-direction: column; align-items: flex-start;">
-          <span class="proj-badge">PILAR 3</span>
-          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0.4rem 0;">Versionamento com Git & GitHub</h3>
-          <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
-            Commits semânticos, branches por funcionalidade, issues de acompanhamento e deploy contínuo no GitHub Pages.
-          </p>
-          <a href="https://github.com" target="_blank" class="btn-action">
-            <i class="fa-brands fa-github"></i> Acessar GitHub
-          </a>
-        </div>
+            <div class="card-quick-meta">
+              <span class="quick-meta-pill green"><i class="fa-solid fa-bullseye"></i> Objetivos SMART</span>
+              <span class="quick-meta-pill green"><i class="fa-solid fa-file-code"></i> Overleaf COTB</span>
+              <span class="quick-meta-pill green"><i class="fa-solid fa-book-bookmark"></i> SOL SBC</span>
+            </div>
 
-        <div class="kpi-card" style="flex-direction: column; align-items: flex-start;">
-          <span class="proj-badge">PILAR 4</span>
-          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; font-weight: 700; margin: 0.4rem 0;">Artigo Científico SBC no Overleaf</h3>
-          <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">
-            Redação do paper oficial para submissão no SEPEI/SNCT/COTB com template LaTeX da Sociedade Brasileira de Computação.
-          </p>
-          <a href="https://www.overleaf.com/latex/templates/sbc-conferences-articles-template/bzkpfsxspfhs" target="_blank" class="btn-action">
-            <i class="fa-solid fa-file-lines"></i> Template Overleaf SBC
-          </a>
-        </div>
+            <div class="roteiro-focus-box">
+              <i class="fa-solid fa-lightbulb" style="color: var(--accent-amber);"></i>
+              <span><strong>Foco Prático:</strong> Redigir Objetivo Geral e 4 Específicos, link seguro <code>/read/</code> do Overleaf e 2 artigos fichados.</span>
+            </div>
 
+            <div class="roteiro-card-actions">
+              <a href="roteiro-1-objetivos-overleaf-cotb/index.html" class="btn-pilar-primary">
+                <i class="fa-solid fa-book-open-reader"></i> Acessar Roteiro 1
+              </a>
+              <a href="devolutiva-objetivos-cotb/index.html" class="btn-pilar-secondary">
+                <i class="fa-solid fa-chalkboard-user"></i> Slides Devolutiva
+              </a>
+              <a href="https://www.overleaf.com/latex/templates/sbc-conferences-articles-template/bzkpfsxspfhs" target="_blank" class="btn-pilar-secondary" title="Template Oficial SBC no Overleaf">
+                <i class="fa-solid fa-file-pen"></i> Overleaf SBC
+              </a>
+            </div>
+          </div>
+
+          <!-- CARD PILAR 2 -->
+          <div class="roteiro-card" id="pilar-card-2">
+            <div class="roteiro-card-media">
+              <img src="figures/pilar2_modelagem_drawio.svg" alt="Pilar 2 - Modelagem Visual draw.io" class="roteiro-card-img" loading="lazy">
+            </div>
+            <div class="roteiro-top-meta">
+              <span class="roteiro-id-badge badge-p2"><i class="fa-solid fa-diagram-project"></i> Pilar #02 • Roteiro 2</span>
+              <span class="status-badge status-pending"><i class="fa-solid fa-calendar-day"></i> Próxima Etapa</span>
+            </div>
+            <h4 class="roteiro-title">Modelagem no draw.io, WBS e Kanban</h4>
+            <p class="roteiro-card-desc">Construção da Estrutura Analítica do Projeto (EAP/WBS), fluxogramas de processos, wireframes de interface e diagramas de arquitetura vivos em <code>docs/</code>.</p>
+            
+            <div class="card-quick-meta">
+              <span class="quick-meta-pill blue"><i class="fa-solid fa-sitemap"></i> WBS / EAP</span>
+              <span class="quick-meta-pill blue"><i class="fa-solid fa-vector-square"></i> draw.io</span>
+              <span class="quick-meta-pill blue"><i class="fa-solid fa-list-check"></i> Kanban</span>
+            </div>
+
+            <div class="roteiro-focus-box">
+              <i class="fa-solid fa-layer-group" style="color: var(--accent-cyan);"></i>
+              <span><strong>Foco Prático:</strong> Prototipar wireframes, desenhar arquitetura em <code>.drawio.png</code> e organizar tarefas em Kanban.</span>
+            </div>
+
+            <div class="roteiro-card-actions">
+              <a href="https://app.diagrams.net" target="_blank" class="btn-pilar-primary">
+                <i class="fa-solid fa-pen-ruler"></i> Abrir draw.io
+              </a>
+              <a href="https://trello.com" target="_blank" class="btn-pilar-secondary">
+                <i class="fa-solid fa-list-check"></i> Trello Kanban
+              </a>
+            </div>
+          </div>
+
+          <!-- CARD PILAR 3 -->
+          <div class="roteiro-card" id="pilar-card-3">
+            <div class="roteiro-card-media">
+              <img src="figures/pilar3_git_github.svg" alt="Pilar 3 - Git & GitHub Pages" class="roteiro-card-img" loading="lazy">
+            </div>
+            <div class="roteiro-top-meta">
+              <span class="roteiro-id-badge badge-p3"><i class="fa-brands fa-github"></i> Pilar #03 • Roteiro 3</span>
+              <span class="status-badge status-pending"><i class="fa-solid fa-calendar-day"></i> Próxima Etapa</span>
+            </div>
+            <h4 class="roteiro-title">Versionamento Git &amp; Deploy no GitHub Pages</h4>
+            <p class="roteiro-card-desc">Controle de código com Git CLI, commits semânticos, branches por tarefa, repositório institucional padronizado e deploy contínuo via GitHub Pages.</p>
+            
+            <div class="card-quick-meta">
+              <span class="quick-meta-pill purple"><i class="fa-solid fa-code-commit"></i> Commits Semânticos</span>
+              <span class="quick-meta-pill purple"><i class="fa-solid fa-code-branch"></i> Branches</span>
+              <span class="quick-meta-pill purple"><i class="fa-solid fa-globe"></i> GitHub Pages</span>
+            </div>
+
+            <div class="roteiro-focus-box">
+              <i class="fa-solid fa-code-branch" style="color: var(--accent-purple);"></i>
+              <span><strong>Foco Prático:</strong> Repositório público com pastas <code>docs/</code> e <code>src/</code>, <code>README.md</code> com badges e site online.</span>
+            </div>
+
+            <div class="roteiro-card-actions">
+              <a href="https://github.com" target="_blank" class="btn-pilar-primary">
+                <i class="fa-brands fa-github"></i> Acessar GitHub
+              </a>
+              <a href="https://docs.github.com/pages" target="_blank" class="btn-pilar-secondary">
+                <i class="fa-solid fa-book"></i> GitHub Pages Docs
+              </a>
+            </div>
+          </div>
+
+          <!-- CARD PILAR 4 -->
+          <div class="roteiro-card" id="pilar-card-4">
+            <div class="roteiro-card-media">
+              <img src="figures/pilar4_paper_sbc.svg" alt="Pilar 4 - Paper SBC & Eventos" class="roteiro-card-img" loading="lazy">
+            </div>
+            <div class="roteiro-top-meta">
+              <span class="roteiro-id-badge badge-p4"><i class="fa-solid fa-file-lines"></i> Pilar #04 • Roteiro 4</span>
+              <span class="status-badge status-pending"><i class="fa-solid fa-calendar-day"></i> Próxima Etapa</span>
+            </div>
+            <h4 class="roteiro-title">Paper SBC, Checkpoints Experimentais &amp; Eventos</h4>
+            <p class="roteiro-card-desc">Redação científica estruturada no Overleaf, coleta empírica de métricas, revisão por pares entre turmas e preparação de submissão (SEPEI, SNCT, COTB).</p>
+            
+            <div class="card-quick-meta">
+              <span class="quick-meta-pill violet"><i class="fa-solid fa-scroll"></i> Template SBC</span>
+              <span class="quick-meta-pill violet"><i class="fa-solid fa-flask"></i> 3 Checkpoints</span>
+              <span class="quick-meta-pill violet"><i class="fa-solid fa-award"></i> Submissão COTB</span>
+            </div>
+
+            <div class="roteiro-focus-box">
+              <i class="fa-solid fa-file-pen" style="color: var(--accent-amber);"></i>
+              <span><strong>Foco Prático:</strong> Artigo científico completo no Overleaf com introdução, metodologia, resultados e referências BibTeX.</span>
+            </div>
+
+            <div class="roteiro-card-actions">
+              <a href="https://sol.sbc.org.br/index.php/cotb" target="_blank" class="btn-pilar-primary">
+                <i class="fa-solid fa-magnifying-glass"></i> Anais COTB (SOL)
+              </a>
+              <a href="https://www.overleaf.com/latex/templates/sbc-conferences-articles-template/bzkpfsxspfhs" target="_blank" class="btn-pilar-secondary">
+                <i class="fa-solid fa-file-lines"></i> Template SBC
+              </a>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
 
@@ -1917,6 +2657,33 @@
       const container = document.getElementById("projects-container");
       const search = (document.getElementById("project-search") ? document.getElementById("project-search").value : "").toLowerCase();
 
+      function checarRoteiro1Entregue(proj, objI) {
+        const hasOverleaf = !!proj.overleaf && proj.overleaf.trim().length > 5;
+        const hasGeral = !!objI.geral && objI.geral.trim().length > 15 && objI.geral !== 'Objetivo em consolidação junto aos docentes orientadores.';
+        return hasOverleaf && hasGeral;
+      }
+
+      // Atualizar contadores de Roteiro 1 e barra de progresso da turma
+      let r1OkTotal = 0;
+      data.forEach(p => {
+        const objI = (window.decomporObjetivos || decomporObjetivosLocal)(p.objective);
+        if (checarRoteiro1Entregue(p, objI)) r1OkTotal++;
+      });
+      const r1PendTotal = data.length - r1OkTotal;
+      const r1Pct = Math.round((r1OkTotal / (data.length || 1)) * 100);
+
+      const elOk = document.getElementById("count-filtro-r1-ok");
+      if (elOk) elOk.innerText = r1OkTotal;
+      const elPend = document.getElementById("count-filtro-r1-pend");
+      if (elPend) elPend.innerText = r1PendTotal;
+
+      document.querySelectorAll("#p1-progress-label").forEach(el => {
+        el.innerHTML = `<strong>${r1OkTotal} / ${data.length}</strong> Equipes (${r1Pct}%)`;
+      });
+      document.querySelectorAll("#p1-progress-bar").forEach(el => {
+        el.style.width = `${r1Pct}%`;
+      });
+
       const filtered = data.filter(p => {
         const matchesSearch = p.title.toLowerCase().includes(search) || 
                               p.team.toLowerCase().includes(search) ||
@@ -1924,6 +2691,11 @@
 
         if (!matchesSearch) return false;
 
+        const objInfo = (window.decomporObjetivos || decomporObjetivosLocal)(p.objective);
+        const r1Ok = checarRoteiro1Entregue(p, objInfo);
+
+        if (currentFilter === 'roteiro1-ok') return r1Ok;
+        if (currentFilter === 'roteiro1-pendente') return !r1Ok;
         if (currentFilter === 'com-github') return !!p.github;
         if (currentFilter === 'com-overleaf') return !!p.overleaf;
         if (currentFilter === 'pendentes') return !p.github || !p.overleaf;
@@ -1962,22 +2734,38 @@
         }
 
         const objInfo = (window.decomporObjetivos || decomporObjetivosLocal)(p.objective);
+        const r1Entregue = checarRoteiro1Entregue(p, objInfo);
         const espPreenchidos = objInfo.especificos.filter(Boolean).length;
         const statusEspTag = espPreenchidos === 4 ? 'complete' : (espPreenchidos > 0 ? 'partial' : 'empty');
         const statusEspTxt = espPreenchidos === 4 ? '4/4 Concluídos' : (espPreenchidos > 0 ? `${espPreenchidos}/4 Preenchidos` : 'Pendente');
+
+        const hasObjGeralReal = objInfo.geral && objInfo.geral.length > 15 && objInfo.geral !== 'Objetivo em consolidação junto aos docentes orientadores.';
 
         return `
           <div class="project-card">
             <div>
               <div class="project-card-header">
-                <div style="display:flex;gap:0.35rem;align-items:center;">
+                <div style="display:flex;gap:0.35rem;align-items:center;flex-wrap:wrap;">
                   <span class="proj-badge">#${p.id}</span>
+                  ${r1Entregue ? 
+                    `<span class="badge-r1-status ok" title="Roteiro 1 (Objetivos e Overleaf) entregue pela equipe"><i class="fa-solid fa-circle-check"></i> R1 Entregue</span>` : 
+                    `<span class="badge-r1-status pendente" title="Roteiro 1 (Objetivos e/ou Overleaf) pendente de preenchimento"><i class="fa-solid fa-clock"></i> R1 Pendente</span>`
+                  }
                   ${objBadge}
                 </div>
                 <span style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-users"></i> ${p.team.split(',').length} integrantes</span>
               </div>
               <h3 class="project-title">${escapeHtml(p.title)}</h3>
               <div class="project-team"><i class="fa-solid fa-user-group"></i> ${escapeHtml(p.team)}</div>
+
+              <!-- Mini Rastreador dos 4 Pilares -->
+              <div class="pilares-mini-tracker" title="Conformidade da equipe nos 4 Pilares Pedagógicos da disciplina">
+                <span style="color:var(--text-muted);font-weight:700;font-size:0.68rem;margin-right:0.25rem;">Pilares:</span>
+                <span class="tracker-dot ${hasObjGeralReal ? 'ok' : 'wait'}" title="Pilar 1: Objetivos Geral e Específicos"></span> <span style="margin-right:0.35rem;">P1</span>
+                <span class="tracker-dot ${hasCanva ? 'ok' : 'wait'}" title="Pilar 2: Modelagem / draw.io"></span> <span style="margin-right:0.35rem;">P2</span>
+                <span class="tracker-dot ${hasGithub ? 'ok' : 'wait'}" title="Pilar 3: Repositório GitHub"></span> <span style="margin-right:0.35rem;">P3</span>
+                <span class="tracker-dot ${hasOverleaf ? 'ok' : 'wait'}" title="Pilar 4: Artigo Overleaf (SBC COTB)"></span> <span>P4</span>
+              </div>
 
               <!-- Bloco de Objetivo Geral Destacado -->
               <div class="project-obj-geral-block">
@@ -2063,6 +2851,39 @@
     }
     window.renderProjects = renderProjects;
 
+    // Alternar visibilidade do painel de pilares
+    function togglePilaresPainel() {
+      const container = document.getElementById("pilares-cards-container");
+      const icon = document.getElementById("icon-toggle-pilares");
+      const label = document.getElementById("label-toggle-pilares");
+      if (!container) return;
+
+      const isCollapsed = container.classList.toggle("collapsed");
+      if (isCollapsed) {
+        if (icon) icon.className = "fa-solid fa-chevron-down";
+        if (label) label.innerText = "Expandir Pilares";
+        localStorage.setItem("pi1_pilares_collapsed", "true");
+      } else {
+        if (icon) icon.className = "fa-solid fa-chevron-up";
+        if (label) label.innerText = "Minimizar Pilares";
+        localStorage.setItem("pi1_pilares_collapsed", "false");
+      }
+    }
+    window.togglePilaresPainel = togglePilaresPainel;
+
+    // Restaurar estado do painel de pilares
+    document.addEventListener("DOMContentLoaded", function() {
+      if (localStorage.getItem("pi1_pilares_collapsed") === "true") {
+        const container = document.getElementById("pilares-cards-container");
+        const icon = document.getElementById("icon-toggle-pilares");
+        const label = document.getElementById("label-toggle-pilares");
+        if (container) container.classList.add("collapsed");
+        if (icon) icon.className = "fa-solid fa-chevron-down";
+        if (label) label.innerText = "Expandir Pilares";
+      }
+    });
+
+
     // 3. Atualizar Indicadores (KPIs)
     function updateKpis(data) {
       const githubCount = data.filter(p => !!p.github).length;
@@ -2072,6 +2893,8 @@
       document.getElementById("kpi-github-count").innerText = githubCount;
       document.getElementById("kpi-overleaf-count").innerText = overleafCount;
       document.getElementById("kpi-canva-count").innerText = canvaCount;
+      const badgeProjetos = document.getElementById("tab-badge-projetos");
+      if (badgeProjetos) badgeProjetos.innerText = data.length;
 
       const githubPct = Math.round((githubCount / data.length) * 100);
       const overleafPct = Math.round((overleafCount / data.length) * 100);
@@ -2555,7 +3378,7 @@
 
   <!-- Google Identity Services, Configuração e Camada Dinâmica -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script src="pi1-config.js?v=2.2"></script>
-  <script src="pi1-live.js?v=2.2"></script>
+  <script src="pi1-config.js?v=2.3"></script>
+  <script src="pi1-live.js?v=2.3"></script>
 </body>
 </html>

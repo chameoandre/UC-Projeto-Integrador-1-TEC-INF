@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4c1d95"/>
+      <stop offset="50%" stop-color="#6d28d9"/>
+      <stop offset="100%" stop-color="#2e1065"/>
+    </linearGradient>
+    <linearGradient id="accent4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#9333ea"/>
+    </linearGradient>
+    <filter id="shadow4" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="800" height="450" rx="16" fill="url(#bg4)"/>
+  <circle cx="700" cy="80" r="140" fill="#a855f7" opacity="0.12"/>
+  <circle cx="100" cy="380" r="180" fill="#c084fc" opacity="0.06"/>
+  
+  <path d="M0 75 H800 M0 150 H800 M0 225 H800 M0 300 H800 M0 375 H800" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+  <path d="M160 0 V450 M320 0 V450 M480 0 V450 M640 0 V450" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+
+  <rect x="50" y="45" width="130" height="32" rx="16" fill="#7c3aed" fill-opacity="0.25" stroke="#c084fc" stroke-width="1.5"/>
+  <text x="115" y="66" fill="#e9d5ff" font-family="'Outfit', system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1.5">PILAR 04</text>
+  
+  <text x="50" y="125" fill="#ffffff" font-family="'Outfit', system-ui, sans-serif" font-size="34" font-weight="800">Paper SBC &amp; Eventos Científicos</text>
+  <text x="50" y="160" fill="#e9d5ff" font-family="'Inter', system-ui, sans-serif" font-size="16" font-weight="500">Overleaf LaTeX • Checkpoints Empíricos • SEPEI / COTB / SNCT</text>
+
+  <g filter="url(#shadow4)">
+    <!-- Card 1: Overleaf Paper -->
+    <rect x="50" y="200" width="215" height="195" rx="12" fill="#24103d" stroke="#8b5cf6" stroke-width="1.5" stroke-opacity="0.5"/>
+    <rect x="75" y="225" width="165" height="85" rx="6" fill="#3b1768" stroke="#a78bfa" stroke-width="1"/>
+    <rect x="85" y="238" width="145" height="8" rx="4" fill="#c084fc" fill-opacity="0.8"/>
+    <rect x="85" y="254" width="90" height="6" rx="3" fill="#c084fc" fill-opacity="0.5"/>
+    <rect x="85" y="270" width="65" height="28" rx="4" fill="#581c87"/>
+    <rect x="158" y="270" width="65" height="28" rx="4" fill="#581c87"/>
+    <text x="65" y="345" fill="#d8b4fe" font-family="'Outfit', system-ui, sans-serif" font-size="14" font-weight="700">Template Oficial SBC</text>
+    <text x="65" y="370" fill="#94a3b8" font-family="'Inter', system-ui, sans-serif" font-size="11">LaTeX / Overleaf</text>
+
+    <!-- Card 2: Checkpoints -->
+    <rect x="290" y="200" width="215" height="195" rx="12" fill="#24103d" stroke="#8b5cf6" stroke-width="1.5" stroke-opacity="0.5"/>
+    <circle cx="320" cy="235" r="12" fill="#10b981"/>
+    <text x="320" y="239" fill="#ffffff" font-family="'Outfit', sans-serif" font-size="10" font-weight="800" text-anchor="middle">C1</text>
+    <text x="342" y="239" fill="#e9d5ff" font-family="'Inter', sans-serif" font-size="12" font-weight="600">Experimentação Mínima</text>
+
+    <circle cx="320" cy="275" r="12" fill="#0284c7"/>
+    <text x="320" y="279" fill="#ffffff" font-family="'Outfit', sans-serif" font-size="10" font-weight="800" text-anchor="middle">C2</text>
+    <text x="342" y="279" fill="#e9d5ff" font-family="'Inter', sans-serif" font-size="12" font-weight="600">Coleta &amp; Tabulação</text>
+
+    <circle cx="320" cy="315" r="12" fill="#7c3aed"/>
+    <text x="320" y="319" fill="#ffffff" font-family="'Outfit', sans-serif" font-size="10" font-weight="800" text-anchor="middle">C3</text>
+    <text x="342" y="319" fill="#e9d5ff" font-family="'Inter', sans-serif" font-size="12" font-weight="600">Revisão por Pares</text>
+
+    <text x="305" y="360" fill="#d8b4fe" font-family="'Outfit', system-ui, sans-serif" font-size="13" font-weight="700">3 Checkpoints Práticos</text>
+    <text x="305" y="378" fill="#94a3b8" font-family="'Inter', system-ui, sans-serif" font-size="11">Acompanhamento contínuo</text>
+
+    <!-- Card 3: Submissão -->
+    <rect x="530" y="200" width="220" height="195" rx="12" fill="#24103d" stroke="#8b5cf6" stroke-width="1.5" stroke-opacity="0.5"/>
+    <circle cx="570" cy="240" r="20" fill="url(#accent4)"/>
+    <path d="M562 245 L570 233 L578 245 M570 234 V249" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="602" y="246" fill="#ffffff" font-family="'Outfit', system-ui, sans-serif" font-size="16" font-weight="700">Submissão</text>
+    <rect x="550" y="275" width="180" height="28" rx="6" fill="#581c87"/>
+    <text x="640" y="293" fill="#f3e8ff" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Computer on the Beach</text>
+    <rect x="550" y="315" width="180" height="28" rx="6" fill="#581c87"/>
+    <text x="640" y="333" fill="#f3e8ff" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">SEPEI &amp; SNCT IFSC</text>
+    <rect x="550" y="355" width="180" height="24" rx="12" fill="url(#accent4)"/>
+    <text x="640" y="371" fill="#ffffff" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="700" text-anchor="middle">Defesa Demonstrativa</text>
+  </g>
+</svg>

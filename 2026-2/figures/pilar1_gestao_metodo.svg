@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#064e3b"/>
+      <stop offset="50%" stop-color="#047857"/>
+      <stop offset="100%" stop-color="#022c22"/>
+    </linearGradient>
+    <linearGradient id="accent1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <filter id="shadow1" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="800" height="450" rx="16" fill="url(#bg1)"/>
+  <circle cx="700" cy="80" r="140" fill="#10b981" opacity="0.08"/>
+  <circle cx="100" cy="380" r="180" fill="#34d399" opacity="0.05"/>
+  
+  <!-- Grid overlay lines -->
+  <path d="M0 75 H800 M0 150 H800 M0 225 H800 M0 300 H800 M0 375 H800" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+  <path d="M160 0 V450 M320 0 V450 M480 0 V450 M640 0 V450" stroke="#ffffff" stroke-opacity="0.04" stroke-width="1"/>
+
+  <!-- Left badge -->
+  <rect x="50" y="45" width="130" height="32" rx="16" fill="#10b981" fill-opacity="0.2" stroke="#34d399" stroke-width="1.5"/>
+  <text x="115" y="66" fill="#6ee7b7" font-family="'Outfit', system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle" letter-spacing="1.5">PILAR 01</text>
+  
+  <text x="50" y="125" fill="#ffffff" font-family="'Outfit', system-ui, sans-serif" font-size="34" font-weight="800">Gestão &amp; Método Científico</text>
+  <text x="50" y="160" fill="#a7f3d0" font-family="'Inter', system-ui, sans-serif" font-size="16" font-weight="500">Objetivos SMART • Escopo de Software • Anais COTB / SBC</text>
+
+  <!-- Illustration Cards -->
+  <g filter="url(#shadow1)">
+    <!-- Card 1: Objetivos -->
+    <rect x="50" y="200" width="215" height="195" rx="12" fill="#0f291e" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4"/>
+    <circle cx="90" cy="240" r="20" fill="url(#accent1)"/>
+    <path d="M90 228 L90 252 M78 240 L102 240 M82 232 L98 248 M82 248 L98 232" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="122" y="246" fill="#ffffff" font-family="'Outfit', system-ui, sans-serif" font-size="16" font-weight="700">Objetivo Geral</text>
+    <rect x="70" y="275" width="175" height="8" rx="4" fill="#34d399" fill-opacity="0.6"/>
+    <rect x="70" y="295" width="145" height="8" rx="4" fill="#34d399" fill-opacity="0.3"/>
+    <rect x="70" y="315" width="160" height="8" rx="4" fill="#34d399" fill-opacity="0.3"/>
+    <rect x="70" y="345" width="100" height="24" rx="12" fill="#10b981" fill-opacity="0.25"/>
+    <text x="120" y="361" fill="#6ee7b7" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Verbo no Infinitivo</text>
+
+    <!-- Card 2: 4 Degraus -->
+    <rect x="290" y="200" width="215" height="195" rx="12" fill="#0f291e" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4"/>
+    <circle cx="330" cy="240" r="20" fill="#065f46" stroke="#34d399" stroke-width="1.5"/>
+    <path d="M322 247 L328 247 L328 241 L334 241 L334 235 L340 235" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    <text x="362" y="246" fill="#ffffff" font-family="'Outfit', system-ui, sans-serif" font-size="16" font-weight="700">4 Degraus Esp.</text>
+    <text x="310" y="285" fill="#6ee7b7" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="600">1. Requisitos &amp; Diagnóstico</text>
+    <text x="310" y="310" fill="#6ee7b7" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="600">2. Modelagem &amp; Design</text>
+    <text x="310" y="335" fill="#6ee7b7" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="600">3. Implementação &amp; Código</text>
+    <text x="310" y="360" fill="#6ee7b7" font-family="'Inter', system-ui, sans-serif" font-size="12" font-weight="600">4. Validação &amp; Testes</text>
+
+    <!-- Card 3: Overleaf & COTB -->
+    <rect x="530" y="200" width="220" height="195" rx="12" fill="#0f291e" stroke="#10b981" stroke-width="1.5" stroke-opacity="0.4"/>
+    <circle cx="570" cy="240" r="20" fill="#065f46" stroke="#34d399" stroke-width="1.5"/>
+    <path d="M562 232 H578 V248 H562 Z M566 238 H574 M566 242 H572" stroke="#34d399" stroke-width="2" stroke-linecap="round" fill="none"/>
+    <text x="602" y="246" fill="#ffffff" font-family="'Outfit', system-ui, sans-serif" font-size="16" font-weight="700">COTB &amp; Overleaf</text>
+    <rect x="550" y="275" width="180" height="28" rx="6" fill="#134e4a"/>
+    <text x="640" y="293" fill="#a7f3d0" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">SBC OpenLib (SOL COTB)</text>
+    <rect x="550" y="315" width="180" height="28" rx="6" fill="#134e4a"/>
+    <text x="640" y="333" fill="#a7f3d0" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Link Seguro /read/</text>
+    <rect x="550" y="355" width="180" height="24" rx="12" fill="url(#accent1)"/>
+    <text x="640" y="371" fill="#ffffff" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="700" text-anchor="middle">2 Trabalhos Fichados</text>
+  </g>
+</svg>
