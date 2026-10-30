@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roteiro 2 — Pesquisa Bibliográfica, Fichamento e Trabalhos Relacionados | PI-1 (IFSC Garopaba)</title>
+  <meta name="description" content="Roteiro Prático 2 de Projeto Integrador I: Regras para pesquisa na SBC OpenLib (COTB), Tripé de Análise, Fórmula do Parágrafo Científico e BibTeX no Overleaf.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root, [data-theme="dark"] {
+      --bg-dark: #080d0a;
+      --bg-surface: #0f1712;
+      --bg-card: rgba(18, 28, 22, 0.85);
+      --bg-card-hover: rgba(26, 42, 32, 0.95);
+      --border-color: rgba(34, 197, 94, 0.2);
+      --border-glow: rgba(34, 197, 94, 0.4);
+
+      --ifsc-green: #16a34a;
+      --ifsc-green-light: #4ade80;
+      --ifsc-green-glow: rgba(34, 197, 94, 0.25);
+      --ifsc-red: #ef4444;
+
+      --accent-cyan: #06b6d4;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --accent-blue: #3b82f6;
+
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --chip-bg: rgba(0, 0, 0, 0.4);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="light"] {
+      --bg-dark: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --bg-card-hover: #ffffff;
+      --border-color: rgba(22, 163, 74, 0.25);
+      --border-glow: rgba(22, 163, 74, 0.5);
+
+      --ifsc-green: #15803d;
+      --ifsc-green-light: #16a34a;
+      --ifsc-green-glow: rgba(22, 163, 74, 0.2);
+      --ifsc-red: #dc2626;
+
+      --accent-cyan: #0891b2;
+      --accent-amber: #d97706;
+      --accent-purple: #7e22ce;
+      --accent-blue: #2563eb;
+
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+
+      --chip-bg: rgba(0, 0, 0, 0.04);
+      --shadow-glass: 0 4px 20px -2px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      padding-bottom: 4rem;
+      min-height: 100vh;
+    }
+
+    .top-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .nav-breadcrumb a {
+      color: var(--ifsc-green-light);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .nav-breadcrumb a:hover { text-decoration: underline; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .theme-toggle-btn {
+      background: var(--chip-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.45rem 0.8rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: var(--transition);
+    }
+    .theme-toggle-btn:hover { border-color: var(--border-glow); }
+
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(22, 163, 74, 0.18) 0%, rgba(6, 182, 212, 0.12) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow-glass);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-tag {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ifsc-green-light);
+      background: rgba(34, 197, 94, 0.18);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      padding: 0.3rem 0.8rem;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.85rem;
+    }
+    .hero-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 0.6rem;
+      background: linear-gradient(90deg, var(--text-main) 60%, var(--ifsc-green-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 820px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Cards de Passos e Regras */
+    .rule-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+      box-shadow: var(--shadow-glass);
+      transition: var(--transition);
+      position: relative;
+    }
+    .rule-card:hover {
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+    }
+    .rule-header {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.25rem;
+    }
+    .rule-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--ifsc-green);
+      color: white;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px var(--ifsc-green-glow);
+    }
+    .rule-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+    .rule-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Links Grid */
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .link-card {
+      background: var(--chip-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      text-decoration: none;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      transition: var(--transition);
+    }
+    .link-card:hover {
+      border-color: var(--ifsc-green-light);
+      background: rgba(34, 197, 94, 0.08);
+      transform: translateY(-2px);
+    }
+    .link-card-icon {
+      font-size: 1.6rem;
+      color: var(--ifsc-green-light);
+    }
+
+    /* Tripé Grid */
+    .tripe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .tripe-item {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 1.15rem;
+    }
+    [data-theme="light"] .tripe-item {
+      background: rgba(0, 0, 0, 0.03);
+    }
+    .tripe-item-badge {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .b-blue { background: rgba(6, 182, 212, 0.2); color: var(--accent-cyan); border: 1px solid rgba(6, 182, 212, 0.35); }
+    .b-purple { background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); border: 1px solid rgba(168, 85, 247, 0.35); }
+    .b-green { background: rgba(34, 197, 94, 0.2); color: var(--ifsc-green-light); border: 1px solid rgba(34, 197, 94, 0.35); }
+
+    /* Fórmula do Parágrafo */
+    .formula-box {
+      background: rgba(6, 182, 212, 0.08);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: #e2e8f0;
+    }
+    [data-theme="light"] .formula-box {
+      background: rgba(6, 182, 212, 0.05);
+      color: #0f172a;
+    }
+    .f-tag {
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+    .f-cite { background: rgba(168, 85, 247, 0.25); color: #d8b4fe; }
+    .f-obj { background: rgba(59, 130, 246, 0.25); color: #93c5fd; }
+    .f-tech { background: rgba(34, 197, 94, 0.25); color: #86efac; }
+    .f-gap { background: rgba(245, 158, 11, 0.25); color: #fde047; }
+    .f-diff { background: rgba(239, 68, 68, 0.25); color: #fca5a5; }
+
+    /* Exemplo Box */
+    .example-box {
+      background: rgba(0, 0, 0, 0.2);
+      border-left: 4px solid var(--ifsc-green);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+    [data-theme="light"] .example-box {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    /* Tabela Comparativa */
+    .table-container {
+      overflow-x: auto;
+      margin: 1.25rem 0;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      text-align: left;
+    }
+    .comp-table th {
+      background: var(--bg-surface);
+      color: var(--text-main);
+      font-weight: 700;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .comp-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+    .comp-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .comp-table .our-proj {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Code Block */
+    .code-window {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      margin: 1.25rem 0;
+      overflow: hidden;
+    }
+    .code-header {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border-color);
+    }
+    .code-content {
+      padding: 1rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      color: #e2e8f0;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .btn-copy {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.72rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .btn-copy:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    /* Checklist */
+    .checklist-card {
+      background: linear-gradient(135deg, rgba(22, 163, 74, 0.15) 0%, rgba(6, 182, 212, 0.08) 100%);
+      border: 1px solid var(--ifsc-green);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      margin-top: 2rem;
+    }
+    .checklist-list {
+      list-style: none;
+      margin: 1.25rem 0;
+    }
+    .checklist-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+    .checklist-list li i {
+      color: var(--ifsc-green-light);
+      font-size: 1.1rem;
+      margin-top: 0.2rem;
+    }
+
+    .btn-action {
+      background: var(--ifsc-green);
+      color: white;
+      text-decoration: none;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      padding: 0.75rem 1.6rem;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+      box-shadow: 0 4px 14px var(--ifsc-green-glow);
+    }
+    .btn-action:hover {
+      background: #15803d;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="top-header">
+    <div class="nav-breadcrumb">
+      <a href="../index.html"><i class="fa-solid fa-arrow-left"></i> Dashboard PI-1</a>
+      <span>/</span>
+      <span>Caderno de Roteiros</span>
+      <span>/</span>
+      <strong>Roteiro #02</strong>
+    </div>
+    <div class="header-actions">
+      <a href="https://sol.sbc.org.br/index.php/cotb" target="_blank" class="theme-toggle-btn" style="color:var(--ifsc-green-light); font-weight:600;">
+        <i class="fa-solid fa-book-open"></i> SBC OpenLib (COTB)
+      </a>
+      <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn">
+        <i class="fa-solid fa-moon"></i> Tema
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+      <span class="hero-tag"><i class="fa-solid fa-graduation-cap"></i> PI-1 • Turma Info 2025 • 2º Ano / 2026-2</span>
+      <h1 class="hero-title">Roteiro 2 — Pesquisa Bibliográfica, Fichamento e Trabalhos Relacionados</h1>
+      <p class="hero-desc">
+        Guia prático e regras fundamentais para mapear artigos científicos na SBC OpenLib (COTB), aplicar o Tripé de Análise, redigir a Seção 2 do Overleaf e estruturar citações com BibTeX.
+      </p>
+      <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="#regras" class="btn-action">
+          <i class="fa-solid fa-list-check"></i> Ver as 5 Regrinhas Básicas
+        </a>
+        <a href="https://sol.sbc.org.br/index.php/cotb" target="_blank" class="btn-action" style="background: var(--chip-bg); border: 1px solid var(--border-color); color: var(--text-main); box-shadow: none;">
+          <i class="fa-solid fa-building-columns"></i> Abrir Anais do COTB (SOL)
+        </a>
+      </div>
+    </section>
+
+    <!-- Regra 1 -->
+    <section class="rule-card" id="regras">
+      <div class="rule-header">
+        <div class="rule-num">1</div>
+        <div>
+          <h2 class="rule-title">Onde e Como Garimpar Artigos no COTB</h2>
+          <p class="rule-subtitle">Identificação de referências científicas válidas sem confundir com materiais informais.</p>
+        </div>
+      </div>
+
+      <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1rem;">
+        Em computação, a seção de <strong>Trabalhos Relacionados</strong> prova aos avaliadores que sua equipe compreende o estado da arte do tema e que sua solução possui um diferencial concreto.
+      </p>
+
+      <div class="links-grid">
+        <a href="https://sol.sbc.org.br/index.php/cotb" target="_blank" class="link-card">
+          <i class="fa-solid fa-building-columns link-card-icon"></i>
+          <div>
+            <strong>Anais do Computer on the Beach (SOL)</strong>
+            <p style="font-size: 0.75rem; color: var(--text-dim);">Biblioteca oficial da Sociedade Brasileira de Computação (SBC)</p>
+          </div>
+        </a>
+        <a href="https://scholar.google.com.br/" target="_blank" class="link-card">
+          <i class="fa-brands fa-google link-card-icon" style="color: var(--accent-purple);"></i>
+          <div>
+            <strong>Google Acadêmico</strong>
+            <p style="font-size: 0.75rem; color: var(--text-dim);">Busca: "Computer on the Beach" + seu tema</p>
+          </div>
+        </a>
+      </div>
+
+      <div style="background: rgba(239, 68, 68, 0.08); border-left: 4px solid var(--ifsc-red); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 0.85rem 1rem; font-size: 0.85rem; margin-top: 1rem;">
+        <strong style="color: #f87171;"><i class="fa-solid fa-triangle-exclamation"></i> O que NÃO é trabalho relacionado:</strong>
+        <p style="color: var(--text-muted); margin-top: 0.25rem;">
+          Tutoriais do YouTube, fóruns do Stack Overflow, posts de blogs (Medium, Dev.to) e documentação de bibliotecas (ex: documentação oficial do React ou Bootstrap) <strong>não são artigos científicos</strong>. Você deve encontrar pesquisas que desenvolveram softwares similares aos dos anais da SBC.
+        </p>
+      </div>
+    </section>
+
+    <!-- Regra 2 -->
+    <section class="rule-card">
+      <div class="rule-header">
+        <div class="rule-num">2</div>
+        <div>
+          <h2 class="rule-title">O Tripé de Análise Crítica</h2>
+          <p class="rule-subtitle">As 3 perguntas obrigatórias que sua equipe deve responder para cada artigo encontrado.</p>
+        </div>
+      </div>
+
+      <p style="font-size: 0.92rem; color: var(--text-muted);">
+        Para cada artigo do COTB selecionado, sua equipe não deve apenas resumir o texto, mas sim confrontá-lo com a proposta do seu software:
+      </p>
+
+      <div class="tripe-grid">
+        <div class="tripe-item">
+          <span class="tripe-item-badge b-blue">1. O Que Fizeram?</span>
+          <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem;">Proposta do Artigo</h4>
+          <p style="font-size: 0.82rem; color: var(--text-muted);">
+            Qual foi o software ou método que os autores construíram? Qual público-alvo eles atenderam?
+          </p>
+        </div>
+
+        <div class="tripe-item">
+          <span class="tripe-item-badge b-purple">2. Como Fizeram?</span>
+          <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem;">Tecnologias &amp; Método</h4>
+          <p style="font-size: 0.82rem; color: var(--text-muted);">
+            Quais linguagens, frameworks, bancos de dados, arquitetura ou método de validação utilizaram?
+          </p>
+        </div>
+
+        <div class="tripe-item">
+          <span class="tripe-item-badge b-green">3. Qual o Diferencial?</span>
+          <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.35rem;">Lacuna vs. Seu Projeto</h4>
+          <p style="font-size: 0.82rem; color: var(--text-muted);">
+            O que o projeto deles deixou de fora ou limitou? O que o SEU software inova ou adapta à realidade local?
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Regra 3 -->
+    <section class="rule-card">
+      <div class="rule-header">
+        <div class="rule-num">3</div>
+        <div>
+          <h2 class="rule-title">A Fórmula do Parágrafo Científico</h2>
+          <p class="rule-subtitle">Template pronto para redação da Seção 2 do Overleaf.</p>
+        </div>
+      </div>
+
+      <p style="font-size: 0.92rem; color: var(--text-muted);">
+        Combine os 5 blocos da fórmula abaixo para produzir um parágrafo acadêmico de alto impacto:
+      </p>
+
+      <div class="formula-box">
+        <span class="f-tag f-cite">[Citação e Autores]</span> + 
+        <span class="f-tag f-obj">[Proposta e Objetivo do Sistema]</span> + 
+        <span class="f-tag f-tech">[Tecnologia / Método Utilizado]</span> + 
+        <span class="f-tag f-gap">[Limitação / Lacuna do Trabalho]</span> + 
+        <span class="f-tag f-diff">[Diferencial Inovador da Sua Equipe]</span>
+      </div>
+
+      <div class="example-box">
+        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--ifsc-green-light); margin-bottom: 0.4rem;">
+          <i class="fa-solid fa-quote-left"></i> Exemplo Prático de Parágrafo (Projeto SELI - Ensino de LIBRAS):
+        </h4>
+        <p>
+          "No trabalho desenvolvido por <strong>Silva et al. (2023)</strong>, foi proposta uma ferramenta digital para apoio à alfabetização em LIBRAS de crianças no ambiente escolar. Para isso, os autores implementaram uma aplicação desktop em linguagem C# com exercícios estáticos de múltipla escolha. Embora o sistema tenha auxiliado na fixação dos sinais básicos, ele apresenta como limitação a dependência de instalação local em computadores com sistema Windows, dificultando o acesso móvel. <em>Diferentemente dessa abordagem, o presente projeto desenvolve uma plataforma 100% web, responsiva e com foco mobile-first, permitindo que estudantes e familiares pratiquem sinais interativos diretamente pelo navegador no smartphone, sem necessidade de download ou configuração prévia.</em>"
+        </p>
+      </div>
+    </section>
+
+    <!-- Regra 4 -->
+    <section class="rule-card">
+      <div class="rule-header">
+        <div class="rule-num">4</div>
+        <div>
+          <h2 class="rule-title">Tabela Comparativa de Trabalhos Relacionados</h2>
+          <p class="rule-subtitle">Síntese visual em tabela para inclusão direta no artigo Overleaf.</p>
+        </div>
+      </div>
+
+      <p style="font-size: 0.92rem; color: var(--text-muted);">
+        Inserir um quadro comparativo na Seção 2 destaca a maturidade técnica da equipe e sintetiza os pontos fortes da sua solução:
+      </p>
+
+      <div class="table-container">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th>Trabalho Relacionado</th>
+              <th>Plataforma</th>
+              <th>Tecnologias</th>
+              <th>Público-Alvo</th>
+              <th>Diferencial do Nosso Projeto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Silva et al. (2023)</strong></td>
+              <td>Desktop</td>
+              <td>C# / WPF</td>
+              <td>Ensino Infantil</td>
+              <td>Nossa proposta é 100% web e roda direto no navegador.</td>
+            </tr>
+            <tr>
+              <td><strong>Santos (2024)</strong></td>
+              <td>Mobile App</td>
+              <td>Flutter / Firebase</td>
+              <td>Ensino Médio</td>
+              <td>Foco na acessibilidade e realidade regional do IFSC Garopaba.</td>
+            </tr>
+            <tr class="our-proj">
+              <td><strong>Nosso Software (SELI)</strong></td>
+              <td>Web App Responsivo</td>
+              <td>JavaScript / HTML5 / Pages</td>
+              <td>Comunidade Escolar</td>
+              <td>Sem instalação, responsivo mobile-first e de código aberto.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="code-window">
+        <div class="code-header">
+          <span>LaTeX: tabela_relacionados.tex</span>
+          <button class="btn-copy" onclick="copiarCodigo('latex-table')"><i class="fa-solid fa-copy"></i> Copiar LaTeX</button>
+        </div>
+        <div class="code-content" id="latex-table">\begin{table}[ht]
+\centering
+\small
+\caption{Quadro comparativo entre trabalhos correlatos e o projeto proposto.}
+\label{tab:relacionados}
+\begin{tabular}{|l|c|c|c|X|}
+\hline
+\textbf{Trabalho} & \textbf{Plataforma} & \textbf{Tecnologias} & \textbf{Público-Alvo} & \textbf{Diferencial do Nosso Projeto} \\ \hline
+Silva et al. (2023) & Desktop & C\# / WPF & Ensino Infantil & Arquitetura Web, mobile-first e livre de instalação. \\ \hline
+Santos (2024) & Mobile App & Flutter / Firebase & Ensino Médio & Recursos voltados à acessibilidade no IFSC Garopaba. \\ \hline
+\textbf{Nossa Proposta} & \textbf{Web App} & \textbf{JS / HTML5 / Pages} & \textbf{Geral / IFSC} & \textbf{Acesso instantâneo e código aberto no GitHub.} \\ \hline
+\end{tabular}
+\end{table}</div>
+      </div>
+    </section>
+
+    <!-- Regra 5 -->
+    <section class="rule-card">
+      <div class="rule-header">
+        <div class="rule-num">5</div>
+        <div>
+          <h2 class="rule-title">Gestão das Referências no BibTeX</h2>
+          <p class="rule-subtitle">Importação correta no arquivo references.bib e citação automática no texto LaTeX.</p>
+        </div>
+      </div>
+
+      <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+        No Overleaf, nunca digite referências manualmente no texto. Exporte o formato BibTeX da SBC OpenLib ou Google Acadêmico e cole no arquivo <code>sbc-template.bib</code>:
+      </p>
+
+      <div class="code-window">
+        <div class="code-header">
+          <span>BibTeX: sbc-template.bib</span>
+          <button class="btn-copy" onclick="copiarCodigo('bibtex-code')"><i class="fa-solid fa-copy"></i> Copiar BibTeX</button>
+        </div>
+        <div class="code-content" id="bibtex-code">@inproceedings{silva2023libras,
+  author    = {Silva, João and Oliveira, Maria},
+  title     = {Ambiente Digital para Apoio ao Ensino de LIBRAS},
+  booktitle = {Anais do XIV Computer on the Beach (COTB)},
+  pages     = {120--129},
+  year      = {2023},
+  publisher = {SBC}
+}</div>
+      </div>
+
+      <div style="background: var(--chip-bg); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.88rem; margin-top: 1rem;">
+        <h4 style="font-size: 0.9rem; color: var(--ifsc-green-light); margin-bottom: 0.35rem;"><i class="fa-solid fa-terminal"></i> Como citar dentro do seu arquivo .tex:</h4>
+        <p>• <strong>Citação direta no fluxo do texto:</strong> <code>No trabalho de \citeauthor{silva2023libras} (\citeyear{silva2023libras}), foi desenvolvido...</code></p>
+        <p style="margin-top: 0.35rem;">• <strong>Citação indireta entre colchetes:</strong> <code>...conforme evidenciado em pesquisas recentes \cite{silva2023libras}.</code></p>
+      </div>
+    </section>
+
+    <!-- Checklist Final -->
+    <section class="checklist-card">
+      <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+        <i class="fa-solid fa-clipboard-check" style="font-size: 1.8rem; color: var(--ifsc-green-light);"></i>
+        <div>
+          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 800;">Checklist de Entrega no Final da Aula</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Registro oficial obrigatório no Dashboard de PI-1 para avaliação e devolutiva docente.</p>
+        </div>
+      </div>
+
+      <ul class="checklist-list">
+        <li>
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Login no Dashboard:</strong> Faça login com a conta institucional Google/IFSC no canto superior direito do Dashboard de PI-1.
+          </div>
+        </li>
+        <li>
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Artigo 1 do COTB:</strong> Registrar título completo, autores, ano, link na SBC OpenLib e parágrafo crítico destacando a lacuna e o diferencial da sua equipe.
+          </div>
+        </li>
+        <li>
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Artigo 2 do COTB:</strong> Registrar título completo, autores, ano, link na SBC OpenLib e parágrafo crítico destacando a lacuna e o diferencial da sua equipe.
+          </div>
+        </li>
+        <li>
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Seção 2 no Overleaf Atualizada:</strong> Colar as referências no arquivo <code>sbc-template.bib</code> e os dois parágrafos na Seção 2 do artigo colaborativo.
+          </div>
+        </li>
+      </ul>
+
+      <div style="text-align: center; margin-top: 1.75rem;">
+        <a href="../index.html" class="btn-action" style="font-size: 1rem; padding: 0.85rem 2rem;">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> Acessar o Dashboard de PI-1 para Entregar
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme') || 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('pi1_theme', next);
+      const btn = document.getElementById('themeBtn');
+      if (btn) btn.innerHTML = next === 'dark' ? '<i class="fa-solid fa-moon"></i> Tema' : '<i class="fa-solid fa-sun"></i> Tema';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('pi1_theme');
+      if (saved) {
+        document.documentElement.setAttribute('data-theme', saved);
+        const btn = document.getElementById('themeBtn');
+        if (btn) btn.innerHTML = saved === 'dark' ? '<i class="fa-solid fa-moon"></i> Tema' : '<i class="fa-solid fa-sun"></i> Tema';
+      }
+    });
+
+    function copiarCodigo(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      navigator.clipboard.writeText(el.innerText).then(() => {
+        alert('Código copiado com sucesso para a área de transferência!');
+      });
+    }
+  </script>
+</body>
+</html>
