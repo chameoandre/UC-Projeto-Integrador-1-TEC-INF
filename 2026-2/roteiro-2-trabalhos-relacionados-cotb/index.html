@@ -283,31 +283,177 @@
     .b-green { background: rgba(34, 197, 94, 0.2); color: var(--ifsc-green-light); border: 1px solid rgba(34, 197, 94, 0.35); }
 
     /* Fórmula do Parágrafo */
+    /* FÓRMULA DO PARÁGRAFO CIENTÍFICO (ALTO CONTRASTE) */
     .formula-box {
       background: rgba(6, 182, 212, 0.08);
-      border: 1px solid rgba(6, 182, 212, 0.3);
+      border: 1px solid rgba(6, 182, 212, 0.35);
       border-radius: var(--radius-sm);
-      padding: 1.25rem;
+      padding: 1.25rem 1.4rem;
       margin: 1.25rem 0;
       font-family: 'Fira Code', monospace;
       font-size: 0.88rem;
-      line-height: 1.8;
-      color: #e2e8f0;
+      line-height: 2.2;
+      color: #f8fafc;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.45rem;
     }
+
     [data-theme="light"] .formula-box {
-      background: rgba(6, 182, 212, 0.05);
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
       color: #0f172a;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
+
+    .formula-plus {
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: var(--accent-cyan);
+      user-select: none;
+      margin: 0 0.15rem;
+    }
+    [data-theme="light"] .formula-plus {
+      color: #0284c7;
+    }
+
     .f-tag {
-      padding: 0.15rem 0.45rem;
-      border-radius: 4px;
-      font-weight: 700;
+      padding: 0.35rem 0.7rem;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      letter-spacing: 0.2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      transition: transform 0.15s ease;
     }
-    .f-cite { background: rgba(168, 85, 247, 0.25); color: #d8b4fe; }
-    .f-obj { background: rgba(59, 130, 246, 0.25); color: #93c5fd; }
-    .f-tech { background: rgba(34, 197, 94, 0.25); color: #86efac; }
-    .f-gap { background: rgba(245, 158, 11, 0.25); color: #fde047; }
-    .f-diff { background: rgba(239, 68, 68, 0.25); color: #fca5a5; }
+    .f-tag:hover {
+      transform: translateY(-1px);
+    }
+
+    /* Cores de Alto Contraste para Cada Bloco */
+    /* Bloco 1: Citação e Autores */
+    .f-cite {
+      background: rgba(168, 85, 247, 0.25);
+      color: #e9d5ff;
+      border: 1.5px solid #a855f7;
+    }
+    [data-theme="light"] .f-cite {
+      background: #f3e8ff;
+      color: #581c87;
+      border-color: #9333ea;
+    }
+
+    /* Bloco 2: Proposta e Objetivo */
+    .f-obj {
+      background: rgba(59, 130, 246, 0.25);
+      color: #bfdbfe;
+      border: 1.5px solid #3b82f6;
+    }
+    [data-theme="light"] .f-obj {
+      background: #eff6ff;
+      color: #1e3a8a;
+      border-color: #2563eb;
+    }
+
+    /* Bloco 3: Tecnologia / Método */
+    .f-tech {
+      background: rgba(34, 197, 94, 0.25);
+      color: #bbf7d0;
+      border: 1.5px solid #22c55e;
+    }
+    [data-theme="light"] .f-tech {
+      background: #f0fdf4;
+      color: #14532d;
+      border-color: #16a34a;
+    }
+
+    /* Bloco 4: Limitação / Lacuna */
+    .f-gap {
+      background: rgba(245, 158, 11, 0.25);
+      color: #fef08a;
+      border: 1.5px solid #eab308;
+    }
+    [data-theme="light"] .f-gap {
+      background: #fef9c3;
+      color: #713f12;
+      border-color: #ca8a04;
+    }
+
+    /* Bloco 5: Diferencial Inovador */
+    .f-diff {
+      background: rgba(239, 68, 68, 0.25);
+      color: #fecdd3;
+      border: 1.5px solid #ef4444;
+    }
+    [data-theme="light"] .f-diff {
+      background: #ffe4e6;
+      color: #881337;
+      border-color: #e11d48;
+    }
+
+    /* Tags inline dentro dos exemplos */
+    .hl-cite { color: #c084fc; font-weight: 700; }
+    [data-theme="light"] .hl-cite { color: #7e22ce; font-weight: 700; }
+
+    .hl-obj { color: #60a5fa; font-weight: 600; }
+    [data-theme="light"] .hl-obj { color: #1d4ed8; font-weight: 600; }
+
+    .hl-tech { color: #4ade80; font-weight: 600; }
+    [data-theme="light"] .hl-tech { color: #15803d; font-weight: 600; }
+
+    .hl-gap { color: #facc15; font-weight: 600; text-decoration: underline dotted; }
+    [data-theme="light"] .hl-gap { color: #a16207; font-weight: 600; text-decoration: underline dotted; }
+
+    .hl-diff { color: #f87171; font-weight: 700; }
+    [data-theme="light"] .hl-diff { color: #be123c; font-weight: 700; }
+
+    /* Switcher de Exemplos de Equipes */
+    .example-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1.25rem 0 0.75rem 0;
+      flex-wrap: wrap;
+    }
+    .example-tab-btn {
+      background: var(--chip-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.45rem 0.95rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: var(--transition);
+    }
+    .example-tab-btn:hover {
+      color: var(--text-main);
+      border-color: var(--border-glow);
+    }
+    .example-tab-btn.active {
+      background: var(--ifsc-green);
+      color: white;
+      border-color: var(--ifsc-green);
+      box-shadow: 0 4px 12px var(--ifsc-green-glow);
+    }
+
+    .example-panel {
+      display: none;
+    }
+    .example-panel.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* Exemplo Box */
     .example-box {
@@ -574,29 +720,135 @@
         <div class="rule-num">3</div>
         <div>
           <h2 class="rule-title">A Fórmula do Parágrafo Científico</h2>
-          <p class="rule-subtitle">Template pronto para redação da Seção 2 do Overleaf.</p>
+          <p class="rule-subtitle">Template acadêmico de alto impacto com exemplos de diferentes equipes de software.</p>
         </div>
       </div>
 
       <p style="font-size: 0.92rem; color: var(--text-muted);">
-        Combine os 5 blocos da fórmula abaixo para produzir um parágrafo acadêmico de alto impacto:
+        Combine os <strong>5 blocos lógicos</strong> da fórmula abaixo para produzir um parágrafo crítico e estruturado na Seção 2 do Overleaf:
       </p>
 
+      <!-- Fórmula com Cores de Alto Contraste -->
       <div class="formula-box">
-        <span class="f-tag f-cite">[Citação e Autores]</span> + 
-        <span class="f-tag f-obj">[Proposta e Objetivo do Sistema]</span> + 
-        <span class="f-tag f-tech">[Tecnologia / Método Utilizado]</span> + 
-        <span class="f-tag f-gap">[Limitação / Lacuna do Trabalho]</span> + 
-        <span class="f-tag f-diff">[Diferencial Inovador da Sua Equipe]</span>
+        <span class="f-tag f-cite">[1. Citação e Autores]</span>
+        <span class="formula-plus">+</span>
+        <span class="f-tag f-obj">[2. Proposta e Objetivo do Sistema]</span>
+        <span class="formula-plus">+</span>
+        <span class="f-tag f-tech">[3. Tecnologia / Método Utilizado]</span>
+        <span class="formula-plus">+</span>
+        <span class="f-tag f-gap">[4. Limitação / Lacuna do Trabalho]</span>
+        <span class="formula-plus">+</span>
+        <span class="f-tag f-diff">[5. Diferencial Inovador da Sua Equipe]</span>
       </div>
 
-      <div class="example-box">
-        <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--ifsc-green-light); margin-bottom: 0.4rem;">
-          <i class="fa-solid fa-quote-left"></i> Exemplo Prático de Parágrafo (Projeto SELI - Ensino de LIBRAS):
-        </h4>
-        <p>
-          "No trabalho desenvolvido por <strong>Silva et al. (2023)</strong>, foi proposta uma ferramenta digital para apoio à alfabetização em LIBRAS de crianças no ambiente escolar. Para isso, os autores implementaram uma aplicação desktop em linguagem C# com exercícios estáticos de múltipla escolha. Embora o sistema tenha auxiliado na fixação dos sinais básicos, ele apresenta como limitação a dependência de instalação local em computadores com sistema Windows, dificultando o acesso móvel. <em>Diferentemente dessa abordagem, o presente projeto desenvolve uma plataforma 100% web, responsiva e com foco mobile-first, permitindo que estudantes e familiares pratiquem sinais interativos diretamente pelo navegador no smartphone, sem necessidade de download ou configuração prévia.</em>"
-        </p>
+      <!-- Seletor de Exemplos Reais de Equipes -->
+      <div style="margin-top: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+          <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-main);">
+            <i class="fa-solid fa-shapes" style="color: var(--ifsc-green-light);"></i> Exemplos Práticos de Aplicação por Tema:
+          </h3>
+          <span style="font-size: 0.78rem; color: var(--text-muted);">Clique para alternar entre as equipes da turma:</span>
+        </div>
+
+        <div class="example-tabs">
+          <button class="example-tab-btn active" onclick="switchExample('poup', this)">
+            <i class="fa-solid fa-coins" style="color: var(--accent-amber);"></i> Equipe #6: Poup! (Finanças)
+          </button>
+          <button class="example-tab-btn" onclick="switchExample('codequest', this)">
+            <i class="fa-solid fa-gamepad" style="color: var(--accent-cyan);"></i> Equipe #7: CodeQuest (Programação)
+          </button>
+          <button class="example-tab-btn" onclick="switchExample('seli', this)">
+            <i class="fa-solid fa-hands-asl-interpreting" style="color: var(--ifsc-green-light);"></i> Equipe #1: SELI (LIBRAS)
+          </button>
+        </div>
+
+        <!-- PAINEL 1: Equipe Poup! (Finanças para Jovens) -->
+        <div class="example-panel active" id="example-poup">
+          <div class="example-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--accent-amber); margin: 0;">
+                <i class="fa-solid fa-coins"></i> Caso da Equipe #6: Projeto Poup! (Marcus, Felipe, Lucas M.)
+              </h4>
+              <span style="font-size: 0.74rem; background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid rgba(245, 158, 11, 0.3);">
+                Artigo COTB Correlato: Martins e Rocha (2022)
+              </span>
+            </div>
+            <p style="margin-bottom: 0.85rem;">
+              "<span class="hl-cite">No trabalho desenvolvido por Martins e Rocha (2022)</span>, 
+              <span class="hl-obj">foi proposta uma dinâmica gamificada com tabuleiros físicos voltada ao ensino de conceitos de poupança e orçamento pessoal para estudantes do ensino básico</span>. 
+              <span class="hl-tech">Para isso, os autores aplicaram oficinas presenciais com fichas de gastos impressas e pontuação manual registrada pelo professor em sala de aula</span>. 
+              <span class="hl-gap">Embora a atividade tenha aumentado o interesse inicial dos alunos, o estudo aponta como limitação a dependência de encontros presenciais e a falta de uma ferramenta contínua que acompanhe os hábitos financeiros dos jovens no seu cotidiano</span>. 
+              <span class="hl-diff">Diferentemente dessa abordagem centrada em papel, o presente projeto desenvolve a plataforma web Poup!, um aplicativo mobile-first que permite aos jovens cadastrar seus gastos reais, definir metas de economia e evoluir em missões digitais interativas diretamente pelo navegador no smartphone, garantindo autonomia e continuidade fora da escola</span>."
+            </p>
+            <div style="font-size: 0.78rem; color: var(--text-muted); background: var(--chip-bg); padding: 0.6rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; gap: 1rem; flex-wrap: wrap;">
+              <span><strong style="color:var(--text-main);">Legenda:</strong></span>
+              <span><span class="hl-cite">■</span> Citação</span>
+              <span><span class="hl-obj">■</span> Proposta</span>
+              <span><span class="hl-tech">■</span> Método</span>
+              <span><span class="hl-gap">■</span> Lacuna</span>
+              <span><span class="hl-diff">■</span> Diferencial</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAINEL 2: Equipe CodeQuest (Gamificação no Ensino de Código) -->
+        <div class="example-panel" id="example-codequest">
+          <div class="example-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--accent-cyan); margin: 0;">
+                <i class="fa-solid fa-gamepad"></i> Caso da Equipe #7: Projeto CodeQuest (Kauan, Davi, Luiz)
+              </h4>
+              <span style="font-size: 0.74rem; background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan); padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid rgba(6, 182, 212, 0.3);">
+                Artigo COTB Correlato: Oliveira e Santos (2023)
+              </span>
+            </div>
+            <p style="margin-bottom: 0.85rem;">
+              "<span class="hl-cite">Em pesquisa publicada no Computer on the Beach, Oliveira e Santos (2023)</span> 
+              <span class="hl-obj">apresentaram um ambiente web para prática de algoritmos e exercícios de lógica de programação voltado a calouros de informática</span>. 
+              <span class="hl-tech">A solução técnica utilizou um juiz online baseado em Python e contêineres Docker para testar automaticamente entradas e saídas de código dos estudantes</span>. 
+              <span class="hl-gap">Contudo, os próprios autores destacaram que o modelo tradicional de submissão textual apresentou alta taxa de desengajamento ao longo do semestre, carecendo de estímulos motivacionais contínuos</span>. 
+              <span class="hl-diff">Para solucionar esse problema de retenção, o projeto CodeQuest inova ao estruturar a prática de programação em trilhas temáticas com mecânicas de RPG, concedendo pontos de experiência (XP), rankings entre colegas e modos de duelos rápidos de lógica 1v1, tornando o aprendizado técnico lúdico e socialmente colaborativo</span>."
+            </p>
+            <div style="font-size: 0.78rem; color: var(--text-muted); background: var(--chip-bg); padding: 0.6rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; gap: 1rem; flex-wrap: wrap;">
+              <span><strong style="color:var(--text-main);">Legenda:</strong></span>
+              <span><span class="hl-cite">■</span> Citação</span>
+              <span><span class="hl-obj">■</span> Proposta</span>
+              <span><span class="hl-tech">■</span> Método</span>
+              <span><span class="hl-gap">■</span> Lacuna</span>
+              <span><span class="hl-diff">■</span> Diferencial</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAINEL 3: Equipe SELI (Acessibilidade e LIBRAS) -->
+        <div class="example-panel" id="example-seli">
+          <div class="example-box">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; flex-wrap: wrap; gap: 0.5rem;">
+              <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--ifsc-green-light); margin: 0;">
+                <i class="fa-solid fa-hands-asl-interpreting"></i> Caso da Equipe #1: Projeto SELI (Eduarda, Débora, Luisa, Vitória)
+              </h4>
+              <span style="font-size: 0.74rem; background: rgba(34, 197, 94, 0.15); color: var(--ifsc-green-light); padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid rgba(34, 197, 94, 0.3);">
+                Artigo COTB Correlato: Silva et al. (2023)
+              </span>
+            </div>
+            <p style="margin-bottom: 0.85rem;">
+              "<span class="hl-cite">No trabalho desenvolvido por Silva et al. (2023)</span>, 
+              <span class="hl-obj">foi proposta uma ferramenta digital para apoio à alfabetização em LIBRAS de crianças no ambiente escolar</span>. 
+              <span class="hl-tech">Para isso, os autores implementaram uma aplicação desktop em linguagem C# com exercícios estáticos de múltipla escolha</span>. 
+              <span class="hl-gap">Embora o sistema tenha auxiliado na fixação dos sinais básicos, ele apresenta como limitação a dependência de instalação local em computadores com sistema Windows, dificultando o acesso móvel</span>. 
+              <span class="hl-diff">Diferentemente dessa abordagem, o presente projeto desenvolve uma plataforma 100% web, responsiva e com foco mobile-first, permitindo que estudantes e familiares pratiquem sinais interativos diretamente pelo navegador no smartphone, sem necessidade de download ou configuração prévia</span>."
+            </p>
+            <div style="font-size: 0.78rem; color: var(--text-muted); background: var(--chip-bg); padding: 0.6rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; gap: 1rem; flex-wrap: wrap;">
+              <span><strong style="color:var(--text-main);">Legenda:</strong></span>
+              <span><span class="hl-cite">■</span> Citação</span>
+              <span><span class="hl-obj">■</span> Proposta</span>
+              <span><span class="hl-tech">■</span> Método</span>
+              <span><span class="hl-gap">■</span> Lacuna</span>
+              <span><span class="hl-diff">■</span> Diferencial</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -755,6 +1007,15 @@ Santos (2024) & Mobile App & Flutter / Firebase & Ensino Médio & Recursos volta
   </main>
 
   <script>
+    
+    function switchExample(teamId, btn) {
+      document.querySelectorAll('.example-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.example-tab-btn').forEach(b => b.classList.remove('active'));
+      const target = document.getElementById('example-' + teamId);
+      if (target) target.classList.add('active');
+      if (btn) btn.classList.add('active');
+    }
+
     function toggleTheme() {
       const html = document.documentElement;
       const current = html.getAttribute('data-theme') || 'dark';
