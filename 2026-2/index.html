@@ -1307,6 +1307,183 @@
       color: #94a3b8;
     }
 
+    /* Botão Atualizar Ficha no Canto Superior Direito do Card */
+    .card-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-atualizar-ficha {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.15), rgba(34, 197, 94, 0.15));
+      color: var(--accent-cyan);
+      border: 1px solid rgba(6, 182, 212, 0.45);
+      padding: 0.38rem 0.72rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.24s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      transform-origin: top right;
+    }
+
+    [data-theme="light"] .btn-atualizar-ficha {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.12), rgba(22, 163, 74, 0.12));
+      color: #0284c7;
+      border-color: rgba(2, 132, 199, 0.45);
+    }
+
+    .btn-atualizar-ficha:hover {
+      transform: scale(1.12);
+      background: linear-gradient(135deg, #06b6d4, #16a34a);
+      color: #ffffff !important;
+      border-color: transparent;
+      box-shadow: 0 6px 18px rgba(6, 182, 212, 0.5);
+      z-index: 5;
+    }
+
+    .btn-atualizar-ficha:active {
+      transform: scale(1.04);
+    }
+
+    /* Listagem Expansiva dos Trabalhos Relacionados nos Cards */
+    .project-card-expandable-related {
+      margin-bottom: 0.85rem;
+    }
+
+    .project-card-expandable-related[open] {
+      border-color: #8b5cf6;
+      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.12);
+    }
+
+    [data-theme="dark"] .project-card-expandable-related[open] {
+      border-color: rgba(168, 85, 247, 0.5);
+    }
+
+    .project-card-expandable-related[open] .summary-chevron {
+      color: #8b5cf6;
+      transform: rotate(180deg);
+    }
+
+    .expandable-related-body {
+      padding: 0.75rem 0.9rem;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      animation: fadeInDegraus 0.2s ease;
+    }
+
+    [data-theme="dark"] .expandable-related-body {
+      background: rgba(0, 0, 0, 0.28);
+      border-top-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .card-related-text {
+      margin: 0;
+      font-size: 0.81rem;
+      line-height: 1.5;
+      color: #334155;
+      max-height: 170px;
+      overflow-y: auto;
+      white-space: pre-line;
+      word-break: break-word;
+      padding-right: 0.25rem;
+    }
+
+    [data-theme="dark"] .card-related-text {
+      color: #cbd5e1;
+    }
+
+    .card-related-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.6rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--border-color);
+      font-size: 0.74rem;
+    }
+
+    .card-related-hint {
+      color: var(--accent-purple);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .btn-detail-link {
+      background: transparent;
+      border: none;
+      color: var(--accent-cyan);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
+
+    .btn-detail-link:hover {
+      background: rgba(6, 182, 212, 0.12);
+      text-decoration: underline;
+    }
+
+    .card-related-empty {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.45;
+      padding: 0.3rem 0;
+      font-style: italic;
+    }
+
+    /* Botão de Auditoria e Correção Geral de Objetivos */
+    .btn-auditoria-objetivos {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.16), rgba(234, 88, 12, 0.16));
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.45);
+      padding: 0.5rem 0.95rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="light"] .btn-auditoria-objetivos {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.15));
+      color: #b45309;
+      border-color: rgba(217, 119, 6, 0.45);
+    }
+
+    .btn-auditoria-objetivos:hover {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #ffffff;
+      border-color: transparent;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+    }
+
+    .modal-card-wide {
+      max-width: 980px;
+      width: 95%;
+    }
+
     .project-links-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -1670,6 +1847,9 @@
           <span class="pill" onclick="setFilter('com-github', this)">Com GitHub</span>
           <span class="pill" onclick="setFilter('com-overleaf', this)">Com Overleaf</span>
           <span class="pill" onclick="setFilter('pendentes', this)">Pendentes</span>
+          <button class="btn-auditoria-objetivos" onclick="abrirModalAuditoriaGeralObjetivos()" title="Painel consolidado para o professor auditar e corrigir os objetivos das 11 equipes">
+            <i class="fa-solid fa-clipboard-check"></i> <strong>Auditar &amp; Corrigir Objetivos</strong>
+          </button>
         </div>
       </div>
 
@@ -2008,6 +2188,16 @@
       <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
       <div id="modalContent">
         <!-- Injetado via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Auditoria e Correção Consolidada de Objetivos -->
+  <div id="auditoriaObjetivosModal" class="modal-overlay" onclick="fecharModalAuditoria(event)">
+    <div class="modal-card modal-card-wide" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="fecharModalAuditoria()"><i class="fa-solid fa-xmark"></i></button>
+      <div id="auditoriaObjetivosContent">
+        <!-- Injetado dinamicamente via JS -->
       </div>
     </div>
   </div>
@@ -2592,6 +2782,12 @@
 
         const hasObjGeralReal = objInfo.geral && objInfo.geral.length > 15 && objInfo.geral !== 'Objetivo em consolidação junto aos docentes orientadores.';
 
+        const hasRelated = !!p.relatedWorks && 
+                           p.relatedWorks.trim().length > 25 && 
+                           !p.relatedWorks.toLowerCase().includes('pendente de inserção');
+        const relArticlesCount = hasRelated ? Math.max(1, (p.relatedWorks.match(/(?:^|\n)\s*(?:\d+[\)\.\-]|[A-ZÁÉÍÓÚ\s]{3,}[\,\.])/g) || []).length) : 0;
+        const relatedCountTxt = hasRelated ? (relArticlesCount >= 2 ? `${relArticlesCount} Fichados` : 'Fichado') : 'Pendente';
+
         return `
           <div class="project-card">
             <div>
@@ -2604,10 +2800,17 @@
                   }
                   ${objBadge}
                 </div>
-                <span style="font-size: 0.75rem; color: var(--text-muted);"><i class="fa-solid fa-users"></i> ${p.team.split(',').length} integrantes</span>
+                <div class="card-header-right">
+                  <button class="btn-atualizar-ficha" onclick="if(window.PI1) PI1.abrirModalEditarFicha(${p.id}); else openModal(${p.id});" title="Atualizar objetivos, link do Overleaf e dados da equipe #${p.id}">
+                    <i class="fa-solid fa-pen-to-square"></i> Atualizar Ficha
+                  </button>
+                </div>
               </div>
               <h3 class="project-title">${escapeHtml(p.title)}</h3>
-              <div class="project-team"><i class="fa-solid fa-user-group"></i> ${escapeHtml(p.team)}</div>
+              <div class="project-team">
+                <i class="fa-solid fa-user-group"></i> ${escapeHtml(p.team)}
+                <span style="font-size: 0.74rem; color: var(--text-muted); margin-left: 0.35rem;">(${p.team.split(',').length} integrantes)</span>
+              </div>
 
               <!-- Mini Rastreador dos 4 Pilares -->
               <div class="pilares-mini-tracker" title="Conformidade da equipe nos 4 Pilares Pedagógicos da disciplina">
@@ -2658,6 +2861,36 @@
                 </div>
               </details>
 
+              <!-- Listagem Expansiva dos Trabalhos Relacionados (COTB/SBC) -->
+              <details class="project-card-expandable-objectives project-card-expandable-related" id="details-rel-${p.id}">
+                <summary class="expandable-summary" title="Clique para expandir e ver os Trabalhos Relacionados fichados pela equipe">
+                  <span class="summary-title">
+                    <i class="fa-solid fa-book-bookmark" style="color:var(--accent-purple);"></i>
+                    <span>Trabalhos Relacionados</span>
+                    <span class="degraus-count-tag ${hasRelated ? 'complete' : 'empty'}">${relatedCountTxt}</span>
+                  </span>
+                  <i class="fa-solid fa-chevron-down summary-chevron"></i>
+                </summary>
+                <div class="expandable-related-body">
+                  ${hasRelated ? `
+                    <div class="card-related-content">
+                      <p class="card-related-text">${escapeHtml(p.relatedWorks)}</p>
+                    </div>
+                    <div class="card-related-footer">
+                      <span class="card-related-hint"><i class="fa-solid fa-file-lines"></i> Fichamento COTB / Seção 2</span>
+                      <button class="btn-detail-link" onclick="openModal(${p.id})">
+                        <i class="fa-solid fa-expand"></i> Ver Completo
+                      </button>
+                    </div>
+                  ` : `
+                    <div class="card-related-empty">
+                      <i class="fa-solid fa-clock" style="color:var(--accent-amber);"></i>
+                      <span>Pendente de inserção pela equipe (Roteiro 2 • SBC/COTB).</span>
+                    </div>
+                  `}
+                </div>
+              </details>
+
               <div class="project-links-grid">
                 <a href="${p.github || '#'}" target="_blank" class="link-btn ${hasGithub ? 'active' : 'disabled'}">
                   <i class="fa-brands fa-github"></i> ${hasGithub ? 'GitHub' : 'Sem GitHub'}
@@ -2681,9 +2914,6 @@
                       <i class="fa-solid fa-clipboard-check"></i> Avaliar
                     </button>
                   ` : ''}
-                  <button class="btn-detail" onclick="if(window.PI1) PI1.abrirModalEditarFicha(${p.id}); else openModal(${p.id});" style="color:var(--accent-cyan);border-color:rgba(6,182,212,0.3);" title="Editar objetivos, Overleaf e links do projeto">
-                    <i class="fa-solid fa-pen-to-square"></i> Ficha
-                  </button>
                   <button class="btn-detail" onclick="if(window.PI1) PI1.abrirModalAvanco(${p.id}); else openModal(${p.id});" style="color:var(--ifsc-green-light);border-color:rgba(34,197,94,0.3);" title="Registrar avanço ou reportar bloqueio">
                     <i class="fa-solid fa-plus"></i> Avanço
                   </button>
@@ -3055,6 +3285,216 @@
         document.getElementById("projectModal").classList.remove("open");
       }
     }
+
+    // 5b. Painel Consolidado de Auditoria e Correção de Objetivos (Docente)
+    function abrirModalAuditoriaGeralObjetivos(filtro = 'todos') {
+      const data = window.projectsData || projectsData;
+      const modal = document.getElementById("auditoriaObjetivosModal");
+      const content = document.getElementById("auditoriaObjetivosContent");
+      if (!modal || !content) return;
+
+      const avaliacoes = (window.PI1 && window.PI1.state && window.PI1.state.avaliacoes) ? window.PI1.state.avaliacoes : [];
+      const isDocente = window.PI1 && window.PI1.state && window.PI1.state.usuario && window.PI1.state.usuario.papel === 'docente';
+
+      let totalComGeral = 0;
+      let total4Degraus = 0;
+      let totalAvaliados = 0;
+
+      data.forEach(p => {
+        const objI = (window.decomporObjetivos || decomporObjetivosLocal)(p.objective);
+        if (objI.geral && objI.geral.length > 15 && objI.geral !== 'Objetivo em consolidação junto aos docentes orientadores.') totalComGeral++;
+        if (objI.especificos.filter(Boolean).length === 4) total4Degraus++;
+        if (avaliacoes.some(a => Number(a.projeto) === p.id && a.tipo === 'objetivos')) totalAvaliados++;
+      });
+
+      const filtered = data.filter(p => {
+        const objI = (window.decomporObjetivos || decomporObjetivosLocal)(p.objective);
+        const aval = avaliacoes.find(a => Number(a.projeto) === p.id && a.tipo === 'objetivos');
+        const r1Ok = (p.overleaf && p.overleaf.length > 5) && (objI.geral && objI.geral.length > 15);
+        if (filtro === 'pendentes-avaliacao') return !aval;
+        if (filtro === 'avaliados') return !!aval;
+        if (filtro === 'aprovados') return aval && aval.status === 'aprovado';
+        if (filtro === 'ajustar') return aval && aval.status === 'ajustar';
+        if (filtro === 'incompletos') return !r1Ok || objI.especificos.filter(Boolean).length < 4;
+        return true;
+      });
+
+      content.innerHTML = `
+        <div style="margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+            <div>
+              <span class="proj-badge" style="background:rgba(245,158,11,0.15);color:var(--accent-amber);border-color:rgba(245,158,11,0.4);">
+                <i class="fa-solid fa-graduation-cap"></i> PAINEL DOCENTE DE AUDITORIA &amp; CORREÇÃO
+              </span>
+              <h2 style="font-family:'Outfit',sans-serif;font-size:1.45rem;font-weight:700;margin-top:0.4rem;color:var(--text-main);">
+                Auditoria Consolidada de Objetivos (Roteiro 1)
+              </h2>
+              <p style="color:var(--text-muted);font-size:0.86rem;margin-top:0.25rem;">
+                Avalie o Objetivo Geral (verbo no infinitivo + delimitação) e os 4 Degraus Metodológicos de cada uma das 11 equipes.
+              </p>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+              <button class="btn-detail" onclick="toggleTodosDegrausModal(this)" id="btn-toggle-todos-degraus">
+                <i class="fa-solid fa-layer-group"></i> <span id="label-toggle-degraus">Expandir Todos os Degraus</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Indicadores Resumidos da Turma -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:0.75rem;margin-top:1.25rem;">
+            <div style="background:var(--bg-card);padding:0.75rem 1rem;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+              <div style="font-size:0.74rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;">Total de Equipes</div>
+              <div style="font-size:1.3rem;font-weight:800;color:var(--text-main);">${data.length} Equipes</div>
+            </div>
+            <div style="background:var(--bg-card);padding:0.75rem 1rem;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+              <div style="font-size:0.74rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;">Objetivo Geral Definido</div>
+              <div style="font-size:1.3rem;font-weight:800;color:var(--ifsc-green-light);">${totalComGeral} / ${data.length}</div>
+            </div>
+            <div style="background:var(--bg-card);padding:0.75rem 1rem;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+              <div style="font-size:0.74rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;">4 Degraus Completos</div>
+              <div style="font-size:1.3rem;font-weight:800;color:var(--accent-cyan);">${total4Degraus} / ${data.length}</div>
+            </div>
+            <div style="background:var(--bg-card);padding:0.75rem 1rem;border-radius:var(--radius-sm);border:1px solid var(--border-color);">
+              <div style="font-size:0.74rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;">Avaliados com Rubrica</div>
+              <div style="font-size:1.3rem;font-weight:800;color:var(--accent-amber);">${totalAvaliados} / ${data.length}</div>
+            </div>
+          </div>
+
+          <!-- Pílulas de Filtro no Modal -->
+          <div style="display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:1.25rem;">
+            <button class="pill ${filtro === 'todos' ? 'active' : ''}" onclick="abrirModalAuditoriaGeralObjetivos('todos')">Todos (${data.length})</button>
+            <button class="pill ${filtro === 'pendentes-avaliacao' ? 'active' : ''}" onclick="abrirModalAuditoriaGeralObjetivos('pendentes-avaliacao')">Pendentes de Avaliação (${data.length - totalAvaliados})</button>
+            <button class="pill ${filtro === 'avaliados' ? 'active' : ''}" onclick="abrirModalAuditoriaGeralObjetivos('avaliados')">Já Avaliados (${totalAvaliados})</button>
+            <button class="pill ${filtro === 'incompletos' ? 'active' : ''}" onclick="abrirModalAuditoriaGeralObjetivos('incompletos')">Com Pendências</button>
+          </div>
+        </div>
+
+        <!-- Lista Consolidada das Equipes -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+          ${filtered.map(p => {
+            const objI = (window.decomporObjetivos || decomporObjetivosLocal)(p.objective);
+            const espCount = objI.especificos.filter(Boolean).length;
+            const aval = avaliacoes.find(a => Number(a.projeto) === p.id && a.tipo === 'objetivos');
+            const hasOverleaf = !!p.overleaf && p.overleaf.length > 5;
+            const r1Ok = hasOverleaf && objI.geral && objI.geral.length > 15;
+
+            return `
+              <div style="background:var(--bg-card);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1.25rem;box-shadow:var(--shadow-sm);">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.75rem;margin-bottom:0.85rem;">
+                  <div>
+                    <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;">
+                      <span class="proj-badge">#${p.id}</span>
+                      <strong style="font-size:1.05rem;color:var(--text-main);">${escapeHtml(p.title)}</strong>
+                      ${r1Ok ? 
+                        `<span class="badge-r1-status ok"><i class="fa-solid fa-circle-check"></i> R1 Entregue</span>` : 
+                        `<span class="badge-r1-status pendente"><i class="fa-solid fa-clock"></i> R1 Pendente</span>`
+                      }
+                      <span class="degraus-count-tag ${espCount === 4 ? 'complete' : (espCount > 0 ? 'partial' : 'empty')}">
+                        ${espCount}/4 Degraus
+                      </span>
+                    </div>
+                    <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.25rem;">
+                      <i class="fa-solid fa-users"></i> ${escapeHtml(p.team)}
+                    </div>
+                  </div>
+
+                  <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+                    ${p.overleaf ? `
+                      <a href="${p.overleaf}" target="_blank" class="link-btn active" style="font-size:0.74rem;padding:0.3rem 0.6rem;">
+                        <i class="fa-solid fa-file-code"></i> Overleaf (/read/)
+                      </a>
+                    ` : `<span style="font-size:0.74rem;color:var(--text-dim);"><i class="fa-solid fa-file-excel"></i> Sem Overleaf</span>`}
+                    ${p.github ? `
+                      <a href="${p.github}" target="_blank" class="link-btn active" style="font-size:0.74rem;padding:0.3rem 0.6rem;">
+                        <i class="fa-brands fa-github"></i> GitHub
+                      </a>
+                    ` : ''}
+                    <button class="btn-detail" onclick="fecharModalAuditoria(); if(window.PI1) PI1.abrirModalAvaliarObjetivos(${p.id}); else openModal(${p.id});" style="background:rgba(245,158,11,0.15);color:#f59e0b;border-color:rgba(245,158,11,0.4);font-weight:700;">
+                      <i class="fa-solid fa-clipboard-check"></i> ${aval ? 'Editar Avaliação' : 'Avaliar Equipe'}
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Bloco Objetivo Geral -->
+                <div style="background:#ffffff;border:1px solid #e2e8f0;border-left:4px solid #0284c7;border-radius:6px;padding:0.75rem 0.95rem;margin-bottom:0.75rem;">
+                  <div style="font-size:0.75rem;font-weight:800;color:#0369a1;text-transform:uppercase;margin-bottom:0.3rem;display:flex;justify-content:space-between;">
+                    <span><i class="fa-solid fa-bullseye"></i> Objetivo Geral</span>
+                    <span style="font-size:0.72rem;font-weight:600;color:#64748b;">${objI.geral ? objI.geral.length + ' caracteres' : 'Não informado'}</span>
+                  </div>
+                  <div style="font-size:0.86rem;color:#0f172a;line-height:1.55;font-weight:450;">
+                    ${escapeHtml(objI.geral || 'Nenhum objetivo geral registrado.')}
+                  </div>
+                </div>
+
+                <!-- Bloco 4 Degraus Metodológicos -->
+                <details class="audit-degraus-details" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:0.6rem 0.85rem;margin-bottom:0.75rem;" open>
+                  <summary style="font-size:0.8rem;font-weight:700;color:#334155;cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+                    <span><i class="fa-solid fa-stairs" style="color:var(--ifsc-green-light);"></i> 4 Degraus Específicos (${espCount}/4 Preenchidos)</span>
+                    <i class="fa-solid fa-chevron-down" style="font-size:0.75rem;color:#64748b;"></i>
+                  </summary>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:0.5rem;margin-top:0.6rem;">
+                    <div class="card-degrau-item ${objI.especificos[0] ? 'has-content' : 'is-empty'}">
+                      <div class="card-degrau-head"><span class="degrau-pill d1">Degrau 1 • Requisitos</span></div>
+                      <div class="card-degrau-text">${escapeHtml(objI.especificos[0] || 'Pendente')}</div>
+                    </div>
+                    <div class="card-degrau-item ${objI.especificos[1] ? 'has-content' : 'is-empty'}">
+                      <div class="card-degrau-head"><span class="degrau-pill d2">Degrau 2 • Modelagem</span></div>
+                      <div class="card-degrau-text">${escapeHtml(objI.especificos[1] || 'Pendente')}</div>
+                    </div>
+                    <div class="card-degrau-item ${objI.especificos[2] ? 'has-content' : 'is-empty'}">
+                      <div class="card-degrau-head"><span class="degrau-pill d3">Degrau 3 • Código</span></div>
+                      <div class="card-degrau-text">${escapeHtml(objI.especificos[2] || 'Pendente')}</div>
+                    </div>
+                    <div class="card-degrau-item ${objI.especificos[3] ? 'has-content' : 'is-empty'}">
+                      <div class="card-degrau-head"><span class="degrau-pill d4">Degrau 4 • Validação</span></div>
+                      <div class="card-degrau-text">${escapeHtml(objI.especificos[3] || 'Pendente')}</div>
+                    </div>
+                  </div>
+                </details>
+
+                <!-- Avaliação Atual e Parecer Docente -->
+                ${aval ? `
+                  <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.3);border-radius:6px;padding:0.65rem 0.85rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.5rem;font-size:0.82rem;">
+                    <div>
+                      <strong style="color:var(--ifsc-green-light);"><i class="fa-solid fa-circle-check"></i> Avaliado (${aval.status === 'aprovado' ? 'Aprovado' : 'Ajustar'})</strong>
+                      ${aval.nota ? ` • <span style="font-weight:700;">Nota: ${aval.nota}</span>` : ''}
+                      ${aval.parecer ? `<div style="color:var(--text-muted);font-size:0.78rem;margin-top:0.2rem;">${escapeHtml(aval.parecer)}</div>` : ''}
+                    </div>
+                    <span style="font-size:0.72rem;color:var(--text-dim);">${aval.data ? String(aval.data).slice(0, 10) : ''}</span>
+                  </div>
+                ` : `
+                  <div style="font-size:0.78rem;color:var(--text-dim);font-style:italic;">
+                    <i class="fa-solid fa-hourglass-half"></i> Nenhuma avaliação formal registrada para esta equipe até o momento.
+                  </div>
+                `}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      modal.classList.add("open");
+    }
+
+    function fecharModalAuditoria(e) {
+      if (!e || e.target.id === "auditoriaObjetivosModal" || e.target.closest(".modal-close")) {
+        const m = document.getElementById("auditoriaObjetivosModal");
+        if (m) m.classList.remove("open");
+      }
+    }
+
+    function toggleTodosDegrausModal(btn) {
+      const details = document.querySelectorAll("#auditoriaObjetivosContent .audit-degraus-details");
+      const label = document.getElementById("label-toggle-degraus");
+      if (!details.length) return;
+      const anyClosed = Array.from(details).some(d => !d.open);
+      details.forEach(d => d.open = anyClosed);
+      if (label) label.innerText = anyClosed ? "Recolher Todos os Degraus" : "Expandir Todos os Degraus";
+    }
+
+    window.abrirModalAuditoriaGeralObjetivos = abrirModalAuditoriaGeralObjetivos;
+    window.fecharModalAuditoria = fecharModalAuditoria;
+    window.toggleTodosDegrausModal = toggleTodosDegrausModal;
 
     // 6. Controles de Abas e Filtros
     function switchTab(tabId) {
