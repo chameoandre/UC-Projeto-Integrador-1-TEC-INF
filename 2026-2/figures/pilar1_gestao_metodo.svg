@@ -57,7 +57,7 @@
     <path d="M562 232 H578 V248 H562 Z M566 238 H574 M566 242 H572" stroke="#34d399" stroke-width="2" stroke-linecap="round" fill="none"/>
     <text x="602" y="246" fill="#ffffff" font-family="'Outfit', system-ui, sans-serif" font-size="16" font-weight="700">COTB &amp; Overleaf</text>
     <rect x="550" y="275" width="180" height="28" rx="6" fill="#134e4a"/>
-    <text x="640" y="293" fill="#a7f3d0" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">SBC OpenLib (SOL COTB)</text>
+    <text x="640" y="293" fill="#a7f3d0" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Portal de Anais COTB</text>
     <rect x="550" y="315" width="180" height="28" rx="6" fill="#134e4a"/>
     <text x="640" y="333" fill="#a7f3d0" font-family="'Inter', system-ui, sans-serif" font-size="11" font-weight="600" text-anchor="middle">Link Seguro /read/</text>
     <rect x="550" y="355" width="180" height="24" rx="12" fill="url(#accent1)"/>

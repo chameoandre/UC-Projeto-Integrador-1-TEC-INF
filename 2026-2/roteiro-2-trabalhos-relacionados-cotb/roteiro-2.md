@@ -1,7 +1,7 @@
 # Roteiro Prático de Aula #2 — Projeto Integrador I
 **IFSC Câmpus Garopaba • Técnico Integrado em Informática (Turma Info 2025 • 2º Ano / 2026-2)**  
 **Docente Responsável:** Prof. Dr. André Moraes (`andre.moraes@ifsc.edu.br`)  
-**Tema da Aula:** Pesquisa Bibliográfica, Fichamento e Trabalhos Relacionados (COTB / SBC OpenLib)
+**Tema da Aula:** Pesquisa Bibliográfica, Fichamento e Trabalhos Relacionados (COTB / Portal de Periódicos da UNIVALI)
 
 ---
 
@@ -9,7 +9,7 @@
 
 Ao final desta aula prática, cada equipe deverá ter concluído:
 1. Compreender o papel da seção de **Trabalhos Relacionados** em um artigo científico de software (provar relevância, evitar "reinventar a roda" e evidenciar o diferencial técnico da equipe);
-2. Pesquisar e selecionar **pelo menos 2 artigos científicos correlatos** nos anais do *Computer on the Beach (SBC OpenLib)* ou *Google Acadêmico*;
+2. Pesquisar e selecionar **pelo menos 2 artigos científicos correlatos** nos anais do *Computer on the Beach (Portal de Periódicos da UNIVALI)* ou *Google Acadêmico*;
 3. Aplicar o **Tripé de Análise Crítica** em cada trabalho selecionado (*O que fizeram? Como fizeram? Qual a limitação deles ou diferencial do seu software?*);
 4. Redigir os parágrafos de síntese na **Seção 2 (Trabalhos Relacionados)** do template SBC no Overleaf utilizando a fórmula de redação científica;
 5. Importar as entradas BibTeX para o arquivo `references.bib` do Overleaf e citá-las no texto com o comando `\cite{...}`;
@@ -23,8 +23,8 @@ Ao final desta aula prática, cada equipe deverá ter concluído:
   [https://chameoandre.github.io/UC-Projeto-Integrador-1-TEC-INF/2026-2/roteiro-2-trabalhos-relacionados-cotb/](https://chameoandre.github.io/UC-Projeto-Integrador-1-TEC-INF/2026-2/roteiro-2-trabalhos-relacionados-cotb/)
 * 📊 **Dashboard Oficial de Projetos PI-1:**  
   [https://chameoandre.github.io/UC-Projeto-Integrador-1-TEC-INF/2026-2/](https://chameoandre.github.io/UC-Projeto-Integrador-1-TEC-INF/2026-2/)
-* 📚 **Anais do Computer on the Beach (SBC OpenLib - SOL):**  
-  [https://sol.sbc.org.br/index.php/cotb](https://sol.sbc.org.br/index.php/cotb)
+* 📚 **Anais do Computer on the Beach (Portal de Periódicos da UNIVALI):**  
+  [https://periodicos.univali.br/index.php/cotb](https://periodicos.univali.br/index.php/cotb)
 * 🔍 **Google Acadêmico:**  
   [https://scholar.google.com.br](https://scholar.google.com.br)
 * 📄 **Template de Artigos SBC no Overleaf:**  
@@ -39,7 +39,7 @@ Ao final desta aula prática, cada equipe deverá ter concluído:
 * **O que É um Trabalho Relacionado:** Um artigo científico publicado em congresso, conferência (ex.: *Computer on the Beach - COTB, WEI, SBIE, SEPEI*) ou periódico indexado que resolveu um problema similar ou usou tecnologias análogas às do seu projeto.
 * **O que NÃO é Trabalho Relacionado:** Postagens de blogs genéricos, tutoriais do YouTube, fóruns de dúvidas ou documentações oficiais de ferramentas (ex: "Documentação do Bootstrap" não é artigo científico).
 * **Estratégia de Busca Inteligente:**
-  - Na **SBC OpenLib (SOL - COTB)**, use termos-chave do seu nicho: `"gamificação"`, `"acessibilidade"`, `"ensino de programação"`, `"aplicação web"`, `"gestão escolar"`.
+  - Na **Portal de Periódicos da UNIVALI (COTB)**, use termos-chave do seu nicho: `"gamificação"`, `"acessibilidade"`, `"ensino de programação"`, `"aplicação web"`, `"gestão escolar"`.
   - No **Google Acadêmico**, use operadores combinados: `"Computer on the Beach" AND "palavra-chave"`.
   - Priorize publicações dos últimos **3 a 5 anos** para garantir atualidade.
 
@@ -93,7 +93,7 @@ Santos (2024) & Mobile App & Flutter / Firebase & Ensino Médio & Recursos volta
 
 ### Regra 5: Gestão das Referências no BibTeX (`references.bib`)
 
-1. Na página do artigo na **SBC OpenLib (SOL)**, localize e clique no botão **BibTeX** (ou no Google Acadêmico, clique no botão de aspas `"Citar"` -> `BibTeX`).
+1. Na página do artigo na **Portal de Periódicos da UNIVALI**, localize e clique no botão **BibTeX** (ou no Google Acadêmico, clique no botão de aspas `"Citar"` -> `BibTeX`).
 2. Copie o bloco de código gerado, por exemplo:
 ```bibtex
 @inproceedings{silva2023libras,
@@ -117,7 +117,7 @@ Santos (2024) & Mobile App & Flutter / Firebase & Ensino Médio & Recursos volta
 1. Fazer login com a conta Google/IFSC institucional no canto superior do **Dashboard de PI-1**;
 2. Localizar o card da sua Equipe e clicar no botão **`[+ Avanço]`**;
 3. No campo de descrição, registrar:
-   - **Artigo 1:** *Título completo, Autores, Ano, Link do artigo na SBC OpenLib e parágrafo crítico estruturado com o diferencial do seu software*;
-   - **Artigo 2:** *Título completo, Autores, Ano, Link do artigo na SBC OpenLib e parágrafo crítico estruturado com o diferencial do seu software*;
+   - **Artigo 1:** *Título completo, Autores, Ano, Link do artigo na Portal de Periódicos da UNIVALI e parágrafo crítico estruturado com o diferencial do seu software*;
+   - **Artigo 2:** *Título completo, Autores, Ano, Link do artigo na Portal de Periódicos da UNIVALI e parágrafo crítico estruturado com o diferencial do seu software*;
    - Confirmação de que as citações BibTeX foram adicionadas ao Overleaf da equipe.
 4. Clicar em **Salvar Registro**.
